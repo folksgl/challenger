@@ -1,5 +1,7 @@
 # Challenger
 
+![](arena.gif)
+
 Challenger is my own custom chess engine.
 
 The goal of challenger is to take on the stockfish 10 chess engine, which is currently the best chess engine in the world.
