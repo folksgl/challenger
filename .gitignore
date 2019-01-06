@@ -1,0 +1,6 @@
+# The challenger executable
+challenger
+
+# Anything in the build directory
+build
+build/*
