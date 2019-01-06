@@ -1,0 +1,1 @@
+double myfunc(double);
