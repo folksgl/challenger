@@ -16,11 +16,11 @@ using namespace std;
 int main()
 {
     string uci_token;
+    int flag = 1;
 
     // Get command from stdin and process>
-    do {
-        getline(cin, uci_token);
-
+    while (getline(cin, uci_token)) 
+    {
         if (uci_token == "uci") {
             cout << "id name Challenger" << endl;
             cout << "id author folksgl" << endl;
@@ -32,11 +32,11 @@ int main()
         else if (uci_token == "isready") {
             cout << "readyok" << endl;
         }
-        else if (uci_token.substr(0,8) == "setoption") {
+        else if (uci_token.substr(0,9) == "setoption") {
             //TODO
             cout << "Haven't implemented that yet" << endl;
         }
-        else if (uci_token.substr(0,7) == "register") {
+        else if (uci_token.substr(0,8) == "register") {
             //TODO
             cout << "Haven't implemented that yet" << endl;
         }
@@ -44,13 +44,14 @@ int main()
             //TODO
             cout << "Haven't implemented that yet" << endl;
         }
-        else if (uci_token.substr(0,7) == "position") {
+        else if (uci_token.substr(0,8) == "position") {
             //TODO
             cout << "Haven't implemented that yet" << endl;
         }
-        else if (uci_token.substr(0,1) == "go") {
+        else if (uci_token.substr(0,2) == "go") {
             //TODO
-            cout << "Haven't implemented that yet" << endl;
+            cout << "bestmove " << char(105-flag) << "7" << char(105-flag) << "5" << endl;
+            flag++;
         }
         else if (uci_token == "stop") {
             //TODO
@@ -61,12 +62,11 @@ int main()
             cout << "Haven't implemented that yet" << endl;
         }
         else if (uci_token == "quit") {
-            exit(0)
+            exit(0);
         }
 
         // Default action is to do nothing and ignore invalid commands.
-
-    } while (1);
+    } 
 
     return 0;
 }
