@@ -19,7 +19,8 @@ The "Percentage winning next level" label indicates challengers progress in beat
 Percentages will be determined by playing 10 games and recording winnings.
 
 ## TODO
-- [ ] Implement UCI compatibility
+- [x] Implement base UCI compatibility
+- [ ] Implement all UCI compatibility
 - [ ] Create board representation
 - [ ] Implement move generation
 - [ ] Search possible moves
