@@ -66,20 +66,30 @@ void process_uci_commands() {
             // If the "startpos" position is given, use the starting position.
             if (startpos.compare(token) == 0) {
                 setup_fen(start_pos);
-                cout << start_pos << endl;
             }
             else {
-                setup_fen(token);
-                cout << token << endl;
+                string uci_fen = token;
+                for (int i = 0; i < 5; i++) {
+                    token = strtok(NULL, " ");
+                    uci_fen += ' ';
+                    uci_fen += token;
+                }
+                setup_fen(uci_fen);
             }
 
             // Handle any moves passed after the fen string.
             token = strtok(NULL, " "); 
-            while (token != NULL) 
-            { 
-                printf("%s\n", token); 
+            if (token == NULL ) {
+                continue;
+            }
+            if (strncmp(token, "moves", 6) == 0) {
                 token = strtok(NULL, " "); 
-            } 
+                while (token != NULL) 
+                { 
+                    game_move(token);
+                    token = strtok(NULL, " "); 
+                } 
+            }
         }
         else if (uci_token.substr(0,2) == "go") {
             //TODO

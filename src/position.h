@@ -26,4 +26,6 @@ struct position {
 
 void setup_fen(std::string fen);
 
+void game_move(std::string uci_move);
+
 #endif
