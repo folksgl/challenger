@@ -4,6 +4,8 @@ TESTLIBS = -lgtest -lpthread
 CXXFLAGS = -g -Wall
 DIRS = build
 
+CPPFILES = src/position.cpp
+
 $(shell if [ ! -d build ]; then mkdir build; fi )
 
 challenger : main.o uci.o position.o
@@ -19,7 +21,7 @@ position.o: src/position.cpp
 	g++ $(CXXFLAGS) -c -o build/position.o src/position.cpp
 
 test :
-	g++ $(CXXFLAGS) -o build/test_runner test/*.cpp $(TESTLIBS)
+	g++ $(CXXFLAGS) -o build/test_runner test/*.cpp $(CPPFILES) $(TESTLIBS)
 	./build/test_runner
 
 clean :
