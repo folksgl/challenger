@@ -21,7 +21,7 @@ Percentages will be determined by playing 10 games and recording winnings.
 ## TODO
 - [x] Implement base UCI compatibility
 - [ ] Implement all UCI compatibility
-- [ ] Create board representation
+- [x] Create board representation
 - [ ] Implement move generation
 - [ ] Search possible moves
 - [ ] Evaluate possible moves
