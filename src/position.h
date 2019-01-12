@@ -28,4 +28,8 @@ position setup_fen(std::string fen);
 
 void game_move(std::string uci_move);
 
+void debug_position(position pos);
+
+void print_position(std::string name, bitmap pos);
+
 #endif

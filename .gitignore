@@ -4,3 +4,6 @@ challenger
 # Anything in the build directory
 build
 build/*
+
+mytest
+run.sh
