@@ -1,4 +1,4 @@
-.PHONY: all test clean
+.PHONY: all test clean run
 
 TESTLIBS = -lgtest -lpthread
 CXXFLAGS = -g -Wall
@@ -23,6 +23,9 @@ position.o: src/position.cpp
 test :
 	g++ $(CXXFLAGS) -o build/test_runner test/*.cpp $(CPPFILES) $(TESTLIBS)
 	./build/test_runner
+
+run : challenger
+	./run.sh
 
 clean :
 	rm -rf ./build ./challenger
