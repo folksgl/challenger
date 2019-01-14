@@ -2,7 +2,7 @@
 
 # Compiler Settings
 CXX = g++
-CXXFLAGS = -g -Wall
+CXXFLAGS = -g -std=c++11 -Wall
 
 # Libraries needed to link for googletest.
 TEST_LIBS = -lgtest -lpthread
