@@ -1,10 +1,4 @@
 
-# Phony target descriptions:
-# 	test - compiles and runs test suite
-# 	clean - removes object files and executables
-# 	run - runs a user-implemented "run.sh" script.
-# 	all - reserved; not implemented
-
 .PHONY: test clean
 
 # Compiler Settings
