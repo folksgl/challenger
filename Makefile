@@ -1,4 +1,11 @@
-.PHONY: all test clean run
+
+# Phony target descriptions:
+# 	test - compiles and runs test suite
+# 	clean - removes object files and executables
+# 	run - runs a user-implemented "run.sh" script.
+# 	all - reserved; not implemented
+
+.PHONY: test clean
 
 # Compiler Settings
 CXX = g++
@@ -13,7 +20,7 @@ TEST_SRC += $(wildcard test/*.cpp)
 
 # Test flags
 TEST_EXECUTABLE = test_runner
-TEST_CXX_FLAGS = -g -Wall -isystem $(HOME)/googletest/googletest/include 
+TEST_CXX_FLAGS = $(CXXFLAGS) -isystem $(HOME)/googletest/googletest/include 
 
 # Project flags
 BUILD_DIR = build
@@ -32,9 +39,6 @@ challenger : $(OBJS)
 test :
 	$(CXX) $(TEST_CXX_FLAGS) -o $(BUILD_DIR)/$(TEST_EXECUTABLE) $(TEST_SRC) $(TEST_LIBS)
 	$(BUILD_DIR)/$(TEST_EXECUTABLE)
-
-run : challenger
-	./run.sh
 
 clean :
 	rm -rf $(BUILD_DIR) ./challenger
