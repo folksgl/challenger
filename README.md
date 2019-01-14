@@ -28,11 +28,16 @@ Percentages will be determined by playing 10 games and recording winnings.
 - [ ] Evaluate possible moves
 
 ## Installation
-To install the challenger engine and run it against another chess engine, you will need to install a UCI (Universal Chess Interface) compatible chess program. I recommend Arena, as it is the one I use for challenger. 
+To install the challenger engine and run it against another chess engine, you will need to install a UCI (Universal Chess Interface) compatible chess program. I recommend Arena, as it is the one I use for challenger.
 
-To compile challenger, simply type "make" in the challenger home directory.
-
-Next, you will need to install the challenger engine in arena. This can be done by going into Arena and navigating to Engines -> Install New Engine and choosing the challenger executable (which after compiling, is located in the challenger home directory).
+1) Download and Install [Arena](http://www.playwitharena.com/?Download).
+2) Clone and compile challenger. The following should work for most linux systems:
+   ```
+   git clone https://github.com/folksgl/challenger.git
+   cd challenger/
+   make
+   ```
+3) Open Arena and import the challenger engine executable. Navigate to Engines -> Install New Engine and choose the challenger executable that was just compiled. (Will be in the challenger project home directory)
 
 ## Development
 Development for challenger will be done in C++, using the googletest framework for testing.
