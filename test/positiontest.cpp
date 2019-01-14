@@ -35,13 +35,13 @@ TEST(startpos, black_bishop) {
 TEST(startpos, black_queen) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_QUEEN,  0x1000000000000000); // BLACK_QUEEN
+    EXPECT_EQ (actualpos.BLACK_QUEEN,  0x0800000000000000); // BLACK_QUEEN
 }
 
 TEST(startpos, black_king) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_KING,   0x0800000000000000); // BLACK_KING
+    EXPECT_EQ (actualpos.BLACK_KING,   0x1000000000000000); // BLACK_KING
 }
 
 TEST(startpos, black_pieces) {
@@ -77,13 +77,13 @@ TEST(startpos, white_bishop) {
 TEST(startpos, white_queen) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_QUEEN,  0x0000000000000010); // WHITE_QUEEN
+    EXPECT_EQ (actualpos.WHITE_QUEEN,  0x0000000000000008); // WHITE_QUEEN
 }
 
 TEST(startpos, white_king) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_KING,   0x0000000000000008); // WHITE_KING
+    EXPECT_EQ (actualpos.WHITE_KING,   0x0000000000000010); // WHITE_KING
 }
 
 TEST(startpos, white_pieces) {
@@ -95,7 +95,7 @@ TEST(startpos, white_pieces) {
 TEST(startpos, whole_board) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PIECES, 0xFFFF00000000FFFF); // WHOLE_BOARD
+    EXPECT_EQ (actualpos.WHITE_PIECES | actualpos.BLACK_PIECES, 0xFFFF00000000FFFF); // WHOLE_BOARD
 }
 
 //
@@ -189,7 +189,7 @@ TEST(complex_position, white_pieces) {
 TEST(complex_position, whole_board) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PIECES, 0x46F7AAD63874270C); // WHOLE_BOARD
+    EXPECT_EQ (actualpos.WHITE_PIECES | actualpos.BLACK_PIECES, 0x46F7AAD63874270C); // WHOLE_BOARD
 }
 
 //

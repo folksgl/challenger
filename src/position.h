@@ -37,6 +37,8 @@ struct position {
 
 };
 
+position setup_fen(std::string fen);
+
 void set_active_color(char* fen_tok, position* board_position);
 
 void set_castling_rights(char* fen_tok, position* board_position);
@@ -47,10 +49,12 @@ void set_halfmove_clock(char* fen_tok, position* board_position);
 
 void set_fullmove_number(char* fen_tok, position* board_position);
 
-position setup_fen(std::string fen);
+void set_bit(bitmap* bit_map, int sq_num);
 
 void game_move(std::string uci_move);
 
 void debug_position(position pos);
+
+void print_bitboard(bitmap bb);
 
 #endif

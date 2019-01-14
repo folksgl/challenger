@@ -65,7 +65,7 @@ void process_uci_commands() {
 
             // If the "startpos" position is given, use the starting position.
             if (startpos.compare(token) == 0) {
-                setup_fen(start_pos);
+                G_game_position = setup_fen(start_pos);
             }
             else {
                 string uci_fen = token;
@@ -74,7 +74,7 @@ void process_uci_commands() {
                     uci_fen += ' ';
                     uci_fen += token;
                 }
-                setup_fen(uci_fen);
+                G_game_position = setup_fen(uci_fen);
             }
 
             // Handle any moves passed after the fen string.

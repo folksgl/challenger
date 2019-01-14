@@ -4,6 +4,7 @@
 #include "./bitmap.h"
 #include "game_variables.h"
 #include "./position.h"
+#include "algorithm"
 
 using namespace std;
 
@@ -18,8 +19,6 @@ position setup_fen(string fen) {
     // Piece string is the first portion of the fen string. Represents the position of the pieces.
     char *piece_string = strtok(fenstring, " "); 
 
-    char* ranks[8];
-
     char *active_color = strtok(NULL, " ");
     char *castling_rights = strtok(NULL, " ");
     char *passant_target_sq = strtok(NULL, " ");
@@ -32,78 +31,69 @@ position setup_fen(string fen) {
     set_halfmove_clock(halfmove_clock, &board_position);
     set_fullmove_number(fullmove_number, &board_position);
 
-    ranks[7] = strtok(piece_string, "/"); // 8th Rank
-    ranks[6] = strtok(NULL, "/");         // 7th Rank
-    ranks[5] = strtok(NULL, "/");         // 6th Rank
-    ranks[4] = strtok(NULL, "/");         // 5th Rank
-    ranks[3] = strtok(NULL, "/");         // 4th Rank
-    ranks[2] = strtok(NULL, "/");         // 3rd Rank
-    ranks[1] = strtok(NULL, "/");         // 2nd Rank
-    ranks[0] = strtok(NULL, "/");         // 1st Rank
+    string tmp, bit_oriented_string;
 
-    //for (int i = 7; i >= 0; i--) {
-        //cout << "Rank " << i << ": " << ranks[i] << endl;
-    //}
+    tmp = strtok(piece_string, "/");
+    std::reverse(tmp.begin(), tmp.end());
+    bit_oriented_string += tmp;
 
-    if (piece_string == NULL || active_color == NULL || castling_rights == NULL ||
-            passant_target_sq == NULL || halfmove_clock == NULL || fullmove_number == NULL) {
-        cout << "Malformed fen string." << endl;
+    for (int i = 0; i < 7; i++) {
+        tmp = strtok(NULL, "/");
+        std::reverse(tmp.begin(), tmp.end());
+        bit_oriented_string += tmp;
     }
 
     // Create position from piece_string.
-    int sq_num = 0;
+    int sq_num = 63;
+    int length = bit_oriented_string.length();
+    for (int i = 0; i < length; i++) {
+        char input = bit_oriented_string.at(i);
+        //cout << "input switched on was: " << input << "\nsquare num is: " << sq_num << endl;
+        switch(input) {
+            // Lower case = Black Pieces
+            case 'p':
+                set_bit(&board_position.BLACK_PAWN, sq_num--);
+                break;
+            case 'r':
+                set_bit(&board_position.BLACK_ROOK, sq_num--);
+                break;
+            case 'n':
+                set_bit(&board_position.BLACK_KNIGHT, sq_num--);
+                break;
+            case 'b':
+                set_bit(&board_position.BLACK_BISHOP, sq_num--);
+                break;
+            case 'q':
+                set_bit(&board_position.BLACK_QUEEN, sq_num--);
+                break;
+            case 'k':
+                set_bit(&board_position.BLACK_KING, sq_num--);
+                break;
 
-    for (int j = 0; j < 8; j++) {
-        int length = strlen(ranks[j]);
-        for (int i = 0; i < length-1; i++) {
-            char input = ranks[j][i];
-            //cout << "input switched on was: " << input << "\nsquare num is: " << sq_num << endl;
-            switch(input) {
-                // Lower case = Black Pieces
-                case 'p':
-                    board_position.BLACK_PAWN = (bitmap)((bitmap)board_position.BLACK_PAWN | ((bitmap)1 << sq_num++));
-                    break;
-                case 'r':
-                    board_position.BLACK_ROOK = (bitmap)(board_position.BLACK_ROOK | ((bitmap)1 << sq_num++));
-                    break;
-                case 'n':
-                    board_position.BLACK_KNIGHT = (bitmap)(board_position.BLACK_KNIGHT | ((bitmap)1 << sq_num++));
-                    break;
-                case 'b':
-                    board_position.BLACK_BISHOP = (bitmap)(board_position.BLACK_BISHOP | ((bitmap)1 << sq_num++));
-                    break;
-                case 'q':
-                    board_position.BLACK_QUEEN = (bitmap)(board_position.BLACK_QUEEN | ((bitmap)1 << sq_num++));
-                    break;
-                case 'k':
-                    board_position.BLACK_KING = (bitmap)(board_position.BLACK_KING | ((bitmap)1 << sq_num++));
-                    break;
+                // Upper case = White Pieces
+            case 'P':
+                set_bit(&board_position.WHITE_PAWN, sq_num--);
+                break;
+            case 'R':
+                set_bit(&board_position.WHITE_ROOK, sq_num--);
+                break;
+            case 'N':
+                set_bit(&board_position.WHITE_KNIGHT, sq_num--);
+                break;
+            case 'B':
+                set_bit(&board_position.WHITE_BISHOP, sq_num--);
+                break;
+            case 'Q':
+                set_bit(&board_position.WHITE_QUEEN, sq_num--);
+                break;
+            case 'K':
+                set_bit(&board_position.WHITE_KING, sq_num--);
+                break;
 
-                    // Upper case = White Pieces
-                case 'P':
-                    board_position.WHITE_PAWN = (bitmap)(board_position.WHITE_PAWN | ((bitmap)1 << sq_num++));
-                    break;
-                case 'R':
-                    board_position.WHITE_ROOK = (bitmap)(board_position.WHITE_ROOK | ((bitmap)1 << sq_num++));
-                    break;
-                case 'N':
-                    board_position.WHITE_KNIGHT = (bitmap)(board_position.WHITE_KNIGHT | ((bitmap)1 << sq_num++));
-                    break;
-                case 'B':
-                    board_position.WHITE_BISHOP = (bitmap)(board_position.WHITE_BISHOP | ((bitmap)1 << sq_num++));
-                    break;
-                case 'Q':
-                    board_position.WHITE_QUEEN = (bitmap)(board_position.WHITE_QUEEN | ((bitmap)1 << sq_num++));
-                    break;
-                case 'K':
-                    board_position.WHITE_KING = (bitmap)(board_position.WHITE_KING | ((bitmap)1 << sq_num++));
-                    break;
-
-                default :
-                    if (isdigit(input)) {
-                        sq_num += atoi(&input);
-                    }
-            }
+            default :
+                if (isdigit(input)) {
+                    sq_num -= atoi(&input);
+                }
         }
     }
 
@@ -119,11 +109,8 @@ position setup_fen(string fen) {
     return board_position;
 }
 
-void game_move(string uci_move) {
-
-    cout << "getting to method" << endl;
-    cout << uci_move << endl;
-    return;
+void set_bit(bitmap* bit_map, int sq_num) {
+    *bit_map = *bit_map | (bitmap)(*bit_map | ((bitmap)1 << sq_num));
 }
 
 void set_castling_rights(char* fen_tok, position* board_position) {
@@ -132,25 +119,17 @@ void set_castling_rights(char* fen_tok, position* board_position) {
         cout << "Got malformed castling rights string. Exiting..." << endl;
     }
 
-    cout << "The fen_tok for castling is: " << fen_tok << endl;
-
-    cout << "The length of fen_tok is: " << strlen(fen_tok) << endl;
     for (unsigned int i = 0; i < strlen(fen_tok); i++) {
-        cout << "Iterating on fen_tok[" << i << "] -- Value is: " << fen_tok[i] << endl;
         if (fen_tok[i] == 'K') {
-            cout << "SHOULD SET KINGSIDE WHITE" << endl;
             board_position->w_kingside_castle = true;
         }
         if (fen_tok[i] == 'Q') {
             board_position->w_queenside_castle = true;
-            cout << "SHOULD SET QUEENSIDE WHITE" << endl;
         }
         if (fen_tok[i] == 'k') {
             board_position->b_kingside_castle = true;
-            cout << "SHOULD SET KINGSIDE BLACK" << endl;
         }
         if (fen_tok[i] == 'q') {
-            cout << "SHOULD SET QUEENSIDE BLACK" << endl;
             board_position->b_queenside_castle = true;
         }
     }
@@ -179,8 +158,10 @@ void set_passant_target_sq(char* fen_tok, position* board_position) {
     if (fen_tok[0] == '-') {
         board_position->passant_target_sq[0] = '-';
         board_position->passant_target_sq[0] = '\0';
+        return;
     }
-    else if (!isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
+
+    if (!isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
         cout << "Got malformed passant target square string. Exiting..." << endl;
         exit(1);
     }
@@ -228,95 +209,138 @@ void set_fullmove_number(char* fen_tok, position* board_position) {
     return;
 }
 
+void game_move(string uci_move) {
+
+    cout << "getting to method" << endl;
+    cout << uci_move << endl;
+    return;
+}
+
 void debug_position(position pos) {
 
-    bitmap maps[14];
-    maps[0] = pos.BLACK_PAWN;
-    maps[1] = pos.BLACK_ROOK;
-    maps[2] = pos.BLACK_KNIGHT;
-    maps[3] = pos.BLACK_BISHOP;
-    maps[4] = pos.BLACK_QUEEN;
-    maps[5] = pos.BLACK_KING;
-    maps[6] = pos.BLACK_PIECES;
+    bitmap bb;
 
-    maps[7] = pos.WHITE_PAWN;
-    maps[8] = pos.WHITE_ROOK;
-    maps[9] = pos.WHITE_KNIGHT;
-    maps[10] = pos.WHITE_BISHOP;
-    maps[11] = pos.WHITE_QUEEN;
-    maps[12] = pos.WHITE_KING;
-    maps[13] = pos.WHITE_PIECES;
+    cout << "\n\nBlack pawn" << endl;
+    bb = pos.BLACK_PAWN;
+    print_bitboard(bb);
+    cout << "\n\nBlack rook" << endl;
+    bb = pos.BLACK_ROOK;
+    print_bitboard(bb);
+    cout << "\n\nBlack knight" << endl;
+    bb = pos.BLACK_KNIGHT;
+    print_bitboard(bb);
+    cout << "\n\nBlack bishop" << endl;
+    bb = pos.BLACK_BISHOP;
+    print_bitboard(bb);
+    cout << "\n\nBlack queen" << endl;
+    bb = pos.BLACK_QUEEN;
+    print_bitboard(bb);
+    cout << "\n\nBlack king" << endl;
+    bb = pos.BLACK_KING;
+    print_bitboard(bb);
+    cout << "\n\nBlack pieces" << endl;
+    bb = pos.BLACK_PIECES;
+    print_bitboard(bb);
 
-    cout << "\n\n| Black Pawn                | Black Rook                | Black Knight               " << endl;
-    for (int h = 0; h < 8; h++) {
-        for (int j = 0; j < 3; j++) {
-            cout << "|  ";
-            for (int i = (56 - (h*8)); i <= (63 - (h * 8)); i++) {
-                if (((maps[j] >> i) & 1) == 0) {
-                    cout << '-' << ' ';
-                }
-                else {
-                    cout << 'B' << ' ';
-                }
-            }
-            cout << "         ";
+    cout << "\n\nWhite pawn" << endl;
+    bb = pos.WHITE_PAWN;
+    print_bitboard(bb);
+    cout << "\n\nWhite rook" << endl;
+    bb = pos.WHITE_ROOK;
+    print_bitboard(bb);
+    cout << "\n\nWhite knight" << endl;
+    bb = pos.WHITE_KNIGHT;
+    print_bitboard(bb);
+    cout << "\n\nWhite bishop" << endl;
+    bb = pos.WHITE_BISHOP;
+    print_bitboard(bb);
+    cout << "\n\nWhite queen" << endl;
+    bb = pos.WHITE_QUEEN;
+    print_bitboard(bb);
+    cout << "\n\nWhite king" << endl;
+    bb = pos.WHITE_KING;
+    print_bitboard(bb);
+    cout << "\n\nWhite pieces" << endl;
+    bb = pos.WHITE_PIECES;
+    print_bitboard(bb);
+
+}
+
+void print_bitboard(bitmap bb) {
+
+    for (int i = 56; i < 64; i++) {
+        if ((bb >> i) & 0x1) {
+            cout << 'B';
         }
-        cout << endl;
-    }
-
-    cout << "\n\n| Black Bishop              | Black Queen               | Black King                | Black Pieces" << endl;
-    for (int h = 0; h < 8; h++) {
-        for (int j = 3; j < 7; j++) {
-            cout << "|  ";
-            for (int i = (56 - (h*8)); i <= (63 - (h * 8)); i++) {
-                if (((maps[j] >> i) & 1) == 0) {
-                    cout << '-' << ' ';
-                }
-                else {
-                    cout << 'B' << ' ';
-                }
-            }
-            cout << "         ";
+        else {
+            cout << '-';
         }
-        cout << endl;
     }
-
-    cout << "\n=======================================================================================" << endl;
-
-    cout << "\n\n| White Pawn                | White Rook                | White Knight               " << endl;
-    for (int h = 0; h < 8; h++) {
-        for (int j = 7; j < 10; j++) {
-            cout << "|  ";
-            for (int i = (56 - (h*8)); i <= (63 - (h * 8)); i++) {
-                if (((maps[j] >> i) & 1) == 0) {
-                    cout << '-' << ' ';
-                }
-                else {
-                    cout << 'W' << ' ';
-                }
-            }
-            cout << "         ";
+    cout << endl;
+    for (int i = 48; i < 56; i++) {
+        if ((bb >> i) & 0x1) {
+            cout << 'B';
         }
-        cout << endl;
-    }
-
-    cout << "\n\n| White Bishop              | White Queen               | White King                | White Pieces" << endl;
-    for (int h = 0; h < 8; h++) {
-        for (int j = 10; j < 14; j++) {
-            cout << "|  ";
-            for (int i = (56 - (h*8)); i <= (63 - (h * 8)); i++) {
-                if (((maps[j] >> i) & 1) == 0) {
-                    cout << '-' << ' ';
-                }
-                else {
-                    cout << 'W' << ' ';
-                }
-            }
-            cout << "         " ;
+        else {
+            cout << '-';
         }
-        cout << endl;
     }
+    cout << endl;
+    for (int i = 40; i < 48; i++) {
+        if ((bb >> i) & 0x1) {
+            cout << 'B';
+        }
+        else {
+            cout << '-';
+        }
+    }
+    cout << endl;
 
+    for (int i = 32; i < 40; i++) {
+        if ((bb >> i) & 0x1) {
+            cout << 'B';
+        }
+        else {
+            cout << '-';
+        }
+    }
+    cout << endl;
+    for (int i = 24; i < 32; i++) {
+        if ((bb >> i) & 0x1) {
+            cout << 'B';
+        }
+        else {
+            cout << '-';
+        }
+    }
+    cout << endl;
+    for (int i = 16; i < 24; i++) {
+        if ((bb >> i) & 0x1) {
+            cout << 'B';
+        }
+        else {
+            cout << '-';
+        }
+    }
+    cout << endl;
+    for (int i = 8; i < 16; i++) {
+        if ((bb >> i) & 0x1) {
+            cout << 'B';
+        }
+        else {
+            cout << '-';
+        }
+    }
+    cout << endl;
+    for (int i = 0; i < 8; i++) {
+        if ((bb >> i) & 0x1) {
+            cout << 'B';
+        }
+        else {
+            cout << '-';
+        }
+    }
+    cout << endl;
     return;
 }
 
