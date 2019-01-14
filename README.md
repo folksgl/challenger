@@ -41,3 +41,6 @@ To install the challenger engine and run it against another chess engine, you wi
 
 ## Development
 Development for challenger will be done in C++, using the googletest framework for testing.
+
+## Contributing
+Before opening issues or pull requests, please read the [contributing page](https://github.com/folksgl/challenger/CONTRIBUTING.md) for Challenger.
