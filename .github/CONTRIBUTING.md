@@ -10,7 +10,7 @@ A propperly set up development environment will be able to do the following **wi
   - [x] make test
   - [x] make clean
 
-#### **Did you find a bug**
+#### **Did you find a bug?**
 
 * **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/folksgl/challenger/issues).
 
