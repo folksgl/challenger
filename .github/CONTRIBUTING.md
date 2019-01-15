@@ -1,7 +1,7 @@
 ## How to contribute to Challenger
 
 #### **Setting up a development environment**
-* First things first, clone the repository or branch you wish to work on.
+* First things first, clone the Challenger repository or branch you wish to work on.
 * Set up googletest. This includes compiling the project. Directions for that can be found in the googletest project.
 * Once googletest is installed, set the GTEST_DIR var in the makefile. By default this is set to $(HOME)/googletest.
 
