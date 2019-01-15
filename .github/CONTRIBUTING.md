@@ -1,5 +1,15 @@
 ## How to contribute to Challenger
 
+#### **Setting up a development environment**
+* First things first, clone the repository or branch you wish to work on.
+* Set up googletest. This includes compiling the project. Directions for that can be found in the googletest project.
+* Once googletest is installed, set the GTEST_DIR var in the makefile. By default this is set to $(HOME)/googletest.
+
+A propperly set up development environment will be able to do the following **without error or warning**:
+  - [x] make
+  - [x] make test
+  - [x] make clean
+
 #### **Did you find a bug**
 
 * **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/folksgl/challenger/issues).
