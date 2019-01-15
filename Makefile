@@ -5,6 +5,10 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -Wall
 
+# DEVELOPERS, the googletest home directory goes here. i.e. if you cloned googletest into /usr/lib, then
+# GTEST_DIR would then be /usr/lib/googletest
+GTEST_DIR = $(HOME)/googletest
+
 # Libraries needed to link for googletest.
 TEST_LIBS = -lgtest -lpthread
 
@@ -14,7 +18,7 @@ TEST_SRC += $(wildcard test/*.cpp)
 
 # Test flags
 TEST_EXECUTABLE = test_runner
-TEST_CXX_FLAGS = $(CXXFLAGS) -isystem $(HOME)/googletest/googletest/include 
+TEST_CXX_FLAGS = $(CXXFLAGS) -isystem $(GTEST_DIR)/googletest/include 
 
 # Project flags
 BUILD_DIR = build
