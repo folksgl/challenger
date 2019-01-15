@@ -39,6 +39,9 @@ To install the challenger engine and run it against another chess engine, you wi
    ```
 3) Open Arena and import the challenger engine executable. Navigate to Engines -> Install New Engine and choose the challenger executable that was just compiled. (Will be in the challenger project home directory)
 
+#### Installing Googletest
+  If you intend to develop code for Challenger, testing will need to be done with googletest. Installation instructions for googletest can be found in [the googletest readme](https://github.com/google/googletest/blob/master/googletest/README.md). More information about setting up your environment for developing can be found in the [contributing page](https://github.com/folksgl/challenger/blob/master/.github/CONTRIBUTING.md).
+
 ## Development
 Development for challenger will be done in C++, using the googletest framework for testing.
 
