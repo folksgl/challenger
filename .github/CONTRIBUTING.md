@@ -4,6 +4,7 @@
 * First things first, clone the Challenger repository or branch you wish to work on.
 * Set up googletest. This includes compiling the project. Directions for that can be found in the googletest project.
 * Once googletest is installed, set the GTEST_DIR var in the makefile. By default this is set to $(HOME)/googletest.
+* **The most important step by far** is to understand the code that is already in place. Attempting to develop and add new features without understanding the codebase will likely result in adding code that will only introduce bugs to your development branch.
 
 A propperly set up development environment will be able to do the following **without error or warning**:
   - [x] make
