@@ -1,9 +1,9 @@
 
-.PHONY: test clean
+.PHONY: all test clean directory optimized setOflags
 
 # Compiler Settings
 CXX = g++
-CXXFLAGS = -g -std=c++11 -Wall
+CXXFLAGS = -g3 -std=c++11 -Wall
 
 # DEVELOPERS, the googletest home directory goes here. i.e. if you cloned googletest into /usr/lib, then
 # GTEST_DIR would then be /usr/lib/googletest
@@ -25,11 +25,18 @@ BUILD_DIR = build
 EXECUTABLE = challenger
 OBJS = main.o uci.o position.o
 
+all : challenger
 
-$(shell if [ ! -d build ]; then mkdir build; fi )
+setOflags: 
+	$(eval CXXFLAGS = -std=c++11 -Wall -s -O3)
 
-challenger : $(OBJS)
+optimized : setOflags challenger
+
+challenger : directory $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(EXECUTABLE) $(BUILD_DIR)/*.o
+
+directory: 
+	$(shell if [ ! -d build ]; then mkdir build; fi )
 
 %.o : src/%.cpp
 	$(CXX) -c $(CXXFLAGS) -o build/$@ $<
