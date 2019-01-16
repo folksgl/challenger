@@ -34,8 +34,10 @@ To install the challenger engine and run it against another chess engine, you wi
    ```
    git clone https://github.com/folksgl/challenger.git
    cd challenger/
-   make
+   make optimized
    ```
+   For more make options, including building for developers please review the Makefile and the contributing page.
+   
 3) Open Arena and import the challenger engine executable. Navigate to Engines -> Install New Engine and choose the challenger executable that was just compiled. (Will be in the challenger project home directory)
 
 #### Installing Googletest
