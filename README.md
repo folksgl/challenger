@@ -1,6 +1,5 @@
-# Challenger
 
-![](.github/IMG/ChessLogo.png)
+![](.github/IMG/challenger.svg)
 
 Challenger is my own custom chess engine.
 
