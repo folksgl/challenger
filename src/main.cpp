@@ -11,7 +11,7 @@ int main()
 {
     G_debug = false;
 
-    process_uci_commands();
+    process_uci_inputs();
 
     return 0;
 }

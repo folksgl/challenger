@@ -1,20 +1,20 @@
 #ifndef UCI_H
 #define UCI_H
 
-void process_uci_commands();
+void process_uci_inputs();
 
-void process_uci_signal();
+void process_uci_command();
 
-void process_debug_signal(std::string uci_token);
+void process_debug_command(std::string uci_token);
 
-void process_setoption_signal(std::string uci_token);
+void process_setoption_command(std::string uci_token);
 
-void process_position_signal(std::string uci_token);
+void process_position_command(std::string uci_token);
 
-void process_go_signal(std::string uci_token);
+void process_go_command(std::string uci_token);
 
-void process_stop_signal();
+void process_stop_command();
 
-void process_ponderhit_signal();
+void process_ponderhit_command();
 
 #endif
