@@ -1,5 +1,10 @@
 
-.PHONY: all test clean directory optimized setOflags
+# PHONY target descriptions:
+# 	- test: compiles and runs the tests for the challenger project
+# 	- clean: removes object files and executables
+# 	- optimized: compiles challenger with heavy optimization (used for releases, not development)
+
+.PHONY: test clean optimized
 
 # Compiler Settings
 CXX = g++
@@ -27,10 +32,10 @@ OBJS = main.o uci.o position.o
 
 all : challenger
 
-setOflags: 
+setOptimizeflags: 
 	$(eval CXXFLAGS = -std=c++11 -Wall -s -O3)
 
-optimized : setOflags challenger
+optimized : setOptimizeflags challenger
 
 challenger : directory $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(EXECUTABLE) $(BUILD_DIR)/*.o
