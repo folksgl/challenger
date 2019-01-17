@@ -10,6 +10,10 @@ using namespace std;
 
 #define start_pos "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
+/*
+ *  process_uci_inputs reads in input from stdin (given by a uci-compatible gui) and
+ *  processes the instructions given to manipulate game progression.
+ */
 void process_uci_inputs() {
 
     string uci_input; // The current UCI command read from stdin.
@@ -55,12 +59,18 @@ void process_uci_inputs() {
     } 
 }
 
+/*
+ *  process_uci_command handles the "uci" command given by the gui
+ */
 void process_uci_command() {
     cout << "id name Challenger\n"
             "id author folksgl\n"
             "uciok" << endl;
 }
 
+/*
+ *  process_debug_command handles the "debug..." command given by the gui
+ */
 void process_debug_command(std::string uci_input) {
     if (uci_input == "debug on") {
         G_debug = true;
@@ -72,12 +82,18 @@ void process_debug_command(std::string uci_input) {
     return;
 }
 
+/*
+ *  process_setoption_command handles the "setoption..." command given by the gui
+ */
 void process_setoption_command(std::string uci_input) {
     //TODO
     //No options yet
     return;
 }
 
+/*
+ *  process_position_command handles the "position..." command given by the gui
+ */
 void process_position_command(std::string uci_input) {
     // Convert uci_input into char array.
     char * command = new char [uci_input.length()+1];
@@ -132,17 +148,26 @@ void process_position_command(std::string uci_input) {
     return;
 }
 
+/*
+ *  process_go_command handles the "go..." command given by the gui
+ */
 void process_go_command(std::string uci_input) {
     //TODO
     //cout << "bestmove " << char(105-flag) << "7" << char(105-flag) << "5" << endl;
     return;
 }
 
+/*
+ *  process_stop_command handles the "stop..." command given by the gui
+ */
 void process_stop_command() {
 
     return;
 }
 
+/*
+ *  process_ponderhit_command handles the "ponderhit..." command given by the gui
+ */
 void process_ponderhit_command() {
 
     return;
