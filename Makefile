@@ -46,7 +46,7 @@ directory:
 %.o : src/%.cpp
 	$(CXX) -c $(CXXFLAGS) -o build/$@ $<
 
-test :
+test : directory
 	$(CXX) $(TEST_CXX_FLAGS) -o $(BUILD_DIR)/$(TEST_EXECUTABLE) $(TEST_SRC) $(TEST_LIBS)
 	$(BUILD_DIR)/$(TEST_EXECUTABLE)
 
