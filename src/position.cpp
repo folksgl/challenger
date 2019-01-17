@@ -8,6 +8,9 @@
 
 using namespace std;
 
+/*
+ *  setup_fen returns a position that has been initialized to the fen string passed to it.
+ */
 position setup_fen(string fen) {
 
     position board_position;
@@ -17,23 +20,40 @@ position setup_fen(string fen) {
     strcpy (fenstring, fen.c_str());
 
     // Piece string is the first portion of the fen string. Represents the position of the pieces.
-    char *piece_string = strtok(fenstring, " "); 
+    char *piece_string  = strtok(fenstring, " "); 
+    char *active_color  = strtok(NULL, " "); 
+    char *castle_rights = strtok(NULL, " "); 
+    char *passant_sq    = strtok(NULL, " "); 
+    char *halfmove_clk  = strtok(NULL, " "); 
+    char *fullmove_num  = strtok(NULL, " "); 
 
-    char *active_color = strtok(NULL, " ");
-    char *castling_rights = strtok(NULL, " ");
-    char *passant_target_sq = strtok(NULL, " ");
-    char *halfmove_clock = strtok(NULL, " ");
-    char *fullmove_number = strtok(NULL, " ");
+    set_piece_positions(piece_string,  &board_position);
+    set_active_color(active_color,     &board_position);
+    set_castling_rights(castle_rights, &board_position);
+    set_passant_target_sq(passant_sq,  &board_position);
+    set_halfmove_clock(halfmove_clk,   &board_position);
+    set_fullmove_number(fullmove_num,  &board_position);
 
-    set_active_color(active_color, &board_position);
-    set_castling_rights(castling_rights, &board_position);
-    set_passant_target_sq(passant_target_sq, &board_position);
-    set_halfmove_clock(halfmove_clock, &board_position);
-    set_fullmove_number(fullmove_number, &board_position);
+    //debug_position(board_position);
+    return board_position;
+}
+
+/*
+ *  set_bit sets the value of the bit indicated by sq_num to 1.
+ */
+void set_bit(bitmap* bit_map, int sq_num) {
+    *bit_map = *bit_map | (bitmap)(*bit_map | ((bitmap)1 << sq_num));
+}
+
+/*
+ *  set_piece_positions sets the value of all the bitmaps in board_position
+ *  to the values found in fen_tok.
+ */
+void set_piece_positions(char* fen_tok, position* pos) {
 
     string tmp, bit_oriented_string;
 
-    tmp = strtok(piece_string, "/");
+    tmp = strtok(fen_tok, "/");
     std::reverse(tmp.begin(), tmp.end());
     bit_oriented_string += tmp;
 
@@ -43,7 +63,7 @@ position setup_fen(string fen) {
         bit_oriented_string += tmp;
     }
 
-    // Create position from piece_string.
+    // Create position from fen_tok.
     int sq_num = 63;
     int length = bit_oriented_string.length();
     for (int i = 0; i < length; i++) {
@@ -51,44 +71,20 @@ position setup_fen(string fen) {
         //cout << "input switched on was: " << input << "\nsquare num is: " << sq_num << endl;
         switch(input) {
             // Lower case = Black Pieces
-            case 'p':
-                set_bit(&board_position.BLACK_PAWN, sq_num--);
-                break;
-            case 'r':
-                set_bit(&board_position.BLACK_ROOK, sq_num--);
-                break;
-            case 'n':
-                set_bit(&board_position.BLACK_KNIGHT, sq_num--);
-                break;
-            case 'b':
-                set_bit(&board_position.BLACK_BISHOP, sq_num--);
-                break;
-            case 'q':
-                set_bit(&board_position.BLACK_QUEEN, sq_num--);
-                break;
-            case 'k':
-                set_bit(&board_position.BLACK_KING, sq_num--);
-                break;
+            case 'p': set_bit(&pos->BLACK_PAWN,   sq_num--); break;
+            case 'r': set_bit(&pos->BLACK_ROOK,   sq_num--); break;
+            case 'n': set_bit(&pos->BLACK_KNIGHT, sq_num--); break;
+            case 'b': set_bit(&pos->BLACK_BISHOP, sq_num--); break;
+            case 'q': set_bit(&pos->BLACK_QUEEN,  sq_num--); break;
+            case 'k': set_bit(&pos->BLACK_KING,   sq_num--); break;
 
                 // Upper case = White Pieces
-            case 'P':
-                set_bit(&board_position.WHITE_PAWN, sq_num--);
-                break;
-            case 'R':
-                set_bit(&board_position.WHITE_ROOK, sq_num--);
-                break;
-            case 'N':
-                set_bit(&board_position.WHITE_KNIGHT, sq_num--);
-                break;
-            case 'B':
-                set_bit(&board_position.WHITE_BISHOP, sq_num--);
-                break;
-            case 'Q':
-                set_bit(&board_position.WHITE_QUEEN, sq_num--);
-                break;
-            case 'K':
-                set_bit(&board_position.WHITE_KING, sq_num--);
-                break;
+            case 'P': set_bit(&pos->WHITE_PAWN,   sq_num--); break;
+            case 'R': set_bit(&pos->WHITE_ROOK,   sq_num--); break;
+            case 'N': set_bit(&pos->WHITE_KNIGHT, sq_num--); break;
+            case 'B': set_bit(&pos->WHITE_BISHOP, sq_num--); break;
+            case 'Q': set_bit(&pos->WHITE_QUEEN,  sq_num--); break;
+            case 'K': set_bit(&pos->WHITE_KING,   sq_num--); break;
 
             default :
                 if (isdigit(input)) {
@@ -97,22 +93,19 @@ position setup_fen(string fen) {
         }
     }
 
-    board_position.WHITE_PIECES = board_position.WHITE_PAWN | board_position.WHITE_ROOK |
-        board_position.WHITE_KNIGHT | board_position.WHITE_BISHOP | board_position.WHITE_QUEEN |
-        board_position.WHITE_KING;
+    pos->WHITE_PIECES = pos->WHITE_PAWN   | pos->WHITE_ROOK  | pos->WHITE_KNIGHT | 
+                        pos->WHITE_BISHOP | pos->WHITE_QUEEN | pos->WHITE_KING;
 
-    board_position.BLACK_PIECES = board_position.BLACK_PAWN | board_position.BLACK_ROOK |
-        board_position.BLACK_KNIGHT | board_position.BLACK_BISHOP | board_position.BLACK_QUEEN |
-        board_position.BLACK_KING;
+    pos->BLACK_PIECES = pos->BLACK_PAWN   | pos->BLACK_ROOK  | pos->BLACK_KNIGHT | 
+                        pos->BLACK_BISHOP | pos->BLACK_QUEEN | pos->BLACK_KING;
 
-    //debug_position(board_position);
-    return board_position;
+    return;
 }
 
-void set_bit(bitmap* bit_map, int sq_num) {
-    *bit_map = *bit_map | (bitmap)(*bit_map | ((bitmap)1 << sq_num));
-}
-
+/*
+ *  set_castling_rights sets the value of castling_rights in board_position
+ *  to the value found in fen_tok.
+ */
 void set_castling_rights(char* fen_tok, position* board_position) {
 
     if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 4) {
@@ -123,13 +116,13 @@ void set_castling_rights(char* fen_tok, position* board_position) {
         if (fen_tok[i] == 'K') {
             board_position->w_kingside_castle = true;
         }
-        if (fen_tok[i] == 'Q') {
+        else if (fen_tok[i] == 'Q') {
             board_position->w_queenside_castle = true;
         }
-        if (fen_tok[i] == 'k') {
+        else if (fen_tok[i] == 'k') {
             board_position->b_kingside_castle = true;
         }
-        if (fen_tok[i] == 'q') {
+        else if (fen_tok[i] == 'q') {
             board_position->b_queenside_castle = true;
         }
     }
@@ -138,6 +131,10 @@ void set_castling_rights(char* fen_tok, position* board_position) {
 }
 
 
+/*
+ *  set_active_color sets the value of active_color in board_position
+ *  to the value found in fen_tok.
+ */
 void set_active_color(char* fen_tok, position* board_position) {
 
     if (fen_tok == NULL || strlen(fen_tok) != 1) {
@@ -149,6 +146,10 @@ void set_active_color(char* fen_tok, position* board_position) {
     return;
 }
 
+/*
+ *  set_passant_target_sq sets the value of passant_target_sq in board_position
+ *  to the value found in fen_tok.
+ */
 void set_passant_target_sq(char* fen_tok, position* board_position) {
     if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 2) {
         cout << "Got malformed passant target square string. Exiting..." << endl;
@@ -173,6 +174,10 @@ void set_passant_target_sq(char* fen_tok, position* board_position) {
     return;
 }
 
+/*
+ *  set_halfmove_clock sets the value of halfmove_clock in board_position
+ *  to the value found in fen_tok.
+ */
 void set_halfmove_clock(char* fen_tok, position* board_position) {
     if (fen_tok == NULL) {
         cout << "Got malformed halfmove clock string. Exiting...";
@@ -191,6 +196,10 @@ void set_halfmove_clock(char* fen_tok, position* board_position) {
     return;
 }
 
+/*
+ *  set_fullmove_number sets the value of fullmove_number in board_position
+ *  to the value found in fen_tok.
+ */
 void set_fullmove_number(char* fen_tok, position* board_position) {
     if (fen_tok == NULL) {
         cout << "Got malformed fullmove_number string. Exiting...";
@@ -220,49 +229,21 @@ void debug_position(position pos) {
 
     bitmap bb;
 
-    cout << "\n\nBlack pawn" << endl;
-    bb = pos.BLACK_PAWN;
-    print_bitboard(bb);
-    cout << "\n\nBlack rook" << endl;
-    bb = pos.BLACK_ROOK;
-    print_bitboard(bb);
-    cout << "\n\nBlack knight" << endl;
-    bb = pos.BLACK_KNIGHT;
-    print_bitboard(bb);
-    cout << "\n\nBlack bishop" << endl;
-    bb = pos.BLACK_BISHOP;
-    print_bitboard(bb);
-    cout << "\n\nBlack queen" << endl;
-    bb = pos.BLACK_QUEEN;
-    print_bitboard(bb);
-    cout << "\n\nBlack king" << endl;
-    bb = pos.BLACK_KING;
-    print_bitboard(bb);
-    cout << "\n\nBlack pieces" << endl;
-    bb = pos.BLACK_PIECES;
-    print_bitboard(bb);
+    cout << "\n\nBlack pawn" << endl;   bb = pos.BLACK_PAWN;   print_bitboard(bb);
+    cout << "\n\nBlack rook" << endl;   bb = pos.BLACK_ROOK;   print_bitboard(bb);
+    cout << "\n\nBlack knight" << endl; bb = pos.BLACK_KNIGHT; print_bitboard(bb);
+    cout << "\n\nBlack bishop" << endl; bb = pos.BLACK_BISHOP; print_bitboard(bb);
+    cout << "\n\nBlack queen" << endl;  bb = pos.BLACK_QUEEN;  print_bitboard(bb);
+    cout << "\n\nBlack king" << endl;   bb = pos.BLACK_KING;   print_bitboard(bb);
+    cout << "\n\nBlack pieces" << endl; bb = pos.BLACK_PIECES; print_bitboard(bb);
 
-    cout << "\n\nWhite pawn" << endl;
-    bb = pos.WHITE_PAWN;
-    print_bitboard(bb);
-    cout << "\n\nWhite rook" << endl;
-    bb = pos.WHITE_ROOK;
-    print_bitboard(bb);
-    cout << "\n\nWhite knight" << endl;
-    bb = pos.WHITE_KNIGHT;
-    print_bitboard(bb);
-    cout << "\n\nWhite bishop" << endl;
-    bb = pos.WHITE_BISHOP;
-    print_bitboard(bb);
-    cout << "\n\nWhite queen" << endl;
-    bb = pos.WHITE_QUEEN;
-    print_bitboard(bb);
-    cout << "\n\nWhite king" << endl;
-    bb = pos.WHITE_KING;
-    print_bitboard(bb);
-    cout << "\n\nWhite pieces" << endl;
-    bb = pos.WHITE_PIECES;
-    print_bitboard(bb);
+    cout << "\n\nWhite pawn" << endl;   bb = pos.WHITE_PAWN;   print_bitboard(bb);
+    cout << "\n\nWhite rook" << endl;   bb = pos.WHITE_ROOK;   print_bitboard(bb);
+    cout << "\n\nWhite knight" << endl; bb = pos.WHITE_KNIGHT; print_bitboard(bb);
+    cout << "\n\nWhite bishop" << endl; bb = pos.WHITE_BISHOP; print_bitboard(bb);
+    cout << "\n\nWhite queen" << endl;  bb = pos.WHITE_QUEEN;  print_bitboard(bb);
+    cout << "\n\nWhite king" << endl;   bb = pos.WHITE_KING;   print_bitboard(bb);
+    cout << "\n\nWhite pieces" << endl; bb = pos.WHITE_PIECES; print_bitboard(bb);
 
 }
 
