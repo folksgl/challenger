@@ -16,30 +16,26 @@ using namespace std;
  */
 void process_uci_inputs() {
 
-    string uci_input; // The current UCI command read from stdin.
-    string uci_command;
+    string uci_input;   // The current line read from stdin.
+    string uci_command; // The first token of uci_input that should be a uci command
 
-    // Get command from stdin and process>
+    // Get command from stdin and process
     while (getline(cin, uci_input)) 
     {
         uci_command = uci_input.substr(0, uci_input.find_first_of(" "));
 
-        // Output name and author, followed by "uciok".
         if (uci_command == "uci") {
             process_uci_command();
         }
-        // Turns on/off debugging.
         else if (uci_command == "debug") {
             process_debug_command(uci_input);
         }
-        // Signals the engine is ready to proceed with the next command.
         else if (uci_command == "isready") {
             cout << "readyok" << endl;
         }
         else if (uci_command == "setoption") {
             process_setoption_command(uci_input);
         }
-        // Set up the position given.
         else if (uci_command == "position") {
             process_position_command(uci_input);
         }
