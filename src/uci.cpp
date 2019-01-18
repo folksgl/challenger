@@ -124,16 +124,13 @@ void process_position_command(std::string uci_input) {
     // Reset the command string to the full command.
     strcpy (command, uci_input.c_str());
     token = strtok(command, " ");
-    cout << "The value after reset is: " << token << endl;
 
     while (token != NULL) 
     {
         if (strncmp(token, "moves", 6) == 0) {
-            cout << "Moves was reached" << endl;
             token = strtok(NULL, " "); 
             while (token != NULL) {
-                cout << "The token after moves " << token << endl;
-                game_move(token);
+                game_move(token, &G_game_position);
                 token = strtok(NULL, " "); 
             }
             break;

@@ -54,7 +54,15 @@ void set_fullmove_number(char* fen_tok, position* board_position);
 
 void set_bit(bitmap* bit_map, int sq_num);
 
-void game_move(std::string uci_move);
+void game_move(std::string move, position* board_position);
+
+int zero_at(int square, position* board_position);
+
+int file_to_num(char file);
+
+int get_square_num(std::string square_string);
+
+void error_exit(std::string error);
 
 void debug_position(position pos);
 
