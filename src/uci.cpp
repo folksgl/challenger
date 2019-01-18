@@ -95,11 +95,10 @@ void process_position_command(std::string uci_input) {
     char * command = new char [uci_input.length()+1];
     strcpy (command, uci_input.c_str());
 
-    // First token is the "position command"
+    // First token is the "position command", disregard this and get to the fen string.
     char *token = strtok(command, " "); 
-
-    // Disregard the "position" token and get the fen string.
     token = strtok(NULL, " "); 
+
     string startpos = "startpos";
 
     // Check for bad (empty) position command.
@@ -115,8 +114,7 @@ void process_position_command(std::string uci_input) {
         string uci_fen = token;
         for (int i = 0; i < 5; i++) {
             token = strtok(NULL, " ");
-            uci_fen += ' ';
-            uci_fen += token;
+            uci_fen += ' ' + token;
         }
         G_game_position = setup_fen(uci_fen);
     }
@@ -124,15 +122,12 @@ void process_position_command(std::string uci_input) {
     // Reset the command string to the full command.
     strcpy (command, uci_input.c_str());
     token = strtok(command, " ");
-    cout << "The value after reset is: " << token << endl;
 
     while (token != NULL) 
     {
         if (strncmp(token, "moves", 6) == 0) {
-            cout << "Moves was reached" << endl;
             token = strtok(NULL, " "); 
             while (token != NULL) {
-                cout << "The token after moves " << token << endl;
                 game_move(token);
                 token = strtok(NULL, " "); 
             }
