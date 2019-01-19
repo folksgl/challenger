@@ -128,7 +128,11 @@ void process_position_command(std::string uci_input) {
         if (strncmp(token, "moves", 6) == 0) {
             token = strtok(NULL, " "); 
             while (token != NULL) {
+<<<<<<< HEAD
                 game_move(token);
+=======
+                game_move(token, &G_game_position);
+>>>>>>> 890219a5c83574facbc060e22a85c78317df9fa5
                 token = strtok(NULL, " "); 
             }
             break;
