@@ -4,23 +4,12 @@
 #ifndef POSITION_H
 #define POSITION_H
 
+enum Piece_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces, 
+                   b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king, b_pieces };
+
 struct position {
 
-    bitmap WHITE_PAWN = 0;
-    bitmap WHITE_ROOK = 0;
-    bitmap WHITE_KNIGHT = 0;
-    bitmap WHITE_BISHOP = 0;
-    bitmap WHITE_QUEEN = 0;
-    bitmap WHITE_KING = 0;
-    bitmap WHITE_PIECES = 0;
-
-    bitmap BLACK_PAWN = 0;
-    bitmap BLACK_ROOK = 0;
-    bitmap BLACK_KNIGHT = 0;
-    bitmap BLACK_BISHOP = 0;
-    bitmap BLACK_QUEEN = 0;
-    bitmap BLACK_KING = 0;
-    bitmap BLACK_PIECES = 0;
+    bitmap maps[14] = { };
 
     char active_color = 'w';
 

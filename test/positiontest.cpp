@@ -11,91 +11,91 @@ using namespace std;
 TEST(startpos, black_pawn) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_PAWN,   0x00FF000000000000); // BLACK_PAWN
+    EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn]
 }
 
 TEST(startpos, black_rook) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_ROOK,   0x8100000000000000); // BLACK_ROOK
+    EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook]
 }
 
 TEST(startpos, black_knight) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_KNIGHT, 0x4200000000000000); // BLACK_KNIGHT
+    EXPECT_EQ (actualpos.maps[b_knight], 0x4200000000000000); // b_knight]
 }
 
 TEST(startpos, black_bishop) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_BISHOP, 0x2400000000000000); // BLACK_BISHOP
+    EXPECT_EQ (actualpos.maps[b_bishop], 0x2400000000000000); // b_bishop]
 }
 
 TEST(startpos, black_queen) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_QUEEN,  0x0800000000000000); // BLACK_QUEEN
+    EXPECT_EQ (actualpos.maps[b_queen],  0x0800000000000000); // b_queen]
 }
 
 TEST(startpos, black_king) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_KING,   0x1000000000000000); // BLACK_KING
+    EXPECT_EQ (actualpos.maps[b_king],   0x1000000000000000); // b_king]
 }
 
 TEST(startpos, black_pieces) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_PIECES, 0xFFFF000000000000); // BLACK_PIECES
+    EXPECT_EQ (actualpos.maps[b_pieces], 0xFFFF000000000000); // b_pieces]
 }
 
 TEST(startpos, white_pawn) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PAWN,   0x000000000000FF00); // WHITE_PAWN
+    EXPECT_EQ (actualpos.maps[w_pawn],   0x000000000000FF00); // w_pawn]
 }
 
 TEST(startpos, white_rook) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_ROOK,   0x0000000000000081); // WHITE_ROOK
+    EXPECT_EQ (actualpos.maps[w_rook],   0x0000000000000081); // w_rook]
 }
 
 TEST(startpos, white_knight) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_KNIGHT, 0x0000000000000042); // WHITE_KNIGHT
+    EXPECT_EQ (actualpos.maps[w_knight], 0x0000000000000042); // w_knight]
 }
 
 TEST(startpos, white_bishop) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_BISHOP, 0x0000000000000024); // WHITE_BISHOP
+    EXPECT_EQ (actualpos.maps[w_bishop], 0x0000000000000024); // w_bishop]
 }
 
 TEST(startpos, white_queen) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_QUEEN,  0x0000000000000008); // WHITE_QUEEN
+    EXPECT_EQ (actualpos.maps[w_queen],  0x0000000000000008); // w_queen]
 }
 
 TEST(startpos, white_king) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_KING,   0x0000000000000010); // WHITE_KING
+    EXPECT_EQ (actualpos.maps[w_king],   0x0000000000000010); // w_king]
 }
 
 TEST(startpos, white_pieces) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PIECES, 0x000000000000FFFF); // WHITE_PIECES
+    EXPECT_EQ (actualpos.maps[w_pieces], 0x000000000000FFFF); // w_pieces]
 }
 
 TEST(startpos, whole_board) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PIECES | actualpos.BLACK_PIECES, 0xFFFF00000000FFFF); // WHOLE_BOARD
+    EXPECT_EQ (actualpos.maps[w_pieces] | actualpos.maps[b_pieces], 0xFFFF00000000FFFF); // WHOLE_BOARD
 }
 
 //
@@ -105,91 +105,91 @@ TEST(startpos, whole_board) {
 TEST(complex_position, black_pawn) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_PAWN,   0x00E50A1000000000); // BLACK_PAWN
+    EXPECT_EQ (actualpos.maps[b_pawn],   0x00E50A1000000000); // b_pawn]
 }
 
 TEST(complex_position, black_rook) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_ROOK,   0x4002000000000000); // BLACK_ROOK
+    EXPECT_EQ (actualpos.maps[b_rook],   0x4002000000000000); // b_rook]
 }
 
 TEST(complex_position, black_knight) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_KNIGHT, 0x0000000410000000); // BLACK_KNIGHT
+    EXPECT_EQ (actualpos.maps[b_knight], 0x0000000410000000); // b_knight]
 }
 
 TEST(complex_position, black_bishop) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_BISHOP, 0x0410000000000000); // BLACK_BISHOP
+    EXPECT_EQ (actualpos.maps[b_bishop], 0x0410000000000000); // b_bishop]
 }
 
 TEST(complex_position, black_queen) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_QUEEN,  0x0000008000000000); // BLACK_QUEEN
+    EXPECT_EQ (actualpos.maps[b_queen],  0x0000008000000000); // b_queen]
 }
 
 TEST(complex_position, black_king) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_KING,   0x0200000000000000); // BLACK_KING
+    EXPECT_EQ (actualpos.maps[b_king],   0x0200000000000000); // b_king]
 }
 
 TEST(complex_position, black_pieces) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_PIECES, 0x46F70A9410000000); // BLACK_PIECES
+    EXPECT_EQ (actualpos.maps[b_pieces], 0x46F70A9410000000); // b_pieces]
 }
 
 TEST(complex_position, white_pawn) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PAWN,   0x0000800008542300); // WHITE_PAWN
+    EXPECT_EQ (actualpos.maps[w_pawn],   0x0000800008542300); // w_pawn]
 }
 
 TEST(complex_position, white_rook) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_ROOK,   0x0000200000000008); // WHITE_ROOK
+    EXPECT_EQ (actualpos.maps[w_rook],   0x0000200000000008); // w_rook]
 }
 
 TEST(complex_position, white_knight) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_KNIGHT, 0x0000000200200000); // WHITE_KNIGHT
+    EXPECT_EQ (actualpos.maps[w_knight], 0x0000000200200000); // w_knight]
 }
 
 TEST(complex_position, white_bishop) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_BISHOP, 0x0000004000000400); // WHITE_BISHOP
+    EXPECT_EQ (actualpos.maps[w_bishop], 0x0000004000000400); // w_bishop]
 }
 
 TEST(complex_position, white_queen) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_QUEEN,  0x0000000020000000); // WHITE_QUEEN
+    EXPECT_EQ (actualpos.maps[w_queen],  0x0000000020000000); // w_queen]
 }
 
 TEST(complex_position, white_king) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_KING,   0x0000000000000004); // WHITE_KING
+    EXPECT_EQ (actualpos.maps[w_king],   0x0000000000000004); // w_king]
 }
 
 TEST(complex_position, white_pieces) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PIECES, 0x0000A0422874270C); // WHITE_PIECES
+    EXPECT_EQ (actualpos.maps[w_pieces], 0x0000A0422874270C); // w_pieces]
 }
 
 TEST(complex_position, whole_board) {
     string test = "1kb3r1/prp1bppp/1p1p1R1P/1Nn1p1Bq/3PnQ2/2P1PNP1/PPB2P2/2KR4 w - - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PIECES | actualpos.BLACK_PIECES, 0x46F7AAD63874270C); // WHOLE_BOARD
+    EXPECT_EQ (actualpos.maps[w_pieces] | actualpos.maps[b_pieces], 0x46F7AAD63874270C); // WHOLE_BOARD
 }
 
 //
@@ -199,91 +199,91 @@ TEST(complex_position, whole_board) {
 TEST(empty_position, black_pawn) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_PAWN,   0); // BLACK_PAWN
+    EXPECT_EQ (actualpos.maps[b_pawn],   0); // b_pawn]
 }
 
 TEST(empty_position, black_rook) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_ROOK,   0); // BLACK_ROOK
+    EXPECT_EQ (actualpos.maps[b_rook],   0); // b_rook]
 }
 
 TEST(empty_position, black_knight) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_KNIGHT, 0); // BLACK_KNIGHT
+    EXPECT_EQ (actualpos.maps[b_knight], 0); // b_knight]
 }
 
 TEST(empty_position, black_bishop) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_BISHOP, 0); // BLACK_BISHOP
+    EXPECT_EQ (actualpos.maps[b_bishop], 0); // b_bishop]
 }
 
 TEST(empty_position, black_queen) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_QUEEN,  0); // BLACK_QUEEN
+    EXPECT_EQ (actualpos.maps[b_queen],  0); // b_queen]
 }
 
 TEST(empty_position, black_king) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_KING,   0); // BLACK_KING
+    EXPECT_EQ (actualpos.maps[b_king],   0); // b_king]
 }
 
 TEST(empty_position, black_pieces) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.BLACK_PIECES, 0); // BLACK_PIECES
+    EXPECT_EQ (actualpos.maps[b_pieces], 0); // b_pieces]
 }
 
 TEST(empty_position, white_pawn) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PAWN,   0); // WHITE_PAWN
+    EXPECT_EQ (actualpos.maps[w_pawn],   0); // w_pawn]
 }
 
 TEST(empty_position, white_rook) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_ROOK,   0); // WHITE_ROOK
+    EXPECT_EQ (actualpos.maps[w_rook],   0); // w_rook]
 }
 
 TEST(empty_position, white_knight) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_KNIGHT, 0); // WHITE_KNIGHT
+    EXPECT_EQ (actualpos.maps[w_knight], 0); // w_knight]
 }
 
 TEST(empty_position, white_bishop) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_BISHOP, 0); // WHITE_BISHOP
+    EXPECT_EQ (actualpos.maps[w_bishop], 0); // w_bishop]
 }
 
 TEST(empty_position, white_queen) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_QUEEN,  0); // WHITE_QUEEN
+    EXPECT_EQ (actualpos.maps[w_queen],  0); // w_queen]
 }
 
 TEST(empty_position, white_king) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_KING,   0); // WHITE_KING
+    EXPECT_EQ (actualpos.maps[w_king],   0); // w_king]
 }
 
 TEST(empty_position, white_pieces) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    EXPECT_EQ (actualpos.WHITE_PIECES, 0); // WHITE_PIECES
+    EXPECT_EQ (actualpos.maps[w_pieces], 0); // w_pieces]
 }
 
 TEST(empty_position, whole_board) {
     string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
     position actualpos = setup_fen(test);
-    bitmap whole = actualpos.WHITE_PIECES & actualpos.BLACK_PIECES;
+    bitmap whole = actualpos.maps[w_pieces] | actualpos.maps[b_pieces];
     EXPECT_EQ (whole, 0); // WHOLE_BOARD
 }
 
@@ -293,72 +293,72 @@ TEST(empty_position, whole_board) {
 
 TEST(position_initialization, correct_defaults_black_pawn) {
     position actualpos;
-    EXPECT_EQ (actualpos.BLACK_PAWN,   0);
+    EXPECT_EQ (actualpos.maps[b_pawn],   0);
 }
 
 TEST(position_initialization, correct_defaults_black_rook) {
     position actualpos;
-    EXPECT_EQ (actualpos.BLACK_ROOK,   0);
+    EXPECT_EQ (actualpos.maps[b_rook],   0);
 }
 
 TEST(position_initialization, correct_defaults_black_knight) {
     position actualpos;
-    EXPECT_EQ (actualpos.BLACK_KNIGHT, 0);
+    EXPECT_EQ (actualpos.maps[b_knight], 0);
 }
 
 TEST(position_initialization, correct_defaults_black_bishop) {
     position actualpos;
-    EXPECT_EQ (actualpos.BLACK_BISHOP, 0);
+    EXPECT_EQ (actualpos.maps[b_bishop], 0);
 }
 
 TEST(position_initialization, correct_defaults_black_queen) {
     position actualpos;
-    EXPECT_EQ (actualpos.BLACK_QUEEN,  0);
+    EXPECT_EQ (actualpos.maps[b_queen],  0);
 }
 
 TEST(position_initialization, correct_defaults_black_king) {
     position actualpos;
-    EXPECT_EQ (actualpos.BLACK_KING,   0);
+    EXPECT_EQ (actualpos.maps[b_king],   0);
 }
 
 TEST(position_initialization, correct_defaults_black_pieces) {
     position actualpos;
-    EXPECT_EQ (actualpos.BLACK_PIECES, 0);
+    EXPECT_EQ (actualpos.maps[b_pieces], 0);
 }
 
 TEST(position_initialization, correct_defaults_white_pawn) {
     position actualpos;
-    EXPECT_EQ (actualpos.WHITE_PAWN,   0);
+    EXPECT_EQ (actualpos.maps[w_pawn],   0);
 }
 
 TEST(position_initialization, correct_defaults_white_rook) {
     position actualpos;
-    EXPECT_EQ (actualpos.WHITE_ROOK,   0); 
+    EXPECT_EQ (actualpos.maps[w_rook],   0); 
 }
 
 TEST(position_initialization, correct_defaults_white_knight) {
     position actualpos;
-    EXPECT_EQ (actualpos.WHITE_KNIGHT, 0);
+    EXPECT_EQ (actualpos.maps[w_knight], 0);
 }
 
 TEST(position_initialization, correct_defaults_white_bishop) {
     position actualpos;
-    EXPECT_EQ (actualpos.WHITE_BISHOP, 0);
+    EXPECT_EQ (actualpos.maps[w_bishop], 0);
 }
 
 TEST(position_initialization, correct_defaults_white_queen) {
     position actualpos;
-    EXPECT_EQ (actualpos.WHITE_QUEEN,  0);
+    EXPECT_EQ (actualpos.maps[w_queen],  0);
 }
 
 TEST(position_initialization, correct_defaults_white_king) {
     position actualpos;
-    EXPECT_EQ (actualpos.WHITE_KING,   0);
+    EXPECT_EQ (actualpos.maps[w_king],   0);
 }
 
 TEST(position_initialization, correct_defaults_white_pieces) {
     position actualpos;
-    EXPECT_EQ (actualpos.WHITE_PIECES,   0);
+    EXPECT_EQ (actualpos.maps[w_pieces], 0);
 }
 
 TEST(position_initialization, correct_defaults_active_color) {
@@ -587,5 +587,148 @@ TEST(fullmove_number, two_thousand_eighty_five) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c2 0 2085";
     position actualpos = setup_fen(test);
     EXPECT_EQ (actualpos.fullmove_number, 2085);
+}
+
+//
+// START SET BIT TEST /////////////////////////////////////////////////////
+//
+
+TEST(set_bit, square_0) {
+    bitmap num1 = 0;
+    set_bit(&num1, 0);
+    EXPECT_EQ (num1, 0x1);
+}
+
+TEST(set_bit, square_1) {
+    bitmap num1 = 0;
+    set_bit(&num1, 1);
+    EXPECT_EQ (num1, 0x2);
+}
+
+TEST(set_bit, square_3) {
+    bitmap num1 = 0;
+    set_bit(&num1, 3);
+    EXPECT_EQ (num1, 0x8);
+}
+
+TEST(set_bit, square_7) {
+    bitmap num1 = 0;
+    set_bit(&num1, 7);
+    EXPECT_EQ (num1, 0x80);
+}
+
+TEST(set_bit, square_15) {
+    bitmap num1 = 0;
+    set_bit(&num1, 15);
+    EXPECT_EQ (num1, 0x8000);
+}
+
+TEST(set_bit, square_31) {
+    bitmap num1 = 0;
+    set_bit(&num1, 31);
+    EXPECT_EQ (num1, 0x80000000);
+}
+
+TEST(set_bit, square_63) {
+    bitmap num1 = 0;
+    set_bit(&num1, 63);
+    EXPECT_EQ (num1, 0x8000000000000000);
+}
+
+//
+// START ZERO AT TEST /////////////////////////////////////////////////////
+//
+
+TEST(zero_at, square_0) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    zero_at(0, &actualpos);
+    EXPECT_EQ (actualpos.maps[w_rook], 0x80);
+}
+
+TEST(zero_at, square_1) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    zero_at(1, &actualpos);
+    EXPECT_EQ (actualpos.maps[w_knight], 0x40);
+}
+
+TEST(zero_at, square_3) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    zero_at(3, &actualpos);
+    EXPECT_EQ (actualpos.maps[w_queen], 0);
+}
+
+TEST(zero_at, square_7) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    zero_at(7, &actualpos);
+    EXPECT_EQ (actualpos.maps[w_rook], 0x01);
+}
+
+TEST(zero_at, square_15) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    zero_at(15, &actualpos);
+    EXPECT_EQ (actualpos.maps[w_pawn], 0x7F00);
+}
+
+TEST(zero_at, square_31) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    zero_at(31, &actualpos);
+    EXPECT_EQ (actualpos.maps[w_pieces], 0xFFFF);
+}
+
+TEST(zero_at, square_63) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    zero_at(63, &actualpos);
+    EXPECT_EQ (actualpos.maps[b_rook], 0x0100000000000000);
+}
+
+//
+// START GET SQUARE NUM TEST //////////////////////////////////////////////
+//
+
+TEST(get_sq_num, a1) {
+    int square = get_square_num("a1");
+    EXPECT_EQ (square, 0);
+}
+
+TEST(get_sq_num, b2) {
+    int square = get_square_num("b2");
+    EXPECT_EQ (square, 9);
+}
+
+TEST(get_sq_num, c3) {
+    int square = get_square_num("c3");
+    EXPECT_EQ (square, 18);
+}
+
+TEST(get_sq_num, d4) {
+    int square = get_square_num("d4");
+    EXPECT_EQ (square, 27);
+}
+
+TEST(get_sq_num, e5) {
+    int square = get_square_num("e5");
+    EXPECT_EQ (square, 36);
+}
+
+TEST(get_sq_num, f6) {
+    int square = get_square_num("f6");
+    EXPECT_EQ (square, 45);
+}
+
+TEST(get_sq_num, g7) {
+    int square = get_square_num("g7");
+    EXPECT_EQ (square, 54);
+}
+
+TEST(get_sq_num, h8) {
+    int square = get_square_num("h8");
+    EXPECT_EQ (square, 63);
 }
 

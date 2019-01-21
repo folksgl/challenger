@@ -43,7 +43,7 @@ position setup_fen(string fen) {
  *  set_bit sets the value of the bit indicated by sq_num to 1.
  */
 void set_bit(bitmap* bit_map, int sq_num) {
-    *bit_map = *bit_map | (bitmap)(*bit_map | ((bitmap)1 << sq_num));
+    *bit_map = (bitmap)(*bit_map | ((bitmap)1 << sq_num));
 }
 
 /*
@@ -72,20 +72,20 @@ void set_piece_positions(char* fen_tok, position* pos) {
         //cout << "input switched on was: " << input << "\nsquare num is: " << sq_num << endl;
         switch(input) {
             // Lower case = Black Pieces
-            case 'p': set_bit(&pos->BLACK_PAWN,   sq_num--); break;
-            case 'r': set_bit(&pos->BLACK_ROOK,   sq_num--); break;
-            case 'n': set_bit(&pos->BLACK_KNIGHT, sq_num--); break;
-            case 'b': set_bit(&pos->BLACK_BISHOP, sq_num--); break;
-            case 'q': set_bit(&pos->BLACK_QUEEN,  sq_num--); break;
-            case 'k': set_bit(&pos->BLACK_KING,   sq_num--); break;
+            case 'p': set_bit(&pos->maps[b_pawn],   sq_num--); break;
+            case 'r': set_bit(&pos->maps[b_rook],   sq_num--); break;
+            case 'n': set_bit(&pos->maps[b_knight], sq_num--); break;
+            case 'b': set_bit(&pos->maps[b_bishop], sq_num--); break;
+            case 'q': set_bit(&pos->maps[b_queen],  sq_num--); break;
+            case 'k': set_bit(&pos->maps[b_king],   sq_num--); break;
 
                 // Upper case = White Pieces
-            case 'P': set_bit(&pos->WHITE_PAWN,   sq_num--); break;
-            case 'R': set_bit(&pos->WHITE_ROOK,   sq_num--); break;
-            case 'N': set_bit(&pos->WHITE_KNIGHT, sq_num--); break;
-            case 'B': set_bit(&pos->WHITE_BISHOP, sq_num--); break;
-            case 'Q': set_bit(&pos->WHITE_QUEEN,  sq_num--); break;
-            case 'K': set_bit(&pos->WHITE_KING,   sq_num--); break;
+            case 'P': set_bit(&pos->maps[w_pawn],   sq_num--); break;
+            case 'R': set_bit(&pos->maps[w_rook],   sq_num--); break;
+            case 'N': set_bit(&pos->maps[w_knight], sq_num--); break;
+            case 'B': set_bit(&pos->maps[w_bishop], sq_num--); break;
+            case 'Q': set_bit(&pos->maps[w_queen],  sq_num--); break;
+            case 'K': set_bit(&pos->maps[w_king],   sq_num--); break;
 
             default :
                 if (isdigit(input)) {
@@ -94,11 +94,11 @@ void set_piece_positions(char* fen_tok, position* pos) {
         }
     }
 
-    pos->WHITE_PIECES = pos->WHITE_PAWN   | pos->WHITE_ROOK  | pos->WHITE_KNIGHT | 
-                        pos->WHITE_BISHOP | pos->WHITE_QUEEN | pos->WHITE_KING;
+    pos->maps[w_pieces] = pos->maps[w_pawn] | pos->maps[w_rook]  | pos->maps[w_knight] | 
+                        pos->maps[w_bishop] | pos->maps[w_queen] | pos->maps[w_king];
 
-    pos->BLACK_PIECES = pos->BLACK_PAWN   | pos->BLACK_ROOK  | pos->BLACK_KNIGHT | 
-                        pos->BLACK_BISHOP | pos->BLACK_QUEEN | pos->BLACK_KING;
+    pos->maps[b_pieces] = pos->maps[b_pawn] | pos->maps[b_rook]  | pos->maps[b_knight] | 
+                        pos->maps[b_bishop] | pos->maps[b_queen] | pos->maps[b_king];
 
     return;
 }
@@ -227,12 +227,7 @@ void game_move(string move, position* board_position) {
     // Zero out the start square
     int piece = zero_at(start_square, board_position);
 
-    if (piece < 6) {
-        // Put a 1 bit in the propper white bitmap. 
-    }
-    else {
-        // Put a 1 bit in the propper black bitmap.
-    }
+    set_bit(&board_position->maps[piece], dest_square);
 
     return;
 }
@@ -240,64 +235,22 @@ void game_move(string move, position* board_position) {
 /*
  *  zero_at zero's the bit indicated by square on the position given and
  *  set a number representing the piece type that was in the square.
+ *
+ *  return the map position of the piece changed
  */
 int zero_at(int square, position* board_position) {
 
-    bitmap mask = 0xFFFFFFFFFFFFFFFF & (~((bitmap)(1 << square)));
+    bitmap square_bit = (bitmap)1 << square;
+    bitmap mask = 0xFFFFFFFFFFFFFFFF & ~square_bit;
 
-    enum Piece { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, 
-                 b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king };
+    board_position->maps[b_pieces] = ((bitmap)board_position->maps[b_pieces] & mask);
+    board_position->maps[w_pieces] = ((bitmap)board_position->maps[w_pieces] & mask);
 
-    board_position->BLACK_PIECES = ((bitmap)board_position->BLACK_PIECES & mask);
-    board_position->WHITE_PIECES = ((bitmap)board_position->WHITE_PIECES & mask);
-
-    if (board_position->WHITE_PAWN & (1 << square)) {
-        board_position->WHITE_PAWN   = ((bitmap)board_position->WHITE_PAWN & mask);
-        return w_pawn;
-    }
-    if (board_position->WHITE_ROOK & (1 << square)) {
-        board_position->WHITE_ROOK   = ((bitmap)board_position->WHITE_ROOK & mask);
-        return w_rook;
-    }
-    if (board_position->WHITE_KNIGHT & (1 << square)) {
-        board_position->WHITE_KNIGHT = ((bitmap)board_position->WHITE_KNIGHT & mask);
-        return w_knight;
-    }
-    if (board_position->WHITE_BISHOP & (1 << square)) {
-        board_position->WHITE_BISHOP = ((bitmap)board_position->WHITE_BISHOP & mask);
-        return w_bishop;
-    }
-    if (board_position->WHITE_QUEEN & (1 << square)) {
-        board_position->WHITE_QUEEN  = ((bitmap)board_position->WHITE_QUEEN & mask);
-        return w_queen;
-    }
-    if (board_position->WHITE_KING & (1 << square)) {
-        board_position->WHITE_KING   = ((bitmap)board_position->WHITE_KING & mask);
-        return w_king;
-    }
-    if (board_position->BLACK_PAWN & (1 << square)) {
-        board_position->BLACK_PAWN   = ((bitmap)board_position->BLACK_PAWN & mask);
-        return b_pawn;
-    }
-    if (board_position->BLACK_ROOK & (1 << square)) {
-        board_position->BLACK_ROOK   = ((bitmap)board_position->BLACK_ROOK & mask);
-        return b_rook;
-    }
-    if (board_position->BLACK_KNIGHT & (1 << square)) {
-        board_position->BLACK_KNIGHT = ((bitmap)board_position->BLACK_KNIGHT & mask);
-        return b_knight;
-    }
-    if (board_position->BLACK_BISHOP & (1 << square)) {
-        board_position->BLACK_BISHOP = ((bitmap)board_position->BLACK_BISHOP & mask);
-        return b_bishop;
-    }
-    if (board_position->BLACK_QUEEN & (1 << square)) {
-        board_position->BLACK_QUEEN  = ((bitmap)board_position->BLACK_QUEEN & mask);
-        return b_queen;
-    }
-    if (board_position->BLACK_KING & (1 << square)) {
-        board_position->BLACK_KING   = ((bitmap)board_position->BLACK_KING & mask);
-        return b_king;
+    for (int i = 0; i < 14; i++) {
+        if (board_position->maps[i] & square_bit) {
+            board_position->maps[i] = ((bitmap)board_position->maps[i] & mask);
+            return i;
+        }
     }
 
     return -1; //This should never return -1. A valid move WILL trigger one of the above cases.
@@ -346,21 +299,21 @@ void debug_position(position pos) {
 
     bitmap bb;
 
-    cout << "\n\nBlack pawn" << endl;   bb = pos.BLACK_PAWN;   print_bitboard(bb);
-    cout << "\n\nBlack rook" << endl;   bb = pos.BLACK_ROOK;   print_bitboard(bb);
-    cout << "\n\nBlack knight" << endl; bb = pos.BLACK_KNIGHT; print_bitboard(bb);
-    cout << "\n\nBlack bishop" << endl; bb = pos.BLACK_BISHOP; print_bitboard(bb);
-    cout << "\n\nBlack queen" << endl;  bb = pos.BLACK_QUEEN;  print_bitboard(bb);
-    cout << "\n\nBlack king" << endl;   bb = pos.BLACK_KING;   print_bitboard(bb);
-    cout << "\n\nBlack pieces" << endl; bb = pos.BLACK_PIECES; print_bitboard(bb);
+    cout << "\n\nBlack pawn" << endl;   bb = pos.maps[b_pawn];   print_bitboard(bb);
+    cout << "\n\nBlack rook" << endl;   bb = pos.maps[b_rook];   print_bitboard(bb);
+    cout << "\n\nBlack knight" << endl; bb = pos.maps[b_knight]; print_bitboard(bb);
+    cout << "\n\nBlack bishop" << endl; bb = pos.maps[b_bishop]; print_bitboard(bb);
+    cout << "\n\nBlack queen" << endl;  bb = pos.maps[b_queen];  print_bitboard(bb);
+    cout << "\n\nBlack king" << endl;   bb = pos.maps[b_king];   print_bitboard(bb);
+    cout << "\n\nBlack pieces" << endl; bb = pos.maps[b_pieces]; print_bitboard(bb);
 
-    cout << "\n\nWhite pawn" << endl;   bb = pos.WHITE_PAWN;   print_bitboard(bb);
-    cout << "\n\nWhite rook" << endl;   bb = pos.WHITE_ROOK;   print_bitboard(bb);
-    cout << "\n\nWhite knight" << endl; bb = pos.WHITE_KNIGHT; print_bitboard(bb);
-    cout << "\n\nWhite bishop" << endl; bb = pos.WHITE_BISHOP; print_bitboard(bb);
-    cout << "\n\nWhite queen" << endl;  bb = pos.WHITE_QUEEN;  print_bitboard(bb);
-    cout << "\n\nWhite king" << endl;   bb = pos.WHITE_KING;   print_bitboard(bb);
-    cout << "\n\nWhite pieces" << endl; bb = pos.WHITE_PIECES; print_bitboard(bb);
+    cout << "\n\nWhite pawn" << endl;   bb = pos.maps[w_pawn];   print_bitboard(bb);
+    cout << "\n\nWhite rook" << endl;   bb = pos.maps[w_rook];   print_bitboard(bb);
+    cout << "\n\nWhite knight" << endl; bb = pos.maps[w_knight]; print_bitboard(bb);
+    cout << "\n\nWhite bishop" << endl; bb = pos.maps[w_bishop]; print_bitboard(bb);
+    cout << "\n\nWhite queen" << endl;  bb = pos.maps[w_queen];  print_bitboard(bb);
+    cout << "\n\nWhite king" << endl;   bb = pos.maps[w_king];   print_bitboard(bb);
+    cout << "\n\nWhite pieces" << endl; bb = pos.maps[w_pieces]; print_bitboard(bb);
 
 }
 
