@@ -732,3 +732,47 @@ TEST(get_sq_num, h8) {
     EXPECT_EQ (square, 63);
 }
 
+//
+// START FILE TO NUM TEST /////////////////////////////////////////////////
+//
+
+TEST(file_to_num, a) {
+    int file = file_to_num('a');
+    EXPECT_EQ (file, 0);
+}
+
+TEST(file_to_num, b) {
+    int file = file_to_num('b');
+    EXPECT_EQ (file, 1);
+}
+
+TEST(file_to_num, c) {
+    int file = file_to_num('c');
+    EXPECT_EQ (file, 2);
+}
+
+TEST(file_to_num, d) {
+    int file = file_to_num('d');
+    EXPECT_EQ (file, 3);
+}
+
+TEST(file_to_num, e) {
+    int file = file_to_num('e');
+    EXPECT_EQ (file, 4);
+}
+
+TEST(file_to_num, f) {
+    int file = file_to_num('f');
+    EXPECT_EQ (file, 5);
+}
+
+TEST(file_to_num, g) {
+    int file = file_to_num('g');
+    EXPECT_EQ (file, 6);
+}
+
+TEST(file_to_num, h) {
+    int file = file_to_num('h');
+    EXPECT_EQ (file, 7);
+}
+
