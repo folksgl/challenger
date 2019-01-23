@@ -221,13 +221,22 @@ void game_move(string move, position* board_position) {
         error_exit("move");
     }
 
+    // Extract start and destination squares from the move
     int start_square = get_square_num(move.substr(0,2));
     int dest_square = get_square_num(move.substr(2,2));
 
     // Zero out the start square
     int piece = zero_at(start_square, board_position);
 
+    // Set the destination square
     set_bit(&board_position->maps[piece], dest_square);
+
+    if (piece < 6) {
+        set_bit(&board_position->maps[w_pieces], dest_square);
+    }
+    else {
+        set_bit(&board_position->maps[b_pieces], dest_square);
+    }
 
     return;
 }
