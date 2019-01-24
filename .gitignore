@@ -8,3 +8,7 @@ build/*
 mytest
 run.sh
 positions.txt
+
+# Profiling files
+gmon.out
+
