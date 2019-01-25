@@ -736,3 +736,116 @@ TEST(file_to_num, h) {
     EXPECT_EQ (file, 7);
 }
 
+//
+// START GAME MOVE TEST ///////////////////////////////////////////////////
+//
+    //EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
+    //EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
+    //EXPECT_EQ (actualpos.maps[b_knight], 0x4200000000000000); // b_knight
+    //EXPECT_EQ (actualpos.maps[b_bishop], 0x2400000000000000); // b_bishop
+    //EXPECT_EQ (actualpos.maps[b_queen],  0x0800000000000000); // b_queen
+    //EXPECT_EQ (actualpos.maps[b_king],   0x1000000000000000); // b_king
+    //EXPECT_EQ (actualpos.maps[b_pieces], 0xFFFF000000000000); // b_pieces
+
+    //EXPECT_EQ (actualpos.maps[w_pawn],   0x000000000000FF00); // w_pawn
+    //EXPECT_EQ (actualpos.maps[w_rook],   0x0000000000000081); // w_rook
+    //EXPECT_EQ (actualpos.maps[w_knight], 0x0000000000000042); // w_knight
+    //EXPECT_EQ (actualpos.maps[w_bishop], 0x0000000000000024); // w_bishop
+    //EXPECT_EQ (actualpos.maps[w_queen],  0x0000000000000008); // w_queen
+    //EXPECT_EQ (actualpos.maps[w_king],   0x0000000000000010); // w_king
+    //EXPECT_EQ (actualpos.maps[w_pieces], 0x000000000000FFFF); // w_pieces
+
+
+TEST(game_move, a2a4) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    game_move("a2a4", &actualpos);
+
+    EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
+    EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
+    EXPECT_EQ (actualpos.maps[b_knight], 0x4200000000000000); // b_knight
+    EXPECT_EQ (actualpos.maps[b_bishop], 0x2400000000000000); // b_bishop
+    EXPECT_EQ (actualpos.maps[b_queen],  0x0800000000000000); // b_queen
+    EXPECT_EQ (actualpos.maps[b_king],   0x1000000000000000); // b_king
+    EXPECT_EQ (actualpos.maps[b_pieces], 0xFFFF000000000000); // b_pieces
+
+    EXPECT_EQ (actualpos.maps[w_pawn],   0x000000000100FE00); // w_pawn
+    EXPECT_EQ (actualpos.maps[w_rook],   0x0000000000000081); // w_rook
+    EXPECT_EQ (actualpos.maps[w_knight], 0x0000000000000042); // w_knight
+    EXPECT_EQ (actualpos.maps[w_bishop], 0x0000000000000024); // w_bishop
+    EXPECT_EQ (actualpos.maps[w_queen],  0x0000000000000008); // w_queen
+    EXPECT_EQ (actualpos.maps[w_king],   0x0000000000000010); // w_king
+    EXPECT_EQ (actualpos.maps[w_pieces], 0x000000000100FEFF); // w_pieces
+}
+
+TEST(game_move, a2a4_b2b4) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    game_move("a2a4", &actualpos);
+    game_move("b2b4", &actualpos);
+
+    EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
+    EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
+    EXPECT_EQ (actualpos.maps[b_knight], 0x4200000000000000); // b_knight
+    EXPECT_EQ (actualpos.maps[b_bishop], 0x2400000000000000); // b_bishop
+    EXPECT_EQ (actualpos.maps[b_queen],  0x0800000000000000); // b_queen
+    EXPECT_EQ (actualpos.maps[b_king],   0x1000000000000000); // b_king
+    EXPECT_EQ (actualpos.maps[b_pieces], 0xFFFF000000000000); // b_pieces
+
+    EXPECT_EQ (actualpos.maps[w_pawn],   0x000000000300FC00); // w_pawn
+    EXPECT_EQ (actualpos.maps[w_rook],   0x0000000000000081); // w_rook
+    EXPECT_EQ (actualpos.maps[w_knight], 0x0000000000000042); // w_knight
+    EXPECT_EQ (actualpos.maps[w_bishop], 0x0000000000000024); // w_bishop
+    EXPECT_EQ (actualpos.maps[w_queen],  0x0000000000000008); // w_queen
+    EXPECT_EQ (actualpos.maps[w_king],   0x0000000000000010); // w_king
+    EXPECT_EQ (actualpos.maps[w_pieces], 0x000000000300FCFF); // w_pieces
+
+}
+
+TEST(game_move, a2a7) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    game_move("a2a7", &actualpos);
+
+    EXPECT_EQ (actualpos.maps[b_pawn],   0x00FE000000000000); // b_pawn
+    EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
+    EXPECT_EQ (actualpos.maps[b_knight], 0x4200000000000000); // b_knight
+    EXPECT_EQ (actualpos.maps[b_bishop], 0x2400000000000000); // b_bishop
+    EXPECT_EQ (actualpos.maps[b_queen],  0x0800000000000000); // b_queen
+    EXPECT_EQ (actualpos.maps[b_king],   0x1000000000000000); // b_king
+    EXPECT_EQ (actualpos.maps[b_pieces], 0xFFFE000000000000); // b_pieces
+
+    EXPECT_EQ (actualpos.maps[w_pawn],   0x000100000000FE00); // w_pawn
+    EXPECT_EQ (actualpos.maps[w_rook],   0x0000000000000081); // w_rook
+    EXPECT_EQ (actualpos.maps[w_knight], 0x0000000000000042); // w_knight
+    EXPECT_EQ (actualpos.maps[w_bishop], 0x0000000000000024); // w_bishop
+    EXPECT_EQ (actualpos.maps[w_queen],  0x0000000000000008); // w_queen
+    EXPECT_EQ (actualpos.maps[w_king],   0x0000000000000010); // w_king
+    EXPECT_EQ (actualpos.maps[w_pieces], 0x000100000000FEFF); // w_pieces
+
+}
+
+TEST(game_move, a2a7_a7b7) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    position actualpos = setup_fen(test);
+    game_move("a2a7", &actualpos);
+    game_move("a7b7", &actualpos);
+
+    EXPECT_EQ (actualpos.maps[b_pawn],   0x00FC000000000000); // b_pawn
+    EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
+    EXPECT_EQ (actualpos.maps[b_knight], 0x4200000000000000); // b_knight
+    EXPECT_EQ (actualpos.maps[b_bishop], 0x2400000000000000); // b_bishop
+    EXPECT_EQ (actualpos.maps[b_queen],  0x0800000000000000); // b_queen
+    EXPECT_EQ (actualpos.maps[b_king],   0x1000000000000000); // b_king
+    EXPECT_EQ (actualpos.maps[b_pieces], 0xFFFC000000000000); // b_pieces
+
+    EXPECT_EQ (actualpos.maps[w_pawn],   0x000200000000FE00); // w_pawn
+    EXPECT_EQ (actualpos.maps[w_rook],   0x0000000000000081); // w_rook
+    EXPECT_EQ (actualpos.maps[w_knight], 0x0000000000000042); // w_knight
+    EXPECT_EQ (actualpos.maps[w_bishop], 0x0000000000000024); // w_bishop
+    EXPECT_EQ (actualpos.maps[w_queen],  0x0000000000000008); // w_queen
+    EXPECT_EQ (actualpos.maps[w_king],   0x0000000000000010); // w_king
+    EXPECT_EQ (actualpos.maps[w_pieces], 0x000200000000FEFF); // w_pieces
+
+}
+

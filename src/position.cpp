@@ -229,6 +229,7 @@ void game_move(string move, position* board_position) {
     int piece = zero_at(start_square, board_position);
 
     // Set the destination square
+    zero_at(dest_square, board_position);
     set_bit(&board_position->maps[piece], dest_square);
 
     if (piece < 6) {
