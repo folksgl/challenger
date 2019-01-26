@@ -1,3 +1,6 @@
+#include "./bitmap.h"
+#include "./position.h"
+
 #ifndef EVALUATE_H
 #define EVALUATE_H
 

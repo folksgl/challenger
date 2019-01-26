@@ -1,5 +1,3 @@
-#include "./position.h"
-#include "./bitmap.h"
 #include "./evaluate.h"
 
 using namespace std;
@@ -27,7 +25,7 @@ int evaluate_position(position* pos) {
     int white_material = get_white_material_value(pos);
     int black_material = get_black_material_value(pos);
 
-    return white_material - black_material;
+    return white_material + black_material;
 }
 
 int get_white_material_value(position* pos) {
