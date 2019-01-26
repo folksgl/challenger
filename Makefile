@@ -28,7 +28,7 @@ TEST_CXX_FLAGS = $(CXXFLAGS) -isystem $(GTEST_DIR)/googletest/include
 # Project flags
 BUILD_DIR = build
 EXECUTABLE = challenger
-OBJS = main.o uci.o position.o
+OBJS = main.o uci.o position.o evaluate.o
 
 all : challenger
 
