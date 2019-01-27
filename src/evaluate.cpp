@@ -20,6 +20,10 @@ const bitmap squares[64] = {
     0x0100000000000000, 0x0200000000000000, 0x0400000000000000, 0x0800000000000000, 0x1000000000000000, 0x2000000000000000, 0x4000000000000000, 0x8000000000000000
 };
 
+/*
+ *  evaluate_position takes in a single position and returns a single number representing its evaluation
+ *  score -- positive means white has advantage, negative means black has advantage.
+ */
 int evaluate_position(position* pos) {
 
     int white_material = get_white_material_value(pos);
@@ -28,6 +32,10 @@ int evaluate_position(position* pos) {
     return white_material + black_material;
 }
 
+/*
+ *  get_white_material_value takes in a single position and returns a number representing the strength
+ *  of the white pieces in the given position.
+ */
 int get_white_material_value(position* pos) {
     int material_val = 0;
     
@@ -44,6 +52,10 @@ int get_white_material_value(position* pos) {
     return material_val;
 }
 
+/*
+ *  get_black_material_value takes in a single position and returns a number representing the strength
+ *  of the black pieces in the given position.
+ */
 int get_black_material_value(position* pos) {
     int material_val = 0;
     
@@ -62,6 +74,9 @@ int get_black_material_value(position* pos) {
 
 }
 
+/*
+ *  num_set_bits takes in a bitmap and returns the number of bits in that bitmap that are set to 1.
+ */
 int num_set_bits(bitmap map) {
     int num_bits = 0;
 

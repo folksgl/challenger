@@ -1,5 +1,6 @@
 #include "./bitmap.h"
 #include <string>
+#include <vector>
 
 #ifndef POSITION_H
 #define POSITION_H
@@ -23,7 +24,7 @@ struct position {
     unsigned short int halfmove_clock = 0;
     unsigned short int fullmove_number = 0;
 
-
+    std::vector<position> moves;
 };
 
 position setup_fen(std::string fen);
