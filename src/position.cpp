@@ -217,7 +217,7 @@ void set_fullmove_number(char* fen_tok, position* board_position) {
  */
 void game_move(string move, position* board_position) {
 
-    if (move.length() != 4) {
+    if (move.length() != 4 || move.length() != 5) {
         error_exit("move");
     }
 
@@ -227,6 +227,19 @@ void game_move(string move, position* board_position) {
 
     // Zero out the start square
     int piece = zero_at(start_square, board_position);
+
+    // Check for pawn promotion
+    if (move.length() == 5) {
+        char promoted_to = move.at(4);
+        switch (promoted_to) {
+            case 'N': piece = w_knight; break;
+            case 'n': piece = b_knight; break;
+            case 'B': piece = w_bishop; break;
+            case 'b': piece = b_bishop; break;
+            case 'Q': piece = w_queen;  break;
+            case 'q': piece = b_queen;  break;
+        }
+    }
 
     // Set the destination square
     zero_at(dest_square, board_position);
