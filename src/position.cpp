@@ -39,7 +39,7 @@ position setup_fen(string fen) {
 
     board_position.evaluation_score = evaluate_position(&board_position);
 
-    generate_moves(&board_position);
+    //generate_moves(&board_position);
 
     //debug_position(board_position);
     return board_position;
@@ -116,7 +116,8 @@ void set_piece_positions(char* fen_tok, position* pos) {
 void set_castling_rights(char* fen_tok, position* board_position) {
 
     if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 4) {
-        error_exit("castling_rights");
+        // Castling right string is malformed, continue with no castling rights 
+        return;
     }
 
     for (unsigned int i = 0; i < strlen(fen_tok); i++) {
@@ -145,7 +146,8 @@ void set_castling_rights(char* fen_tok, position* board_position) {
 void set_active_color(char* fen_tok, position* board_position) {
 
     if (fen_tok == NULL || strlen(fen_tok) != 1) {
-        error_exit("active_color");
+        // Malformed active color string. Just assume that it is white's turn.
+        return;
     }
     board_position->active_color = fen_tok[0];
 
@@ -157,19 +159,13 @@ void set_active_color(char* fen_tok, position* board_position) {
  *  to the value found in fen_tok.
  */
 void set_passant_target_sq(char* fen_tok, position* board_position) {
-    if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 2) {
-        error_exit("passant target square");
-    }
-
-    if (fen_tok[0] == '-') {
+    if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 2 || fen_tok[0] == '-' || !isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
+        // No target square or if malformed passant target string, assume there is none.
         board_position->passant_target_sq[0] = '-';
-        board_position->passant_target_sq[0] = '\0';
+        board_position->passant_target_sq[1] = '\0';
         return;
     }
 
-    if (!isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
-        error_exit("passant target square");
-    }
     else {
         board_position->passant_target_sq[0] = fen_tok[0];
         board_position->passant_target_sq[1] = fen_tok[1];
@@ -184,11 +180,13 @@ void set_passant_target_sq(char* fen_tok, position* board_position) {
  */
 void set_halfmove_clock(char* fen_tok, position* board_position) {
     if (fen_tok == NULL) {
-        error_exit("halfmove_clock");
+        // Malformed clock string, just don't modify the clock and ignore token.
+        return;
     }
     for (unsigned int i = 0; i < strlen(fen_tok); i++) {
         if (!isdigit(fen_tok[i])) {
-            error_exit("halfmove_clock");
+            // Malformed clock string, just don't modify the clock and ignore token.
+            return;
         }
     }
 
@@ -204,11 +202,13 @@ void set_halfmove_clock(char* fen_tok, position* board_position) {
  */
 void set_fullmove_number(char* fen_tok, position* board_position) {
     if (fen_tok == NULL) {
-        error_exit("fullmove_number");
+        // Malformed move number string, ignore token and don't modify move number.
+        return;
     }
     for (unsigned int i = 0; i < strlen(fen_tok); i++) {
         if (!isdigit(fen_tok[i])) {
-            error_exit("fullmove_number");
+            // Malformed move number string, ignore token and don't modify move number.
+            return;
         }
     }
 
@@ -224,7 +224,8 @@ void set_fullmove_number(char* fen_tok, position* board_position) {
 void game_move(string move, position* board_position) {
 
     if (move.length() != 4 || move.length() != 5) {
-        error_exit("move");
+        // Malformed move string, ignore move and don't change the position.
+        return;
     }
 
     // Extract start and destination squares from the move
@@ -317,11 +318,6 @@ int file_to_num(char file) {
     }
 
     return number;
-}
-
-void error_exit(std::string error) {
-    cout << "Got malformed " << error << "string. Exiting..." << endl;
-    exit(1);
 }
 
 void debug_position(position pos) {

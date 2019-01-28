@@ -54,8 +54,6 @@ int file_to_num(char file);
 
 int get_square_num(std::string square_string);
 
-void error_exit(std::string error);
-
 void debug_position(position pos);
 
 void print_bitboard(bitmap bb);
