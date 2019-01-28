@@ -6,6 +6,7 @@
 #include "./genmove.h"
 #include "game_variables.h"
 #include "./position.h"
+#include "./evaluate.h"
 #include "algorithm"
 
 using namespace std;
@@ -35,6 +36,8 @@ position setup_fen(string fen) {
     set_passant_target_sq(passant_sq,  &board_position);
     set_halfmove_clock(halfmove_clk,   &board_position);
     set_fullmove_number(fullmove_num,  &board_position);
+
+    board_position.evaluation_score = evaluate_position(&board_position);
 
     generate_moves(&board_position);
 

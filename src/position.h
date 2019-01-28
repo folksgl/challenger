@@ -24,6 +24,8 @@ struct position {
     unsigned short int halfmove_clock = 0;
     unsigned short int fullmove_number = 0;
 
+    int evaluation_score = 0;
+
     std::vector<position> moves;
 };
 
