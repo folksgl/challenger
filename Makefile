@@ -8,7 +8,7 @@
 
 # Compiler Settings
 CXX = g++
-CXXFLAGS = -g3 -std=c++11 -Wall
+CXXFLAGS = -g3 -std=c++11 -Wall -pg
 
 # DEVELOPERS, the googletest home directory goes here. i.e. if you cloned googletest into /usr/lib, then
 # GTEST_DIR would then be /usr/lib/googletest
