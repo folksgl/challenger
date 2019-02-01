@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <string>
-#include "./bitmap.h"
+#include "./bitboard.h"
 #include "./genmove.h"
 #include "game_variables.h"
 #include "./position.h"
@@ -48,12 +48,12 @@ position setup_fen(string fen) {
 /*
  *  set_bit sets the value of the bit indicated by sq_num to 1.
  */
-void set_bit(bitmap* bit_map, int sq_num) {
-    *bit_map = (bitmap)(*bit_map | ((bitmap)1 << sq_num));
+void set_bit(bitboard* bit_map, int sq_num) {
+    *bit_map = (bitboard)(*bit_map | ((bitboard)1 << sq_num));
 }
 
 /*
- *  set_piece_positions sets the value of all the bitmaps in board_position
+ *  set_piece_positions sets the value of all the bitboards in board_position
  *  to the values found in fen_tok.
  */
 void set_piece_positions(char* fen_tok, position* pos) {
@@ -270,15 +270,15 @@ void game_move(string move, position* board_position) {
  */
 int zero_at(int square, position* board_position) {
 
-    bitmap square_bit = (bitmap)1 << square;
-    bitmap mask = 0xFFFFFFFFFFFFFFFF & ~square_bit;
+    bitboard square_bit = (bitboard)1 << square;
+    bitboard mask = 0xFFFFFFFFFFFFFFFF & ~square_bit;
 
-    board_position->maps[b_pieces] = ((bitmap)board_position->maps[b_pieces] & mask);
-    board_position->maps[w_pieces] = ((bitmap)board_position->maps[w_pieces] & mask);
+    board_position->maps[b_pieces] = ((bitboard)board_position->maps[b_pieces] & mask);
+    board_position->maps[w_pieces] = ((bitboard)board_position->maps[w_pieces] & mask);
 
     for (int i = 0; i < 14; i++) {
         if (board_position->maps[i] & square_bit) {
-            board_position->maps[i] = ((bitmap)board_position->maps[i] & mask);
+            board_position->maps[i] = ((bitboard)board_position->maps[i] & mask);
             return i;
         }
     }
@@ -322,7 +322,7 @@ int file_to_num(char file) {
 
 void debug_position(position pos) {
 
-    bitmap bb;
+    bitboard bb;
 
     cout << "\n\nBlack pawn" << endl;   bb = pos.maps[b_pawn];   print_bitboard(bb);
     cout << "\n\nBlack rook" << endl;   bb = pos.maps[b_rook];   print_bitboard(bb);
@@ -342,7 +342,7 @@ void debug_position(position pos) {
 
 }
 
-void print_bitboard(bitmap bb) {
+void print_bitboard(bitboard bb) {
 
     for (int i = 56; i < 64; i++) { if ((bb >> i) & 0x1) { cout << 'B'; } else { cout << '-'; } }
     cout << endl;

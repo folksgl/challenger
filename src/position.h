@@ -1,4 +1,4 @@
-#include "./bitmap.h"
+#include "./bitboard.h"
 #include <string>
 #include <vector>
 
@@ -10,7 +10,7 @@ enum Piece_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces
 
 struct position {
 
-    bitmap maps[14] = { };
+    bitboard maps[14] = { };
 
     char active_color = 'w';
 
@@ -44,7 +44,7 @@ void set_halfmove_clock(char* fen_tok, position* board_position);
 void set_fullmove_number(char* fen_tok, position* board_position);
 
 
-void set_bit(bitmap* bit_map, int sq_num);
+void set_bit(bitboard* bit_map, int sq_num);
 
 void game_move(std::string move, position* board_position);
 
@@ -56,6 +56,6 @@ int get_square_num(std::string square_string);
 
 void debug_position(position pos);
 
-void print_bitboard(bitmap bb);
+void print_bitboard(bitboard bb);
 
 #endif

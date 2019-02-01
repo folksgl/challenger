@@ -1,10 +1,10 @@
-#include "./bitmap.h"
+#include "./bitboard.h"
 #include "./position.h"
 
 #ifndef EVALUATE_H
 #define EVALUATE_H
 
-const bitmap squares[64] = {
+const bitboard squares[64] = {
     0x01,               0x02,               0x04,               0x08,               0x10,               0x20,               0x40,               0x80, 
     0x0100,             0x0200,             0x0400,             0x0800,             0x1000,             0x2000,             0x4000,             0x8000,
     0x010000,           0x020000,           0x040000,           0x080000,           0x100000,           0x200000,           0x400000,           0x800000,
@@ -21,6 +21,6 @@ int get_white_material_value(position* pos);
 
 int get_black_material_value(position* pos);
 
-int num_set_bits(bitmap map);
+int num_set_bits(bitboard map);
 
 #endif

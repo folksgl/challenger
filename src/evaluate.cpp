@@ -64,9 +64,9 @@ int get_black_material_value(position* pos) {
 }
 
 /*
- *  num_set_bits takes in a bitmap and returns the number of bits in that bitmap that are set to 1.
+ *  num_set_bits takes in a bitboard and returns the number of bits in that bitboard that are set to 1.
  */
-int num_set_bits(bitmap map) {
+int num_set_bits(bitboard map) {
     int num_bits = 0;
 
     for (int i = 0; i < 64; i++) {

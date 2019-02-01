@@ -57,14 +57,14 @@ position copy_of(position* pos) {
     tmp_pos.w_queenside_castle = pos->w_queenside_castle;
     tmp_pos.b_queenside_castle = pos->b_queenside_castle;
 
-    tmp_pos.passant_target_sq = pos->passant_target_sq;
+    //tmp_pos.passant_target_sq = pos->passant_target_sq;
 
     tmp_pos.halfmove_clock = pos->halfmove_clock;
     tmp_pos.fullmove_number = pos->fullmove_number;
 
     tmp_pos.evaluation_score = pos->evaluation_score;
 
-    tmp_pos.moves = NULL;
+    //tmp_pos.moves = NULL;
 
     return tmp_pos;
 }
@@ -72,7 +72,7 @@ position copy_of(position* pos) {
 void generate_w_pawn_moves(position* pos) {
 
     int pawns = 0;
-    int num_to_generate = num_set_bits(pos.maps[w_pawn]);
+    int num_to_generate = num_set_bits(pos->maps[w_pawn]);
 
     while (pawns < num_to_generate) {
         
