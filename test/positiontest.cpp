@@ -554,43 +554,43 @@ TEST(fullmove_number, two_thousand_eighty_five) {
 //
 
 TEST(set_bit, square_0) {
-    bitmap num1 = 0;
+    bitboard num1 = 0;
     set_bit(&num1, 0);
     EXPECT_EQ (num1, 0x1);
 }
 
 TEST(set_bit, square_1) {
-    bitmap num1 = 0;
+    bitboard num1 = 0;
     set_bit(&num1, 1);
     EXPECT_EQ (num1, 0x2);
 }
 
 TEST(set_bit, square_3) {
-    bitmap num1 = 0;
+    bitboard num1 = 0;
     set_bit(&num1, 3);
     EXPECT_EQ (num1, 0x8);
 }
 
 TEST(set_bit, square_7) {
-    bitmap num1 = 0;
+    bitboard num1 = 0;
     set_bit(&num1, 7);
     EXPECT_EQ (num1, 0x80);
 }
 
 TEST(set_bit, square_15) {
-    bitmap num1 = 0;
+    bitboard num1 = 0;
     set_bit(&num1, 15);
     EXPECT_EQ (num1, 0x8000);
 }
 
 TEST(set_bit, square_31) {
-    bitmap num1 = 0;
+    bitboard num1 = 0;
     set_bit(&num1, 31);
     EXPECT_EQ (num1, 0x80000000);
 }
 
 TEST(set_bit, square_63) {
-    bitmap num1 = 0;
+    bitboard num1 = 0;
     set_bit(&num1, 63);
     EXPECT_EQ (num1, 0x8000000000000000);
 }
