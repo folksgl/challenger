@@ -223,7 +223,8 @@ void set_fullmove_number(char* fen_tok, position* board_position) {
  */
 void game_move(string move, position* board_position) {
 
-    if (move.length() != 4 || move.length() != 5) {
+    if (move.length() != 4 && move.length() != 5) {
+        cout << "we exited on length" << endl;
         // Malformed move string, ignore move and don't change the position.
         return;
     }
@@ -235,8 +236,11 @@ void game_move(string move, position* board_position) {
     // Zero out the start square
     int piece = zero_at(start_square, board_position);
 
+    cout << "piece is: " << piece << endl;
+
     // Check for pawn promotion
     if (move.length() == 5) {
+        cout << "we changed piece" << endl;
         char promoted_to = move.at(4);
         switch (promoted_to) {
             case 'N': piece = w_knight; break;
