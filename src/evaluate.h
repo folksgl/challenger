@@ -15,11 +15,11 @@ const bitboard squares[64] = {
     0x0100000000000000, 0x0200000000000000, 0x0400000000000000, 0x0800000000000000, 0x1000000000000000, 0x2000000000000000, 0x4000000000000000, 0x8000000000000000
 };
 
-int evaluate_position(position* pos);
+int evaluate_position(Position* pos);
 
-int get_white_material_value(position* pos);
+int get_white_material_value(Position* pos);
 
-int get_black_material_value(position* pos);
+int get_black_material_value(Position* pos);
 
 int num_set_bits(bitboard map);
 

@@ -1,16 +1,28 @@
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <string>
+#include "./bitboard.h"
+#include "./genmove.h"
+#include "game_variables.h"
 #include "./position.h"
 #include "./evaluate.h"
+#include "algorithm"
 
-Position::Position() {
-    Position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-}
+using namespace std;
 
-Position::Position(string fen) {
+/*
+ *  setup_fen returns a position that has been initialized to the fen string passed to it.
+ */
+position setup_fen(string fen) {
+
+    position board_position;
 
     // Copy fen string into char[] for tokenizing.
     char * fenstring = new char [fen.length()+1];
     strcpy (fenstring, fen.c_str());
 
+    // Piece string is the first portion of the fen string. Represents the position of the pieces.
     char *piece_string  = strtok(fenstring, " "); 
     char *active_color  = strtok(NULL, " "); 
     char *castle_rights = strtok(NULL, " "); 
@@ -18,36 +30,25 @@ Position::Position(string fen) {
     char *halfmove_clk  = strtok(NULL, " "); 
     char *fullmove_num  = strtok(NULL, " "); 
 
-    set_piece_positions(piece_string,  this);
-    set_active_color(active_color,     this);
-    set_castling_rights(castle_rights, this);
-    set_passant_target_sq(passant_sq,  this);
-    set_halfmove_clock(halfmove_clk,   this);
-    set_fullmove_number(fullmove_num,  this);
- 
-    evaluation_score = evaluate_position(this);
-}
+    set_piece_positions(piece_string,  &board_position);
+    set_active_color(active_color,     &board_position);
+    set_castling_rights(castle_rights, &board_position);
+    set_passant_target_sq(passant_sq,  &board_position);
+    set_halfmove_clock(halfmove_clk,   &board_position);
+    set_fullmove_number(fullmove_num,  &board_position);
 
-bool Position::is_white_move(void) {
-    return active_color == 'w';
-}
+    board_position.evaluation_score = evaluate_position(&board_position);
 
-bool Position::is_black_move(void) {
-    return active_color == 'b';
-}
+    //generate_moves(&board_position);
 
-void Position::generate_moves() {
-    return;
-}
-
-void Position::move(string move_string) {
-    return;
+    //debug_position(board_position);
+    return board_position;
 }
 
 /*
  *  set_bit sets the value of the bit indicated by sq_num to 1.
  */
-void Position::set_bit(bitboard* bit_map, int sq_num) {
+void set_bit(bitboard* bit_map, int sq_num) {
     *bit_map = (bitboard)(*bit_map | ((bitboard)1 << sq_num));
 }
 
@@ -55,7 +56,7 @@ void Position::set_bit(bitboard* bit_map, int sq_num) {
  *  set_piece_positions sets the value of all the bitboards in board_position
  *  to the values found in fen_tok.
  */
-void Position::set_piece_positions(char* fen_tok, Position* pos) {
+void set_piece_positions(char* fen_tok, position* pos) {
 
     string tmp, bit_oriented_string;
 
@@ -69,7 +70,7 @@ void Position::set_piece_positions(char* fen_tok, Position* pos) {
         bit_oriented_string += tmp;
     }
 
-    // Create Position from fen_tok.
+    // Create position from fen_tok.
     int sq_num = 63;
     int length = bit_oriented_string.length();
     for (int i = 0; i < length; i++) {
@@ -112,7 +113,7 @@ void Position::set_piece_positions(char* fen_tok, Position* pos) {
  *  set_castling_rights sets the value of castling_rights in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_castling_rights(char* fen_tok, Position* board_position) {
+void set_castling_rights(char* fen_tok, position* board_position) {
 
     if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 4) {
         // Castling right string is malformed, continue with no castling rights 
@@ -142,7 +143,7 @@ void Position::set_castling_rights(char* fen_tok, Position* board_position) {
  *  set_active_color sets the value of active_color in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_active_color(char* fen_tok, Position* board_position) {
+void set_active_color(char* fen_tok, position* board_position) {
 
     if (fen_tok == NULL || strlen(fen_tok) != 1) {
         // Malformed active color string. Just assume that it is white's turn.
@@ -157,7 +158,7 @@ void Position::set_active_color(char* fen_tok, Position* board_position) {
  *  set_passant_target_sq sets the value of passant_target_sq in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_passant_target_sq(char* fen_tok, Position* board_position) {
+void set_passant_target_sq(char* fen_tok, position* board_position) {
     if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 2 || fen_tok[0] == '-' || !isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
         // No target square or if malformed passant target string, assume there is none.
         board_position->passant_target_sq[0] = '-';
@@ -177,7 +178,7 @@ void Position::set_passant_target_sq(char* fen_tok, Position* board_position) {
  *  set_halfmove_clock sets the value of halfmove_clock in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_halfmove_clock(char* fen_tok, Position* board_position) {
+void set_halfmove_clock(char* fen_tok, position* board_position) {
     if (fen_tok == NULL) {
         // Malformed clock string, just don't modify the clock and ignore token.
         return;
@@ -199,7 +200,7 @@ void Position::set_halfmove_clock(char* fen_tok, Position* board_position) {
  *  set_fullmove_number sets the value of fullmove_number in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_fullmove_number(char* fen_tok, Position* board_position) {
+void set_fullmove_number(char* fen_tok, position* board_position) {
     if (fen_tok == NULL) {
         // Malformed move number string, ignore token and don't modify move number.
         return;
@@ -220,7 +221,7 @@ void Position::set_fullmove_number(char* fen_tok, Position* board_position) {
 /*
  *  game_move performs the move given in the move string on board_position.
  */
-void Position::game_move(string move, Position* board_position) {
+void game_move(string move, position* board_position) {
 
     if (move.length() != 4 && move.length() != 5) {
         cout << "we exited on length" << endl;
@@ -233,7 +234,7 @@ void Position::game_move(string move, Position* board_position) {
     int dest_square = get_square_num(move.substr(2,2));
 
     // Zero out the start square
-    int piece = board_position->zero_at(start_square);
+    int piece = zero_at(start_square, board_position);
 
     cout << "piece is: " << piece << endl;
 
@@ -252,7 +253,7 @@ void Position::game_move(string move, Position* board_position) {
     }
 
     // Set the destination square
-    board_position->zero_at(dest_square);
+    zero_at(dest_square, board_position);
     set_bit(&board_position->maps[piece], dest_square);
 
     if (piece < 6) {
@@ -271,17 +272,17 @@ void Position::game_move(string move, Position* board_position) {
  *
  *  return the map position of the piece changed
  */
-int Position::zero_at(int square) {
+int zero_at(int square, position* board_position) {
 
     bitboard square_bit = (bitboard)1 << square;
     bitboard mask = 0xFFFFFFFFFFFFFFFF & ~square_bit;
 
-    maps[b_pieces] = ((bitboard)maps[b_pieces] & mask);
-    maps[w_pieces] = ((bitboard)maps[w_pieces] & mask);
+    board_position->maps[b_pieces] = ((bitboard)board_position->maps[b_pieces] & mask);
+    board_position->maps[w_pieces] = ((bitboard)board_position->maps[w_pieces] & mask);
 
     for (int i = 0; i < 14; i++) {
-        if (maps[i] & square_bit) {
-            maps[i] = ((bitboard)maps[i] & mask);
+        if (board_position->maps[i] & square_bit) {
+            board_position->maps[i] = ((bitboard)board_position->maps[i] & mask);
             return i;
         }
     }
@@ -292,7 +293,7 @@ int Position::zero_at(int square) {
 /*
  *  get_square_num calculates the number of the square represented by square_string
  */
-int Position::get_square_num(std::string square_string) {
+int get_square_num(std::string square_string) {
 
     // To get the square number for a string such as e4, translate the file to a 
     // number (a=0, b=1, etc) and add (rank_multiplier * 8) to get the square.
@@ -306,7 +307,7 @@ int Position::get_square_num(std::string square_string) {
  *  file_to_num translates a character representing a file on a chess board (i.e. a, b, etc)
  *  to a number representing its location on the board. a=0, b=1, c=2
  */
-int Position::file_to_num(char file) {
+int file_to_num(char file) {
 
     int number = 0;
 
@@ -323,29 +324,29 @@ int Position::file_to_num(char file) {
     return number;
 }
 
-void Position::debug_position() {
+void debug_position(position pos) {
 
     bitboard bb;
 
-    cout << "\n\nBlack pawn" << endl;   bb = maps[b_pawn];   print_bitboard(bb);
-    cout << "\n\nBlack rook" << endl;   bb = maps[b_rook];   print_bitboard(bb);
-    cout << "\n\nBlack knight" << endl; bb = maps[b_knight]; print_bitboard(bb);
-    cout << "\n\nBlack bishop" << endl; bb = maps[b_bishop]; print_bitboard(bb);
-    cout << "\n\nBlack queen" << endl;  bb = maps[b_queen];  print_bitboard(bb);
-    cout << "\n\nBlack king" << endl;   bb = maps[b_king];   print_bitboard(bb);
-    cout << "\n\nBlack pieces" << endl; bb = maps[b_pieces]; print_bitboard(bb);
+    cout << "\n\nBlack pawn" << endl;   bb = pos.maps[b_pawn];   print_bitboard(bb);
+    cout << "\n\nBlack rook" << endl;   bb = pos.maps[b_rook];   print_bitboard(bb);
+    cout << "\n\nBlack knight" << endl; bb = pos.maps[b_knight]; print_bitboard(bb);
+    cout << "\n\nBlack bishop" << endl; bb = pos.maps[b_bishop]; print_bitboard(bb);
+    cout << "\n\nBlack queen" << endl;  bb = pos.maps[b_queen];  print_bitboard(bb);
+    cout << "\n\nBlack king" << endl;   bb = pos.maps[b_king];   print_bitboard(bb);
+    cout << "\n\nBlack pieces" << endl; bb = pos.maps[b_pieces]; print_bitboard(bb);
 
-    cout << "\n\nWhite pawn" << endl;   bb = maps[w_pawn];   print_bitboard(bb);
-    cout << "\n\nWhite rook" << endl;   bb = maps[w_rook];   print_bitboard(bb);
-    cout << "\n\nWhite knight" << endl; bb = maps[w_knight]; print_bitboard(bb);
-    cout << "\n\nWhite bishop" << endl; bb = maps[w_bishop]; print_bitboard(bb);
-    cout << "\n\nWhite queen" << endl;  bb = maps[w_queen];  print_bitboard(bb);
-    cout << "\n\nWhite king" << endl;   bb = maps[w_king];   print_bitboard(bb);
-    cout << "\n\nWhite pieces" << endl; bb = maps[w_pieces]; print_bitboard(bb);
+    cout << "\n\nWhite pawn" << endl;   bb = pos.maps[w_pawn];   print_bitboard(bb);
+    cout << "\n\nWhite rook" << endl;   bb = pos.maps[w_rook];   print_bitboard(bb);
+    cout << "\n\nWhite knight" << endl; bb = pos.maps[w_knight]; print_bitboard(bb);
+    cout << "\n\nWhite bishop" << endl; bb = pos.maps[w_bishop]; print_bitboard(bb);
+    cout << "\n\nWhite queen" << endl;  bb = pos.maps[w_queen];  print_bitboard(bb);
+    cout << "\n\nWhite king" << endl;   bb = pos.maps[w_king];   print_bitboard(bb);
+    cout << "\n\nWhite pieces" << endl; bb = pos.maps[w_pieces]; print_bitboard(bb);
 
 }
 
-void Position::print_bitboard(bitboard bb) {
+void print_bitboard(bitboard bb) {
 
     for (int i = 56; i < 64; i++) { if ((bb >> i) & 0x1) { cout << 'B'; } else { cout << '-'; } }
     cout << endl;

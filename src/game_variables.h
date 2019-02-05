@@ -4,6 +4,6 @@
 #include "./position.h"
 
 extern bool G_debug;
-extern position G_game_position;
+extern Position* G_game_position;
 
 #endif

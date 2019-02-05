@@ -9,7 +9,7 @@ using namespace std;
 // Include declaration of globals from src/main.cpp since it won't be  //
 // included in compilation of tests.                                   //
 bool G_debug;                                                          // 
-position G_game_position;                                              //
+Position* G_game_position;                                              //
                                                                        //
 /////////////////////////////////////////////////////////////////////////
 

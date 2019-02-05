@@ -5,7 +5,7 @@
 using namespace std;
 
 bool G_debug;
-position G_game_position;
+Position* G_game_position;
 
 int main()
 {

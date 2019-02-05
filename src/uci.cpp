@@ -108,7 +108,7 @@ void process_position_command(std::string uci_input) {
 
     // If the "startpos" position is given, use the starting position.
     if (startpos.compare(token) == 0) {
-        G_game_position = setup_fen(start_pos);
+        G_game_position = new Position();
     }
     else {
         string uci_fen = token;
@@ -116,7 +116,7 @@ void process_position_command(std::string uci_input) {
             token = strtok(NULL, " ");
             uci_fen += ' ' + token;
         }
-        G_game_position = setup_fen(uci_fen);
+        G_game_position = new Position(uci_fen);
     }
 
     // Reset the command string to the full command.
@@ -128,7 +128,7 @@ void process_position_command(std::string uci_input) {
         if (strncmp(token, "moves", 6) == 0) {
             token = strtok(NULL, " "); 
             while (token != NULL) {
-                game_move(token, &G_game_position);
+                (*G_game_position).move(token);
                 token = strtok(NULL, " "); 
             }
             break;

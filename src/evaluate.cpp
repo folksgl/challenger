@@ -13,7 +13,7 @@ using namespace std;
  *  evaluate_position takes in a single position and returns a single number representing its evaluation
  *  score -- positive means white has advantage, negative means black has advantage.
  */
-int evaluate_position(position* pos) {
+int evaluate_position(Position* pos) {
 
     int white_material = get_white_material_value(pos);
     int black_material = get_black_material_value(pos);
@@ -25,7 +25,7 @@ int evaluate_position(position* pos) {
  *  get_white_material_value takes in a single position and returns a number representing the strength
  *  of the white pieces in the given position.
  */
-int get_white_material_value(position* pos) {
+int get_white_material_value(Position* pos) {
     int material_val = 0;
     
     material_val += (PAWN   * num_set_bits(pos->maps[w_pawn]));
@@ -45,7 +45,7 @@ int get_white_material_value(position* pos) {
  *  get_black_material_value takes in a single position and returns a number representing the strength
  *  of the black pieces in the given position.
  */
-int get_black_material_value(position* pos) {
+int get_black_material_value(Position* pos) {
     int material_val = 0;
     
     material_val -= (PAWN   * num_set_bits(pos->maps[b_pawn]));

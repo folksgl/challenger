@@ -5,7 +5,7 @@
 
 using namespace std;
 
-std::string search(position* pos) {
+std::string search(Position* pos) {
     int beta  = std::numeric_limits<int>::max();
     int alpha = std::numeric_limits<int>::min();
 
@@ -20,14 +20,14 @@ std::string search(position* pos) {
     return "TODO" + bestscore;
 }
 
-int alphaBetaMax(position* pos, int alpha, int beta, int depth) {
+int alphaBetaMax(Position* pos, int alpha, int beta, int depth) {
     if (depth == 0) {
         return pos->evaluation_score;
     }
 
     int score = 0;
 
-    for (vector<position>::iterator p = pos->moves.begin(); p != pos->moves.end(); p++) {
+    for (vector<Position>::iterator p = pos->moves.begin(); p != pos->moves.end(); p++) {
         score = alphaBetaMin(&(*p), alpha, beta, depth - 1);
         if (score >= beta) {
             return beta;
@@ -39,14 +39,14 @@ int alphaBetaMax(position* pos, int alpha, int beta, int depth) {
     return alpha;
 }
 
-int alphaBetaMin(position* pos, int alpha, int beta, int depth) {
+int alphaBetaMin(Position* pos, int alpha, int beta, int depth) {
     if (depth == 0) {
         return pos->evaluation_score;
     }
 
     int score = 0;
 
-    for (vector<position>::iterator p = pos->moves.begin(); p != pos->moves.end(); p++) {
+    for (vector<Position>::iterator p = pos->moves.begin(); p != pos->moves.end(); p++) {
         score = alphaBetaMax(&(*p), alpha, beta, depth - 1);
         if (score <= alpha) {
             return alpha;

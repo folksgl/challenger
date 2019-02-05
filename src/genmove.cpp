@@ -6,7 +6,7 @@
  *  generate_moves takes in a position and generates all possible moves for that position, 
  *  storing the resulting positions in the moves vector for the position.
  */
-void generate_moves(position* pos) {
+void generate_moves(Position* pos) {
 
     if (pos->active_color == 'w') {
         generate_white_moves(pos);
@@ -18,7 +18,7 @@ void generate_moves(position* pos) {
     return;
 }
 
-void generate_white_moves(position* pos) {
+void generate_white_moves(Position* pos) {
 
     generate_w_pawn_moves(pos);
     generate_w_knight_moves(pos);
@@ -30,7 +30,7 @@ void generate_white_moves(position* pos) {
     return;
 }
 
-void generate_black_moves(position* pos) {
+void generate_black_moves(Position* pos) {
 
     generate_b_pabn_moves(pos);
     generate_b_knight_moves(pos);
@@ -42,8 +42,8 @@ void generate_black_moves(position* pos) {
     return;
 }
 
-position copy_of(position* pos) {
-    position tmp_pos;
+Position copy_of(Position* pos) {
+    Position tmp_pos;
 
     // Set the white pieces that aren't pawns
     for (int i = 0; i < 14; i++) {
@@ -69,7 +69,7 @@ position copy_of(position* pos) {
     return tmp_pos;
 }
 
-void generate_w_pawn_moves(position* pos) {
+void generate_w_pawn_moves(Position* pos) {
 
     int pawns = 0;
     int num_to_generate = num_set_bits(pos->maps[w_pawn]);
@@ -81,49 +81,49 @@ void generate_w_pawn_moves(position* pos) {
     return;
 }
 
-void generate_w_knight_moves(position* pos) {
+void generate_w_knight_moves(Position* pos) {
     return;
 }
 
-void generate_w_bishop_moves(position* pos) {
+void generate_w_bishop_moves(Position* pos) {
     return;
 }
 
-void generate_w_rook_moves(position* pos) {
+void generate_w_rook_moves(Position* pos) {
     return;
 }
 
-void generate_w_queen_moves(position* pos) {
+void generate_w_queen_moves(Position* pos) {
     return;
 }
 
-void generate_w_king_moves(position* pos) {
+void generate_w_king_moves(Position* pos) {
     return;
 }
 
 
 
-void generate_b_pabn_moves(position* pos) {
+void generate_b_pabn_moves(Position* pos) {
     return;
 }
 
-void generate_b_knight_moves(position* pos) {
+void generate_b_knight_moves(Position* pos) {
     return;
 }
 
-void generate_b_bishop_moves(position* pos) {
+void generate_b_bishop_moves(Position* pos) {
     return;
 }
 
-void generate_b_rook_moves(position* pos) {
+void generate_b_rook_moves(Position* pos) {
     return;
 }
 
-void generate_b_queen_moves(position* pos) {
+void generate_b_queen_moves(Position* pos) {
     return;
 }
 
-void generate_b_king_moves(position* pos) {
+void generate_b_king_moves(Position* pos) {
     return;
 }
 
