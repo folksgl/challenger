@@ -36,7 +36,8 @@ class Position {
         std::vector<Position> moves;
 
         // Constructors
-        Position(void);
+
+        Position(void) : Position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {}
         Position(std::string fen);
 
         // Functions
@@ -44,14 +45,15 @@ class Position {
         bool is_black_move(void);
         void generate_moves(void);
         void move(std::string move_string);
-        void set_piece_positions(char* fen_tok, Position* pos);
-        void set_active_color(char* fen_tok, Position* board_position);
-        void set_castling_rights(char* fen_tok, Position* board_position);
-        void set_passant_target_sq(char* fen_tok, Position* board_position);
-        void set_halfmove_clock(char* fen_tok, Position* board_position);
-        void set_fullmove_number(char* fen_tok, Position* board_position);
+        void zero_piece_positions();
+        void set_piece_positions(char* fen_tok);
+        void set_active_color(char* fen_tok);
+        void set_castling_rights(char* fen_tok);
+        void set_passant_target_sq(char* fen_tok);
+        void set_halfmove_clock(char* fen_tok);
+        void set_fullmove_number(char* fen_tok);
         void set_bit(bitboard* bit_map, int sq_num);
-        void game_move(std::string move, Position* board_position);
+        void game_move(std::string move);
         int zero_at(int square);
         int file_to_num(char file);
         int get_square_num(std::string square_string);

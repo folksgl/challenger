@@ -8,8 +8,6 @@
 
 using namespace std;
 
-#define start_pos "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-
 /*
  *  process_uci_inputs reads in input from stdin (given by a uci-compatible gui) and
  *  processes the instructions given to manipulate game progression.

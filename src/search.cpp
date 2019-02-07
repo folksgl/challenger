@@ -5,11 +5,17 @@
 
 using namespace std;
 
+/*
+ * Perform a search of the position given and return a string representing the best move to make.
+ */
 std::string search(Position* pos) {
     int beta  = std::numeric_limits<int>::max();
     int alpha = std::numeric_limits<int>::min();
 
     int bestscore = 0;
+
+    move_order(pos);
+
     if (pos->active_color == 'w') {
         bestscore = alphaBetaMax(pos, alpha, beta, 15);
     }
@@ -18,6 +24,20 @@ std::string search(Position* pos) {
     }
 
     return "TODO" + bestscore;
+}
+
+/*
+ * Sort the moves vector of the position to attempt to maximize pruning of alpha-beta search
+ */
+void move_order(Position* pos) {
+    if (pos->active_color == 'w') {
+        std::sort(pos->moves.begin(), pos->moves.end(), 
+                          [](Position const &a, Position const &b) { return b.evaluation_score < a.evaluation_score; });
+    }
+    else {
+        std::sort(pos->moves.begin(), pos->moves.end(), 
+                          [](Position const &a, Position const &b) { return a.evaluation_score < b.evaluation_score; });
+    }
 }
 
 int alphaBetaMax(Position* pos, int alpha, int beta, int depth) {

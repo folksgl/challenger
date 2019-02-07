@@ -5,6 +5,7 @@
 #define SEARCH_H
 
 std::string search(Position* pos);
+void move_order(Position* pos);
 int alphaBetaMax(Position* pos, int alpha, int beta, int depth);
 int alphaBetaMin(Position* pos, int alpha, int beta, int depth);
 
