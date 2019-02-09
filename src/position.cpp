@@ -25,11 +25,11 @@ Position::Position(string fen) {
     evaluation_score = evaluate_position(this);
 }
 
-bool Position::is_white_move(void) {
+bool Position::is_white_move(void) const {
     return active_color == 'w';
 }
 
-bool Position::is_black_move(void) {
+bool Position::is_black_move(void) const {
     return active_color == 'b';
 }
 
@@ -49,7 +49,7 @@ void Position::set_bit(bitboard* bit_map, int sq_num) {
 }
 
 void Position::zero_piece_positions() {
-    for (int i = 0; i < 14; i++) {
+    for (int i = 0; i < maps.size(); i++) {
         maps[i] = 0;
     }
     return;
@@ -280,7 +280,7 @@ int Position::zero_at(int square) {
     maps[b_pieces] = ((bitboard)maps[b_pieces] & mask);
     maps[w_pieces] = ((bitboard)maps[w_pieces] & mask);
 
-    for (int i = 0; i < 14; i++) {
+    for (int i = 0; i < maps.size(); i++) {
         if (maps[i] & square_bit) {
             maps[i] = ((bitboard)maps[i] & mask);
             return i;
@@ -293,7 +293,7 @@ int Position::zero_at(int square) {
 /*
  *  get_square_num calculates the number of the square represented by square_string
  */
-int Position::get_square_num(std::string square_string) {
+int Position::get_square_num(std::string square_string) const {
 
     // To get the square number for a string such as e4, translate the file to a 
     // number (a=0, b=1, etc) and add (rank_multiplier * 8) to get the square.
@@ -307,7 +307,7 @@ int Position::get_square_num(std::string square_string) {
  *  file_to_num translates a character representing a file on a chess board (i.e. a, b, etc)
  *  to a number representing its location on the board. a=0, b=1, c=2
  */
-int Position::file_to_num(char file) {
+int Position::file_to_num(char file) const {
 
     int number = 0;
 
@@ -324,7 +324,7 @@ int Position::file_to_num(char file) {
     return number;
 }
 
-void Position::debug_position() {
+void Position::debug_position() const {
 
     bitboard bb;
 
@@ -346,7 +346,7 @@ void Position::debug_position() {
 
 }
 
-void Position::print_bitboard(bitboard bb) {
+void Position::print_bitboard(bitboard bb) const {
 
     for (int i = 56; i < 64; i++) { if ((bb >> i) & 0x1) { cout << 'B'; } else { cout << '-'; } }
     cout << endl;

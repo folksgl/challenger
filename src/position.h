@@ -1,9 +1,10 @@
-#include "./bitboard.h"
 #include <string>
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <array>
 #include <string.h>
+#include "./bitboard.h"
 
 #ifndef POSITION_H
 #define POSITION_H
@@ -17,7 +18,7 @@ class Position {
 
     public:
         // Class Attributes
-        bitboard maps[14];
+        array<bitboard, 14> maps;
 
         char active_color;
 
@@ -41,8 +42,8 @@ class Position {
         Position(std::string fen);
 
         // Functions
-        bool is_white_move(void);
-        bool is_black_move(void);
+        bool is_white_move(void) const;
+        bool is_black_move(void) const;
         void generate_moves(void);
         void move(std::string move_string);
         void zero_piece_positions();
@@ -55,10 +56,10 @@ class Position {
         void set_bit(bitboard* bit_map, int sq_num);
         void game_move(std::string move);
         int zero_at(int square);
-        int file_to_num(char file);
-        int get_square_num(std::string square_string);
-        void debug_position(void);
-        void print_bitboard(bitboard bb);
+        int file_to_num(char file) const;
+        int get_square_num(std::string square_string) const;
+        void debug_position(void) const;
+        void print_bitboard(bitboard bb) const;
 };
 
 #endif
