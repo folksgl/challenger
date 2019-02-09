@@ -32,7 +32,7 @@ void generate_white_moves(Position* pos) {
 
 void generate_black_moves(Position* pos) {
 
-    generate_b_pabn_moves(pos);
+    generate_b_pawn_moves(pos);
     generate_b_knight_moves(pos);
     generate_b_bishop_moves(pos);
     generate_b_rook_moves(pos);
@@ -103,7 +103,7 @@ void generate_w_king_moves(Position* pos) {
 
 
 
-void generate_b_pabn_moves(Position* pos) {
+void generate_b_pawn_moves(Position* pos) {
     return;
 }
 

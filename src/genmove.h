@@ -28,7 +28,7 @@ void generate_w_king_moves(Position* pos);
 
 
 
-void generate_b_pabn_moves(Position* pos);
+void generate_b_pawn_moves(Position* pos);
 
 void generate_b_knight_moves(Position* pos);
 
