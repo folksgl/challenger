@@ -4,7 +4,7 @@
 #include <iostream>
 #include <array>
 #include <string.h>
-#include "./bitboard.h"
+#include "bitboard.h"
 
 #ifndef POSITION_H
 #define POSITION_H
@@ -44,8 +44,6 @@ class Position {
         // Functions
         bool is_white_move(void) const;
         bool is_black_move(void) const;
-        void generate_moves(void);
-        void zero_piece_positions();
 
         void set_piece_positions(char* fen_tok);
         void set_active_color(char* fen_tok);
@@ -54,12 +52,16 @@ class Position {
         void set_halfmove_clock(char* fen_tok);
         void set_fullmove_number(char* fen_tok);
 
+        void generate_moves(void);
+        void zero_piece_positions();
         void move(std::string move_string);
         int zero_at(int square);
         int file_to_num(char file) const;
         int get_square_num(std::string square_string) const;
+
         void debug_position(void) const;
         void print_bitboard(bitboard bb) const;
 };
 
 #endif
+

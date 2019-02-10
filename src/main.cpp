@@ -1,6 +1,6 @@
-#include "./position.h"
-#include "./game_variables.h"
-#include "./uci.h"
+#include "position.h"
+#include "game_variables.h"
+#include "uci.h"
 
 using namespace std;
 

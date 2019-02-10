@@ -1,5 +1,5 @@
-#include "./position.h"
-#include "./evaluate.h"
+#include "position.h"
+#include "evaluate.h"
 
 Position::Position(string fen) {
 

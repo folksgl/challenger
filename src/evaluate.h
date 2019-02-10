@@ -1,5 +1,5 @@
-#include "./bitboard.h"
-#include "./position.h"
+#include "bitboard.h"
+#include "position.h"
 
 #ifndef EVALUATE_H
 #define EVALUATE_H

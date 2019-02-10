@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <string>
-#include "./bitboard.h"
-#include "./genmove.h"
+#include "bitboard.h"
+#include "genmove.h"
 #include "game_variables.h"
-#include "./position.h"
-#include "./evaluate.h"
+#include "position.h"
+#include "evaluate.h"
 #include "algorithm"
 
 using namespace std;

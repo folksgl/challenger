@@ -1,4 +1,4 @@
-#include "./evaluate.h"
+#include "evaluate.h"
 
 using namespace std;
 

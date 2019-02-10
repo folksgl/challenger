@@ -1,6 +1,6 @@
-#include "./position.h"
-#include "./evaluate.h"
-#include "./genmove.h"
+#include "position.h"
+#include "evaluate.h"
+#include "genmove.h"
 
 /*
  *  generate_moves takes in a position and generates all possible moves for that position, 

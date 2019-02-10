@@ -1,4 +1,4 @@
-#include "./position.h"
+#include "position.h"
 
 #ifndef GENMOVE_H
 #define GENMOVE_H
