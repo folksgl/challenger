@@ -37,19 +37,8 @@ void Position::generate_moves() {
     return;
 }
 
-void Position::move(string move_string) {
-    return;
-}
-
-/*
- *  set_bit sets the value of the bit indicated by sq_num to 1.
- */
-void Position::set_bit(bitboard* bit_map, int sq_num) {
-    *bit_map |= ((bitboard)1 << sq_num);
-}
-
 void Position::zero_piece_positions() {
-    for (int i = 0; i < maps.size(); i++) {
+    for (unsigned int i = 0; i < maps.size(); i++) {
         maps[i] = 0;
     }
     return;
@@ -81,20 +70,20 @@ void Position::set_piece_positions(char* fen_tok) {
         char input = bit_oriented_string.at(i);
         switch(input) {
             // Lower case = Black Pieces
-            case 'p': set_bit(&maps[b_pawn],   sq_num--); break;
-            case 'r': set_bit(&maps[b_rook],   sq_num--); break;
-            case 'n': set_bit(&maps[b_knight], sq_num--); break;
-            case 'b': set_bit(&maps[b_bishop], sq_num--); break;
-            case 'q': set_bit(&maps[b_queen],  sq_num--); break;
-            case 'k': set_bit(&maps[b_king],   sq_num--); break;
+            case 'p': maps[b_pawn]   |= ((bitboard)1 << sq_num--); break;
+            case 'r': maps[b_rook]   |= ((bitboard)1 << sq_num--); break;
+            case 'n': maps[b_knight] |= ((bitboard)1 << sq_num--); break;
+            case 'b': maps[b_bishop] |= ((bitboard)1 << sq_num--); break;
+            case 'q': maps[b_queen]  |= ((bitboard)1 << sq_num--); break;
+            case 'k': maps[b_king]   |= ((bitboard)1 << sq_num--); break;
 
                 // Upper case = White Pieces
-            case 'P': set_bit(&maps[w_pawn],   sq_num--); break;
-            case 'R': set_bit(&maps[w_rook],   sq_num--); break;
-            case 'N': set_bit(&maps[w_knight], sq_num--); break;
-            case 'B': set_bit(&maps[w_bishop], sq_num--); break;
-            case 'Q': set_bit(&maps[w_queen],  sq_num--); break;
-            case 'K': set_bit(&maps[w_king],   sq_num--); break;
+            case 'P': maps[w_pawn]   |= ((bitboard)1 << sq_num--); break;
+            case 'R': maps[w_rook]   |= ((bitboard)1 << sq_num--); break;
+            case 'N': maps[w_knight] |= ((bitboard)1 << sq_num--); break;
+            case 'B': maps[w_bishop] |= ((bitboard)1 << sq_num--); break;
+            case 'Q': maps[w_queen]  |= ((bitboard)1 << sq_num--); break;
+            case 'K': maps[w_king]   |= ((bitboard)1 << sq_num--); break;
 
             default :
                 if (isdigit(input)) {
@@ -225,7 +214,7 @@ void Position::set_fullmove_number(char* fen_tok) {
 /*
  *  game_move performs the move given in the move string on board_position.
  */
-void Position::game_move(string move) {
+void Position::move(string move) {
 
     if (move.length() != 4 && move.length() != 5) {
         // Malformed move string, ignore move and don't change the position.
@@ -254,13 +243,13 @@ void Position::game_move(string move) {
 
     // Set the destination square
     zero_at(dest_square);
-    set_bit(&maps[piece], dest_square);
+    maps[piece] |= (bitboard)1 << dest_square;
 
     if (piece < 6) {
-        set_bit(&maps[w_pieces], dest_square);
+        maps[w_pieces] |= (bitboard)1 << dest_square;
     }
     else {
-        set_bit(&maps[b_pieces], dest_square);
+        maps[b_pieces] |= (bitboard)1 << dest_square;
     }
 
     return;
@@ -280,7 +269,7 @@ int Position::zero_at(int square) {
     maps[b_pieces] = ((bitboard)maps[b_pieces] & mask);
     maps[w_pieces] = ((bitboard)maps[w_pieces] & mask);
 
-    for (int i = 0; i < maps.size(); i++) {
+    for (unsigned int i = 0; i < maps.size(); i++) {
         if (maps[i] & square_bit) {
             maps[i] = ((bitboard)maps[i] & mask);
             return i;

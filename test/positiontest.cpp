@@ -636,7 +636,7 @@ TEST(file_to_num, h) {
 TEST(game_move, a2a4) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.game_move("a2a4");
+    actualpos.move("a2a4");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
@@ -658,8 +658,8 @@ TEST(game_move, a2a4) {
 TEST(game_move, a2a4_b2b4) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.game_move("a2a4");
-    actualpos.game_move("b2b4");
+    actualpos.move("a2a4");
+    actualpos.move("b2b4");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
@@ -682,7 +682,7 @@ TEST(game_move, a2a4_b2b4) {
 TEST(game_move, a2a7) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.game_move("a2a7");
+    actualpos.move("a2a7");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FE000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
@@ -705,8 +705,8 @@ TEST(game_move, a2a7) {
 TEST(game_move, a2a7_a7b7) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.game_move("a2a7");
-    actualpos.game_move("a7b7");
+    actualpos.move("a2a7");
+    actualpos.move("a7b7");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FC000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook

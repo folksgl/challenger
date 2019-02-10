@@ -45,16 +45,16 @@ class Position {
         bool is_white_move(void) const;
         bool is_black_move(void) const;
         void generate_moves(void);
-        void move(std::string move_string);
         void zero_piece_positions();
+
         void set_piece_positions(char* fen_tok);
         void set_active_color(char* fen_tok);
         void set_castling_rights(char* fen_tok);
         void set_passant_target_sq(char* fen_tok);
         void set_halfmove_clock(char* fen_tok);
         void set_fullmove_number(char* fen_tok);
-        void set_bit(bitboard* bit_map, int sq_num);
-        void game_move(std::string move);
+
+        void move(std::string move_string);
         int zero_at(int square);
         int file_to_num(char file) const;
         int get_square_num(std::string square_string) const;
