@@ -44,6 +44,26 @@ void Position::zero_piece_positions() {
     return;
 }
 
+Position::Position(const Position& other) {
+    maps = other.maps;
+
+    active_color = other.active_color;
+
+    w_kingside_castle  = other.w_kingside_castle;
+    w_queenside_castle = other.w_queenside_castle;
+    b_kingside_castle  = other.b_kingside_castle;
+    b_queenside_castle = other.b_queenside_castle;
+
+    passant_target_sq = other.passant_target_sq;
+
+    halfmove_clock = other.halfmove_clock;
+    fullmove_number = other.fullmove_number;
+
+    evaluation_score = other.evaluation_score;
+
+    moves = other.moves;
+}
+
 /*
  *  set_piece_positions sets the value of all the bitboards in board_position
  *  to the values found in fen_tok.
@@ -153,14 +173,12 @@ void Position::set_active_color(char* fen_tok) {
 void Position::set_passant_target_sq(char* fen_tok) {
     if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 2 || fen_tok[0] == '-' || !isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
         // No target square or if malformed passant target string, assume there is none.
-        passant_target_sq[0] = '-';
-        passant_target_sq[1] = '\0';
+        passant_target_sq = "";
         return;
     }
 
     else {
-        passant_target_sq[0] = fen_tok[0];
-        passant_target_sq[1] = fen_tok[1];
+        passant_target_sq = fen_tok;
     }
 
     return;

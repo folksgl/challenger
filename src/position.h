@@ -27,7 +27,7 @@ class Position {
         bool b_kingside_castle;
         bool b_queenside_castle;
 
-        char passant_target_sq[2];
+        string passant_target_sq;
 
         unsigned short int halfmove_clock;
         unsigned short int fullmove_number;
@@ -40,6 +40,7 @@ class Position {
 
         Position(void) : Position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {}
         Position(std::string fen);
+        Position(const Position& other);
 
         // Functions
         bool is_white_move(void) const;

@@ -367,25 +367,25 @@ TEST(active_color, black_active) {
 TEST(en_passant, d3) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq d3 0 1";
     Position actualpos(test);
-    EXPECT_STREQ (actualpos.passant_target_sq, "d3");
+    EXPECT_EQ (actualpos.passant_target_sq, "d3");
 }
 
 TEST(en_passant, a6) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a6 0 1";
     Position actualpos(test);
-    EXPECT_STREQ (actualpos.passant_target_sq, "a6");
+    EXPECT_EQ (actualpos.passant_target_sq, "a6");
 }
 
 TEST(en_passant, h4) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq h4 0 1";
     Position actualpos(test);
-    EXPECT_STREQ (actualpos.passant_target_sq, "h4");
+    EXPECT_EQ (actualpos.passant_target_sq, "h4");
 }
 
 TEST(en_passant, c2) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c2 0 1";
     Position actualpos(test);
-    EXPECT_STREQ (actualpos.passant_target_sq, "c2");
+    EXPECT_EQ (actualpos.passant_target_sq, "c2");
 }
 
 //
@@ -726,10 +726,75 @@ TEST(game_move, a2a7_a7b7) {
 
 }
 
-TEST(MUCHEMPTYWOW, black_pawn) {
-    string test = "8/8/8/8/8/8/8/8 w KQkq - 0 1";
-    Position startpos(test);
-    EXPECT_EQ (startpos.maps[b_pawn],   0x0000000000000000); // b_pawn]
+TEST(copy_constructor, deep_maps) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    Position copypos = actualpos;
+
+    copypos.maps[w_pawn] = 0x0;
+    EXPECT_EQ (actualpos.maps[w_pawn], 0x000000000000FF00);
+    EXPECT_EQ (copypos.maps[w_pawn],   0x0);
 }
 
+TEST(copy_constructor, deep_color) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    Position copypos = actualpos;
+
+    copypos.active_color = 'G';
+    EXPECT_EQ (actualpos.active_color, 'w');
+    EXPECT_EQ (copypos.active_color,   'G');
+}
+
+TEST(copy_constructor, deep_castle) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    Position copypos = actualpos;
+
+    copypos.w_kingside_castle = false;
+    EXPECT_EQ (actualpos.w_kingside_castle, true);
+    EXPECT_EQ (copypos.w_kingside_castle,   false);
+}
+
+TEST(copy_constructor, deep_passant) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    Position copypos = actualpos;
+
+    copypos.passant_target_sq = "no target";
+    EXPECT_EQ (actualpos.passant_target_sq, "");
+    EXPECT_EQ (copypos.passant_target_sq,   "no target");
+}
+
+TEST(copy_constructor, deep_int) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    Position copypos = actualpos;
+
+    copypos.halfmove_clock   = 100;
+    copypos.fullmove_number  = 100;
+    copypos.evaluation_score = 100;
+
+    EXPECT_EQ (actualpos.halfmove_clock,   0);
+    EXPECT_EQ (actualpos.fullmove_number,  1);
+    EXPECT_EQ (actualpos.evaluation_score, 0);
+
+    EXPECT_EQ (copypos.halfmove_clock,   100);
+    EXPECT_EQ (copypos.fullmove_number,  100);
+    EXPECT_EQ (copypos.evaluation_score, 100);
+}
+
+TEST(copy_constructor, deep_moves) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    Position copypos = actualpos;
+
+    std::vector<Position> newvec;
+    Position start;
+    newvec.push_back(start);
+
+    copypos.moves = newvec;
+    EXPECT_EQ (actualpos.moves.size(), 0);
+    EXPECT_EQ (copypos.moves.size(),   1);
+}
 
