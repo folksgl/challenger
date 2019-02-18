@@ -26,6 +26,26 @@ Position::Position(string fen) {
     evaluation_score = evaluate_position(this);
 }
 
+bool Position::operator == (const Position& other) const {
+    for (unsigned int i = 0; i < maps.size(); i++) {
+        if (maps[i] != other.maps[i]) { return false; }
+    }
+
+    if (active_color != other.active_color) { return false; }
+
+    if (w_kingside_castle  != other.w_kingside_castle)  { return false; }
+    if (b_kingside_castle  != other.b_kingside_castle)  { return false; }
+    if (w_queenside_castle != other.w_queenside_castle) { return false; }
+    if (w_queenside_castle != other.w_queenside_castle) { return false; }
+
+    if (passant_target_sq  != other.passant_target_sq)  { return false; }
+
+    if (halfmove_clock  != other.halfmove_clock)  { return false; }
+    if (fullmove_number != other.fullmove_number) { return false; }
+
+    return true;
+}
+
 bool Position::is_white_move(void) const {
     return active_color == 'w';
 }
@@ -36,6 +56,11 @@ bool Position::is_black_move(void) const {
 
 void Position::generate_moves() {
     ::generate_moves(this);
+    return;
+}
+
+void Position::evaluate() {
+    evaluation_score = ::evaluate_position(this);
     return;
 }
 
@@ -297,40 +322,6 @@ int Position::zero_at(int square) {
     }
 
     return -1; //This should never return -1. A valid move WILL trigger one of the above cases.
-}
-
-/*
- *  get_square_num calculates the number of the square represented by square_string
- */
-int Position::get_square_num(std::string square_string) const {
-
-    // To get the square number for a string such as e4, translate the file to a 
-    // number (a=0, b=1, etc) and add (rank_multiplier * 8) to get the square.
-    int rank_mult = atoi(square_string.substr(1, 1).c_str()) - 1;
-    int square_num = file_to_num(square_string.at(0)) + (rank_mult * 8);
-
-    return square_num;
-}
-
-/*
- *  file_to_num translates a character representing a file on a chess board (i.e. a, b, etc)
- *  to a number representing its location on the board. a=0, b=1, c=2
- */
-int Position::file_to_num(char file) const {
-
-    int number = 0;
-
-    switch(file) {
-        case 'b': number = 1; break;
-        case 'c': number = 2; break;
-        case 'd': number = 3; break;
-        case 'e': number = 4; break;
-        case 'f': number = 5; break;
-        case 'g': number = 6; break;
-        case 'h': number = 7; break;
-    }
-
-    return number;
 }
 
 void Position::debug_position() const {
