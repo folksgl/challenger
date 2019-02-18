@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "../src/evaluate.h"
+#include "../src/common.h"
 #include <string>
 
 namespace {
