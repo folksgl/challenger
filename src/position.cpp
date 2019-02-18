@@ -1,5 +1,6 @@
 #include "position.h"
 #include "evaluate.h"
+#include "genmove.h"
 
 Position::Position(string fen) {
 
@@ -34,6 +35,7 @@ bool Position::is_black_move(void) const {
 }
 
 void Position::generate_moves() {
+    ::generate_moves(this);
     return;
 }
 
