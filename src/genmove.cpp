@@ -1,5 +1,3 @@
-#include "position.h"
-#include "evaluate.h"
 #include "genmove.h"
 
 /*
@@ -40,33 +38,6 @@ void generate_black_moves(Position* pos) {
     generate_b_king_moves(pos);
 
     return;
-}
-
-Position copy_of(Position* pos) {
-    Position tmp_pos;
-
-    // Set the white pieces that aren't pawns
-    for (int i = 0; i < 14; i++) {
-        tmp_pos.maps[i] = pos->maps[i];
-    }
-
-    tmp_pos.active_color = pos->active_color;
-
-    tmp_pos.w_kingside_castle = pos->w_kingside_castle;
-    tmp_pos.b_kingside_castle = pos->w_kingside_castle;
-    tmp_pos.w_queenside_castle = pos->w_queenside_castle;
-    tmp_pos.b_queenside_castle = pos->b_queenside_castle;
-
-    //tmp_pos.passant_target_sq = pos->passant_target_sq;
-
-    tmp_pos.halfmove_clock = pos->halfmove_clock;
-    tmp_pos.fullmove_number = pos->fullmove_number;
-
-    tmp_pos.evaluation_score = pos->evaluation_score;
-
-    //tmp_pos.moves = NULL;
-
-    return tmp_pos;
 }
 
 void generate_w_pawn_moves(Position* pos) {
