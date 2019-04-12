@@ -17,7 +17,6 @@ The "Percentage winning next level" label indicates challenger's progress in bea
 Percentages will be determined by playing 10 games and recording winnings.
 
 ## TODO
-- [ ] Containerize challenger for portability
 - [x] Implement base UCI compatibility
 - [ ] Implement all UCI compatibility
 - [x] Create board representation
