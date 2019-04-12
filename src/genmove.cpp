@@ -42,13 +42,59 @@ void generate_black_moves(Position* pos) {
 
 void generate_w_pawn_moves(Position* pos) {
 
-    int pawns = 0;
-    int num_to_generate = num_set_bits(pos->maps[w_pawn]);
-
-    while (pawns < num_to_generate) {
-        
+    bitboard passant_bit;
+    if (pos->passant_target_sq.empty()) {
+        passant_bit = 0;
+    }
+    else {
+        passant_bit = squares[get_square_num(pos->passant_target_sq)];
     }
 
+    bitboard pawns = pos->maps[w_pawn];
+    bitboard black = pos->maps[b_pawn] | passant_bit;
+
+    // left/right/forward contain the start squares of pawns that can perform those moves.
+    bitboard left_attacks  = (pawns & (~a_file)) & (black << 7);
+    bitboard right_attacks = (pawns & (~h_file)) & (black << 9);
+    bitboard forward = ((pawns >> 8) ^ black) << 8;
+
+    string src, dest;
+
+    // Loop over pawns and generate appropriate moves.
+    for (int i = 0; i < 64; i++) {
+        // Found a pawn; check for 3 possible moves
+        if (squares[i] & pawns) {
+            src = bit_to_square.at(squares[i]);
+
+            if (squares[i] & left_attacks) {
+                Position pawnmove(*pos);
+                dest = bit_to_square.at(squares[i+7]);
+                if (dest.at(1) == '8') { dest += 'q'; }
+                pawnmove.movestring = src + dest;
+                pawnmove.move(src+dest);
+                pawnmove.evaluate();
+                pos->moves.push_back(pawnmove);
+            }
+            if (squares[i] & right_attacks) {
+                Position pawnmove(*pos);
+                dest = bit_to_square.at(squares[i+9]);
+                if (dest.at(1) == '8') { dest += 'q'; }
+                pawnmove.movestring = src + dest;
+                pawnmove.move(src+dest);
+                pawnmove.evaluate();
+                pos->moves.push_back(pawnmove);
+            }
+            if (squares[i] & forward) {
+                Position pawnmove(*pos);
+                dest = bit_to_square.at(squares[i+8]);
+                if (dest.at(1) == '8') { dest += 'q'; }
+                pawnmove.movestring = src + dest;
+                pawnmove.move(src+dest);
+                pawnmove.evaluate();
+                pos->moves.push_back(pawnmove);
+            }
+        }
+    }
     return;
 }
 
