@@ -10,6 +10,7 @@ using namespace std;
 // included in compilation of tests.                                   //
 bool G_debug;                                                          // 
 Position* G_game_position;                                              //
+MoveStore* G_movestore;
                                                                        //
 /////////////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstdlib>
-#include "./uci.h"
-#include "./game_variables.h"
-#include "./position.h"
+#include "uci.h"
+#include "game_variables.h"
+#include "position.h"
+#include "search.h"
 
 using namespace std;
 
@@ -141,8 +142,9 @@ void process_position_command(std::string uci_input) {
  *  process_go_command handles the "go..." command given by the gui
  */
 void process_go_command(std::string uci_input) {
-    //TODO
-    //cout << "bestmove " << char(105-flag) << "7" << char(105-flag) << "5" << endl;
+    G_movestore->clear();
+    search(G_game_position);
+    cout << "bestmove " << G_movestore->best_move() << endl;
     return;
 }
 

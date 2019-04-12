@@ -24,6 +24,7 @@ Position::Position(string fen) {
     set_fullmove_number(fullmove_num);
 
     evaluation_score = evaluate_position(this);
+    movestring = "";
 }
 
 bool Position::operator == (const Position& other) const {
@@ -295,6 +296,14 @@ void Position::move(string move) {
     }
     else {
         maps[b_pieces] |= (bitboard)1 << dest_square;
+    }
+
+    if (active_color == 'b') {
+        fullmove_number++;
+        active_color = 'w';
+    }
+    else {
+        active_color = 'b';
     }
 
     return;
