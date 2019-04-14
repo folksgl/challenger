@@ -64,8 +64,6 @@ class Position {
         void move(std::string move_string);
         int zero_at(int square);
 
-        void debug_position(void) const;
-        void print_bitboard(bitboard bb) const;
 };
 
 #endif
