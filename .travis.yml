@@ -2,4 +2,5 @@ language: cpp
 dist: xenial
 install: make
 compiler: gcc
-
+script:
+    - make clean && make -j 8
