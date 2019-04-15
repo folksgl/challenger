@@ -160,6 +160,11 @@ void Position::set_castling_rights(char* fen_tok) {
         return;
     }
 
+    w_kingside_castle = false;
+    w_queenside_castle = false;
+    b_kingside_castle = false;
+    b_queenside_castle = false;
+
     for (unsigned int i = 0; i < strlen(fen_tok); i++) {
         if (fen_tok[i] == 'K') {
             w_kingside_castle = true;
@@ -201,7 +206,7 @@ void Position::set_active_color(char* fen_tok) {
 void Position::set_passant_target_sq(char* fen_tok) {
     if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 2 || fen_tok[0] == '-' || !isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
         // No target square or if malformed passant target string, assume there is none.
-        passant_target_sq = "";
+        passant_target_sq = "-";
         return;
     }
 
@@ -331,5 +336,94 @@ int Position::zero_at(int square) {
     }
 
     return -1; //This should never return -1. A valid move WILL trigger one of the above cases.
+}
+
+string Position::to_fen_string() {
+    string fenstring = "";
+
+    for (int i = 63; i >= 0; i--) {
+        if ((i % 8) == 0) {
+            // add current rank
+            int empty = 0;
+
+            for (int j = 0; j < 8; j++) {
+                bitboard cur_square = squares[i + j];
+
+                if (!((maps[w_pieces] | maps[b_pieces]) & cur_square)) {
+                    empty++;
+                    if (j == 7) { fenstring += to_string(empty); }
+                    continue;
+                }
+                // Position was not empty, check if there was an empty streak to add to the fen.
+                if (empty != 0) {
+                    fenstring += to_string(empty);
+                    empty = 0;
+                }
+                
+                if (maps[w_pawn]   & cur_square) { 
+                    fenstring += "P"; 
+                }
+                else if (maps[b_pawn]   & cur_square) { 
+                    fenstring += "p"; 
+                }
+                else if (maps[w_rook]   & cur_square) { 
+                    fenstring += "R"; 
+                }
+                else if (maps[b_rook]   & cur_square) { 
+                    fenstring += "r"; 
+                }
+                else if (maps[w_bishop] & cur_square) { 
+                    fenstring += "B"; 
+                }
+                else if (maps[b_bishop] & cur_square) { 
+                    fenstring += "b"; 
+                }
+                else if (maps[w_knight] & cur_square) { 
+                    fenstring += "N"; 
+                }
+                else if (maps[b_knight] & cur_square) { 
+                    fenstring += "n"; 
+                }
+                else if (maps[w_queen]  & cur_square) { 
+                    fenstring += "Q"; 
+                }
+                else if (maps[b_queen]  & cur_square) { 
+                    fenstring += "q"; 
+                }
+                else if (maps[w_king]   & cur_square) { 
+                    fenstring += "K"; 
+                }
+                else if (maps[b_king]   & cur_square) { 
+                    fenstring += "k"; 
+                }
+            }
+            // add / on to the end of every rank but the last one
+            if ((i - 8) >= 0) {
+                fenstring += "/";
+            }
+        }
+    }
+
+    fenstring += ' ';
+    fenstring += active_color;
+    fenstring += ' ';
+
+    string castling = "";
+
+    if (w_kingside_castle)  { castling += "K"; }
+    if (w_queenside_castle) { castling += "Q"; }
+    if (b_kingside_castle)  { castling += "k"; }
+    if (b_queenside_castle) { castling += "q"; }
+
+    if (castling.empty()) {
+        castling += "-";
+    }
+
+    fenstring += castling + " ";
+    fenstring += passant_target_sq + " ";
+    fenstring += to_string(halfmove_clock) + " ";
+    fenstring += to_string(fullmove_number);
+
+    return fenstring;
 }
 

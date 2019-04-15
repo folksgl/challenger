@@ -336,13 +336,65 @@ TEST(castling_rights, black_queenside_castling_allowed) {
     EXPECT_FALSE (actualpos.w_queenside_castle);
 }
 
-TEST(castling_rights, no_castling_allowed) {
+TEST(castling_rights, no_castling_allowed_all) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
     EXPECT_FALSE (actualpos.b_queenside_castle);
     EXPECT_FALSE (actualpos.b_kingside_castle);
     EXPECT_FALSE (actualpos.w_kingside_castle);
     EXPECT_FALSE (actualpos.w_queenside_castle);
+}
+
+TEST(castling_rights, no_castling_allowed_q) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
+    Position actualpos(test);
+    EXPECT_FALSE (actualpos.b_queenside_castle);
+}
+
+TEST(castling_rights, no_castling_allowed_k) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
+    Position actualpos(test);
+    EXPECT_FALSE (actualpos.b_kingside_castle);
+}
+
+TEST(castling_rights, no_castling_allowed_Q) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
+    Position actualpos(test);
+    EXPECT_FALSE (actualpos.w_queenside_castle);
+}
+
+TEST(castling_rights, no_castling_allowed_K) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
+    Position actualpos(test);
+    EXPECT_FALSE (actualpos.w_kingside_castle);
+}
+
+
+
+
+
+TEST(castling_rights, bk_castling_allowed) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
+    Position actualpos(test);
+    EXPECT_FALSE (actualpos.b_kingside_castle);
+}
+
+TEST(castling_rights, wk_castling_allowed) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
+    Position actualpos(test);
+    EXPECT_FALSE (actualpos.w_queenside_castle);
+}
+
+TEST(castling_rights, wq_castling_allowed) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
+    Position actualpos(test);
+    EXPECT_FALSE (actualpos.w_queenside_castle);
+}
+
+TEST(castling_rights, bq_castling_allowed) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
+    Position actualpos(test);
+    EXPECT_FALSE (actualpos.b_queenside_castle);
 }
 
 //
@@ -747,7 +799,7 @@ TEST(copy_constructor, deep_passant) {
     Position copypos = actualpos;
 
     copypos.passant_target_sq = "no target";
-    EXPECT_EQ (actualpos.passant_target_sq, "");
+    EXPECT_EQ (actualpos.passant_target_sq, "-");
     EXPECT_EQ (copypos.passant_target_sq,   "no target");
 }
 
@@ -781,5 +833,33 @@ TEST(copy_constructor, deep_moves) {
     copypos.moves = newvec;
     EXPECT_EQ (actualpos.moves.size(), 0);
     EXPECT_EQ (copypos.moves.size(),   1);
+}
+
+//
+// START TO_FEN_STRING TESTS
+//
+
+TEST(to_fen_string, startposition) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    string actualstring = actualpos.to_fen_string();
+
+    EXPECT_EQ (actualstring, test);
+}
+
+TEST(to_fen_string, random1) {
+    string test1 = "2N1bbN1/2k1p3/4K3/1p5r/7R/1nPP4/Q6P/5R2 w - - 0 1";
+    Position actualpos(test1);
+    string actualstring = actualpos.to_fen_string();
+
+    EXPECT_EQ (actualstring, test1);
+}
+
+TEST(to_fen_string, random2) {
+    string test2 = "q4rN1/p1r2Pp1/N1PPp1bQ/2p1p2B/3P1R2/1P1Pk1Pn/1bK1pp2/8 w - - 0 1";
+    Position actualpos(test2);
+    string actualstring = actualpos.to_fen_string();
+
+    EXPECT_EQ (actualstring, test2);
 }
 

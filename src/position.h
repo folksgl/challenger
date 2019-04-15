@@ -64,6 +64,7 @@ class Position {
         void move(std::string move_string);
         int zero_at(int square);
 
+        std::string to_fen_string();
 };
 
 #endif
