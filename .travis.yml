@@ -1,6 +1,10 @@
 language: cpp
 dist: xenial
-install: cmake make
+addons:
+    apt:
+        packages:
+            - cmake
+            - make
 compiler: gcc
 script:
     - cmake -H. -Bbuild
