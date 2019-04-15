@@ -1,6 +1,8 @@
 language: cpp
 dist: xenial
-install: make
+install: cmake make
 compiler: gcc
 script:
-    - make clean && make -j 8
+    - cmake -H. -Bbuild
+    - cd build/
+    - make -j 8 && make test
