@@ -1,0 +1,5 @@
+language: cpp
+dist: xenial
+install: make
+compiler: gcc
+
