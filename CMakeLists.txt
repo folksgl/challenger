@@ -48,6 +48,6 @@ add_executable(challenger ${SRC_FILES})
 
 add_executable(challenger_tests ${TEST_FILES})
 target_link_libraries(challenger_tests gtest)
-add_test(unit_tests challenger_tests)
+add_test(unit_tests challenger_tests --gtest_color=yes)
 
 
