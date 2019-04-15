@@ -37,6 +37,9 @@ endif()
 ### GOOGLETEST END ###
 
 # Add src and test files
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "-Wall -g3 -Og")
+
 set(SRC_DIR "./src")
 set(TEST_DIR "./test")
 file(GLOB_RECURSE SRC_FILES "${SRC_DIR}/*.cpp")
