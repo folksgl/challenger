@@ -2,14 +2,19 @@
 
 #### **Setting up a development environment**
 * First things first, clone the Challenger repository or branch you wish to work on.
-* Set up googletest. This includes compiling the project. Directions for that can be found in the googletest project.
-* Once googletest is installed, set the GTEST_DIR var in the makefile. By default this is set to $(HOME)/googletest.
+* Make sure you can compile the project. For most linux systems, running 'cmake -H. -Bbuild' will do the trick. Challenger uses cmake to generate its makefiles so feel free to set the build directory wherever you choose.
 * **The most important step by far** is to understand the code that is already in place. Attempting to develop and add new features without understanding the codebase will likely result in adding code that will only introduce bugs to your development branch.
 
 A propperly set up development environment will be able to do the following **without error or warning**:
   - [x] make
   - [x] make test
   - [x] make clean
+
+Note: cmake includes the googletest framework into the project during its generation stage. You do not have to have googletest already installed on your system. This is done to keep all branches as homogenous as possible and speed up the development process.
+
+#### **Is there an optimization you would like to introduce to challenger?**
+
+* **Create a branch** and optimize away! We're still working out a way to benchmark challenger so stay tuned on how to prove your optimization works. For now, demonstrating an improvment in the current level of stockfish beaten would be more than enough.
 
 #### **Did you find a bug?**
 
