@@ -79,7 +79,7 @@ void Position::set_defaults() {
     b_kingside_castle = false;
     b_queenside_castle = false;
 
-    string passant_target_sq;
+    passant_target_sq = "-";
 
     halfmove_clock = 0;
     fullmove_number = 0;
@@ -218,7 +218,7 @@ void Position::set_active_color(char* fen_tok) {
  */
 void Position::set_passant_target_sq(char* fen_tok) {
 
-    if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 2 || fen_tok[0] == '-' || !isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
+    if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 2 || !isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
         // No target square or if malformed passant target string, assume there is none.
         return;
     }
@@ -356,14 +356,18 @@ int Position::zero_at(int square) {
 string Position::to_fen_string() {
     string fenstring = "";
 
+    // Loop through all 64 squares on the board
     for (int i = 63; i >= 0; i--) {
+        // Fen string construction begins on the left of the rank (i.e. every 8th square)
         if ((i % 8) == 0) {
             // add current rank
             int empty = 0;
 
+            // Loop over the entire rank
             for (int j = 0; j < 8; j++) {
                 bitboard cur_square = squares[i + j];
 
+                // Check for an empty square
                 if (!((maps[w_pieces] | maps[b_pieces]) & cur_square)) {
                     empty++;
                     if (j == 7) { fenstring += to_string(empty); }
@@ -375,42 +379,19 @@ string Position::to_fen_string() {
                     empty = 0;
                 }
                 
-                if (maps[w_pawn]   & cur_square) { 
-                    fenstring += "P"; 
-                }
-                else if (maps[b_pawn]   & cur_square) { 
-                    fenstring += "p"; 
-                }
-                else if (maps[w_rook]   & cur_square) { 
-                    fenstring += "R"; 
-                }
-                else if (maps[b_rook]   & cur_square) { 
-                    fenstring += "r"; 
-                }
-                else if (maps[w_bishop] & cur_square) { 
-                    fenstring += "B"; 
-                }
-                else if (maps[b_bishop] & cur_square) { 
-                    fenstring += "b"; 
-                }
-                else if (maps[w_knight] & cur_square) { 
-                    fenstring += "N"; 
-                }
-                else if (maps[b_knight] & cur_square) { 
-                    fenstring += "n"; 
-                }
-                else if (maps[w_queen]  & cur_square) { 
-                    fenstring += "Q"; 
-                }
-                else if (maps[b_queen]  & cur_square) { 
-                    fenstring += "q"; 
-                }
-                else if (maps[w_king]   & cur_square) { 
-                    fenstring += "K"; 
-                }
-                else if (maps[b_king]   & cur_square) { 
-                    fenstring += "k"; 
-                }
+                // Add the piece to the fen string
+                if      (maps[w_pawn]   & cur_square) { fenstring += "P"; }
+                else if (maps[b_pawn]   & cur_square) { fenstring += "p"; }
+                else if (maps[w_rook]   & cur_square) { fenstring += "R"; }
+                else if (maps[b_rook]   & cur_square) { fenstring += "r"; }
+                else if (maps[w_bishop] & cur_square) { fenstring += "B"; }
+                else if (maps[b_bishop] & cur_square) { fenstring += "b"; }
+                else if (maps[w_knight] & cur_square) { fenstring += "N"; }
+                else if (maps[b_knight] & cur_square) { fenstring += "n"; }
+                else if (maps[w_queen]  & cur_square) { fenstring += "Q"; }
+                else if (maps[b_queen]  & cur_square) { fenstring += "q"; }
+                else if (maps[w_king]   & cur_square) { fenstring += "K"; }
+                else if (maps[b_king]   & cur_square) { fenstring += "k"; }
             }
             // add / on to the end of every rank but the last one
             if ((i - 8) >= 0) {
