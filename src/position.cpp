@@ -127,7 +127,6 @@ void Position::set_piece_positions(char* fen_tok) {
         bit_oriented_string += tmp;
     }
 
-    cout << "bit oriented string: " << bit_oriented_string << endl;
     // Create Position from bit_oriented_string.
     int sq_num = 63;
     int length = bit_oriented_string.length();
@@ -153,7 +152,7 @@ void Position::set_piece_positions(char* fen_tok) {
 
             default :
                 if (isdigit(input)) {
-                    sq_num -= atoi(&input);
+                    sq_num -= (input - '0');
                 }
         }
     }
