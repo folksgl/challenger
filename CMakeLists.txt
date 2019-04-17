@@ -49,8 +49,8 @@ enable_testing()
 
 add_executable(challenger ${SRC_FILES})
 
-add_executable(challenger_tests ${TEST_FILES})
-target_link_libraries(challenger_tests gtest)
-add_test(unit_tests challenger_tests --gtest_color=yes)
+add_executable(runtest ${TEST_FILES})
+target_link_libraries(runtest gtest)
+add_test(unit_tests runtest --gtest_color=yes)
 
 
