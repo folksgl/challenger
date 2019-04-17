@@ -60,7 +60,7 @@ class Position {
 
         void generate_moves(void);
         void evaluate(void);
-        void zero_piece_positions();
+        void set_defaults();
         void move(std::string move_string);
         int zero_at(int square);
 

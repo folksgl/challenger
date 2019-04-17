@@ -15,7 +15,7 @@ Position::Position(string fen) {
     char *halfmove_clk  = strtok(NULL, " "); 
     char *fullmove_num  = strtok(NULL, " "); 
 
-    zero_piece_positions();
+    set_defaults();
     set_piece_positions(piece_string);
     set_active_color(active_color);
     set_castling_rights(castle_rights);
@@ -65,11 +65,28 @@ void Position::evaluate() {
     return;
 }
 
-void Position::zero_piece_positions() {
+void Position::set_defaults() {
+
+    bitboard board_zero = (bitboard)0;
     for (unsigned int i = 0; i < maps.size(); i++) {
-        maps[i] = 0;
+        maps[i] = board_zero;
     }
-    return;
+
+    active_color = 'w';
+
+    w_kingside_castle = false;
+    w_queenside_castle = false;
+    b_kingside_castle = false;
+    b_queenside_castle = false;
+
+    string passant_target_sq;
+
+    halfmove_clock = 0;
+    fullmove_number = 0;
+
+    int evaluation_score = 0;
+
+    string movestring = "";
 }
 
 Position::Position(const Position& other) {
@@ -110,6 +127,7 @@ void Position::set_piece_positions(char* fen_tok) {
         bit_oriented_string += tmp;
     }
 
+    cout << "bit oriented string: " << bit_oriented_string << endl;
     // Create Position from bit_oriented_string.
     int sq_num = 63;
     int length = bit_oriented_string.length();
@@ -125,7 +143,7 @@ void Position::set_piece_positions(char* fen_tok) {
             case 'q': maps[b_queen]  |= ((bitboard)1 << sq_num--); break;
             case 'k': maps[b_king]   |= ((bitboard)1 << sq_num--); break;
 
-                // Upper case = White Pieces
+            // Upper case = White Pieces
             case 'P': maps[w_pawn]   |= ((bitboard)1 << sq_num--); break;
             case 'R': maps[w_rook]   |= ((bitboard)1 << sq_num--); break;
             case 'N': maps[w_knight] |= ((bitboard)1 << sq_num--); break;
@@ -159,11 +177,6 @@ void Position::set_castling_rights(char* fen_tok) {
         // Castling right string is malformed, continue with no castling rights 
         return;
     }
-
-    w_kingside_castle = false;
-    w_queenside_castle = false;
-    b_kingside_castle = false;
-    b_queenside_castle = false;
 
     for (unsigned int i = 0; i < strlen(fen_tok); i++) {
         if (fen_tok[i] == 'K') {
@@ -204,9 +217,9 @@ void Position::set_active_color(char* fen_tok) {
  *  to the value found in fen_tok.
  */
 void Position::set_passant_target_sq(char* fen_tok) {
+
     if (fen_tok == NULL || strlen(fen_tok) < 1 || strlen(fen_tok) > 2 || fen_tok[0] == '-' || !isalpha(fen_tok[0]) || !isdigit(fen_tok[1])) {
         // No target square or if malformed passant target string, assume there is none.
-        passant_target_sq = "-";
         return;
     }
 
@@ -222,6 +235,7 @@ void Position::set_passant_target_sq(char* fen_tok) {
  *  to the value found in fen_tok.
  */
 void Position::set_halfmove_clock(char* fen_tok) {
+
     if (fen_tok == NULL) {
         // Malformed clock string, just don't modify the clock and ignore token.
         return;
@@ -245,6 +259,7 @@ void Position::set_halfmove_clock(char* fen_tok) {
  *  to the value found in fen_tok.
  */
 void Position::set_fullmove_number(char* fen_tok) {
+
     if (fen_tok == NULL) {
         // Malformed move number string, ignore token and don't modify move number.
         return;
