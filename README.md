@@ -32,21 +32,18 @@ Percentages will be determined by playing 10 games and recording winnings.
 To install the challenger engine and run it against another chess engine, you will need to install a UCI (Universal Chess Interface) compatible chess program. I recommend Arena, as it is the one I use for challenger.
 
 1) Download and Install [Arena](http://www.playwitharena.com/?Download).
-2) Clone and compile challenger. The following should work for most linux systems:
+2) Starting with version 1.0, you can head over to the release page and download the challenger executable for your platform. Until then, clone and compile challenger. The following should work for most linux systems:
    ```
    git clone https://github.com/folksgl/challenger.git
    cd challenger/
-   make optimized
+   cmake -H. -Bbuild
+   cd build/ && make
    ```
-   For more make options, including building for developers please review the Makefile and the contributing page.
+   For more make options, including building for developers please review the contributing page.
    
-3) Open Arena and import the challenger engine executable. Navigate to Engines -> Install New Engine and choose the challenger executable that was just compiled. (Will be in the challenger project home directory)
+3) Open Arena and import the challenger engine executable. Navigate to Engines -> Install New Engine and choose the challenger executable that was just compiled. (Will be in the challenger project build directory)
 
-#### Installing Googletest
-  If you intend to develop code for Challenger, testing will need to be done with googletest. Installation instructions for googletest can be found in the [googletest readme](https://github.com/google/googletest/blob/master/googletest/README.md). More information about setting up your environment for developing can be found in the [contributing page](https://github.com/folksgl/challenger/blob/master/.github/CONTRIBUTING.md).
+## Development and Contributing
+Development for challenger will be done in C++, using the googletest framework for testing. Before opening issues or pull requests, please read the [contributing page](https://github.com/folksgl/challenger/blob/master/.github/CONTRIBUTING.md) for Challenger.
 
-## Development
-Development for challenger will be done in C++, using the googletest framework for testing.
-
-## Contributing
-Before opening issues or pull requests, please read the [contributing page](https://github.com/folksgl/challenger/blob/master/.github/CONTRIBUTING.md) for Challenger.
+Contributions of all kinds are welcomed and encouraged. This project is far from finished and there are always portions of the code or documentation that can be improved.
