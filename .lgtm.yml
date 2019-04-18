@@ -1,0 +1,15 @@
+extraction:
+  cpp:
+    prepare:    # Customizable step used by all languages.
+      packages:
+        - g++-6
+        - cmake
+        - make
+        - lcov
+    configure:    # Customizable step used only by C/C++ extraction.
+      command:
+        - cmake -H. -Bbuild
+    index:    # Customizable step used by all languages.
+      build_command:
+        - cd build/
+        - make -j2 -s 
