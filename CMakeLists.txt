@@ -40,17 +40,21 @@ endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "-Wall -g3 -Og -fprofile-arcs -ftest-coverage")
 
-set(SRC_DIR "./src")
-set(TEST_DIR "./test")
-file(GLOB_RECURSE SRC_FILES "${SRC_DIR}/*.cpp")
-file(GLOB_RECURSE TEST_FILES "${TEST_DIR}/*.cpp" "src/common.cpp" "src/evaluate.cpp" "src/genmove.cpp" "src/movestore.cpp" "src/position.cpp" "src/search.cpp" "src/uci.cpp")
+set(SRC_DIR src)
+set(TEST_DIR "test")
+file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
+file(GLOB_RECURSE TEST_FILES ${TEST_DIR}/*.cpp ${SRC_FILES}/*.cpp)
+set(SRC_FILE_LIST ${SRC_FILES})
+set(TEST_FILE_LIST ${TEST_FILES})
+list(REMOVE_ITEM TEST_FILE_LIST ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+message("${TEST_FILE_LIST}")
+
+
+add_executable(challenger ${SRC_FILE_LIST})
 
 enable_testing()
-
-add_executable(challenger ${SRC_FILES})
-
 set (TEST_FILE_NAME runtest)
-add_executable(${TEST_FILE_NAME} ${TEST_FILES})
+add_executable(${TEST_FILE_NAME} ${TEST_FILE_LIST})
 
 target_link_libraries(${TEST_FILE_NAME} gtest)
 
@@ -59,9 +63,9 @@ add_test(unit_tests ${TEST_FILE_NAME} --gtest_color=yes)
 # Add test coverage generation and cleaning
 set(COVERAGE_OUTPUT_FILE challenger.info)
 add_custom_target(coverage
-    COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/src/ --zerocounters 
+    COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/${SRC_DIR}/ --zerocounters 
     COMMAND make test 
-    COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/src/ --capture --output-file ${COVERAGE_OUTPUT_FILE}
+    COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/${SRC_DIR}/ --directory ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR} --capture --no-external --output-file ${COVERAGE_OUTPUT_FILE}
     BYPRODUCTS ${COVERAGE_OUTPUT_FILE}
     )
 #add_custom_target()
