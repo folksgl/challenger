@@ -2,6 +2,7 @@
 ![](.github/IMG/challenger.svg)
 
 [![Build Status](https://travis-ci.com/folksgl/challenger.svg?branch=master)](https://travis-ci.com/folksgl/challenger)
+[![Coverage Status](https://coveralls.io/repos/github/folksgl/challenger/badge.svg?branch=master)](https://coveralls.io/github/folksgl/challenger?branch=master)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
 Challenger is my own custom chess engine.
