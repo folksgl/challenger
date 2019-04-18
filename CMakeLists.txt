@@ -47,7 +47,6 @@ file(GLOB_RECURSE TEST_FILES ${TEST_DIR}/*.cpp ${SRC_FILES}/*.cpp)
 set(SRC_FILE_LIST ${SRC_FILES})
 set(TEST_FILE_LIST ${TEST_FILES})
 list(REMOVE_ITEM TEST_FILE_LIST ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
-message("${TEST_FILE_LIST}")
 
 
 add_executable(challenger ${SRC_FILE_LIST})
