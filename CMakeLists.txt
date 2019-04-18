@@ -38,7 +38,7 @@ endif()
 
 # Add src and test files
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "-Wall -g3 -Og")
+set(CMAKE_CXX_FLAGS "-Wall -g3 -Og -fprofile-arcs -ftest-coverage")
 
 set(SRC_DIR "./src")
 set(TEST_DIR "./test")
@@ -49,8 +49,20 @@ enable_testing()
 
 add_executable(challenger ${SRC_FILES})
 
-add_executable(runtest ${TEST_FILES})
-target_link_libraries(runtest gtest)
-add_test(unit_tests runtest --gtest_color=yes)
+set (TEST_FILE_NAME runtest)
+add_executable(${TEST_FILE_NAME} ${TEST_FILES})
 
+target_link_libraries(${TEST_FILE_NAME} gtest)
+
+add_test(unit_tests ${TEST_FILE_NAME} --gtest_color=yes)
+
+# Add test coverage generation and cleaning
+set(COVERAGE_OUTPUT_FILE challenger.info)
+add_custom_target(coverage
+    COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/src/ --zerocounters 
+    COMMAND make test 
+    COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/src/ --capture --output-file ${COVERAGE_OUTPUT_FILE}
+    BYPRODUCTS ${COVERAGE_OUTPUT_FILE}
+    )
+#add_custom_target()
 
