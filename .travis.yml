@@ -1,30 +1,29 @@
 language: cpp
 dist: xenial
 env:
-    global:
-        # COVERITY_SCAN_TOKEN
-        - secure: "LOMhlLi/QUeZXv6tQCrZz/Sn8nTq5LkODXHiWz54Ttw9HJU41OAhiMU4shDk5IP0CMjpe6dsv/AMDnX8/ne1R0iuRQdc9iCGFkxV94y6rkw2QCGxfJ0iFFNGKRxQ/URU7tP499TUDvVmUiM6cCf8PQuGIpq/1wuwRcYcfic1V0Eh1XMn1O61/aHrRWFZyn+D1znOJBNkILCztW4AhX5y2eGnPbrFit7Sv/N9kYOtYEMCqM+WJewVWD1CMF13KF0XovSKyjxerlw/USAhuD5OHQcR0CRVdTpkmX4AqLThlASIaOpCQBskEYWk9XTMR8KTLRf/3Xy45xMORVA5CKqaSDxKD/ZjSa4XKSn6vFBWzyaMySxZY6Ow/pfwijxmp3u/krrqqI3gu5VajkdAeHumgXMdEbos66SUONGtOjFnRiBkeTibHyFmspYmoDc75W1beV1Z0ngs1jWItjOCkLC9b1P6Ae0Vpeq58O3HqL1K/z0xE7sDvG6GlTMUDS9CIiTyMs5cW6pEgYUoPdtb4DLYNi0CQKr5ejMBkPGe+vNyjqML9l40Y7qH2qcSvcZs4XJCOkSEmpXxmlwm/DHLLVlgVM6uV1ydmy7+vRzk3E2C3sWpTAm62eD3SEzMizd+ZpoH2BcZsZsCnTWjmJMdD8PINE2hNP4D3EuBQUltYo+018g="
+  global:
+    secure: IGGLSHdfWkp7oy6FIB8oQtLzgyjC/hYXbRSf4roM+8MMTQE9PL1FSnuEGIZZyVKa/zfYLP7tDNzqvKK/tsQsps5oUr6m+LwX1PcoAkU59aCqeZaBBu9EsvhXHBdxiAU3eFS0to1aYRc6pOUyqfowIkBAjaUYP8auPHzme9rpwWufxVMrWwJHSKhnWdbvsFG6h30C87iHDHARY2ISJ2BcgQ27IY0ZGg8dNghQRdZiZ0jANF9RUB0m62SW1VAXgr4EOGpieJz1ByklArxS3G3/lMgeOB9QedSSFOHh8GBZoZsqrfIRU+MvWjr1BOPHOe+KXJvoFh3owKyXyNUj6uDdV6p87ejSJqlyoU1z0KRwFyZTM1dNqDmIAYJVlQuVFJVKfAINJfR8ozolApb49L0yvUJutEWIeDvBo0d4B1gBlu9+A779WmQlicsQKIcbTI8f9MS8NPZXh8Y6VZqirg26Uk9E+OA0Ts9bDCTfdI9vpcgVVAa/krRpr9Kc7vVsSel209NhGTAeoVHekXTGY2XANy9/SWazpuU+O2n/6BOONb5WfpSY+fMwakDCD09ml6rsSJyx0Ne+3BSuOg24nEgTZr1/B1w+jdkgxs8wVEiTZCve/+PpvPNlwnJo8Y2oaOZb1Wr1gkB6iC4jtTHA8MbciUGpaLOfYtKhxihs0Zo9Q4o=
 addons:
-    apt:
-        packages:
-            - cmake
-            - make
-            - lcov
-    coverity_scan:
-        project: 
-            name: folksgl/challenger
-            version: 0.1
-            description: Challenger Chess Engine
-        build_command_prepend: cmake -H. -Bbuild
-        build_command: cd build/ && make
-        branch_pattern: master
+  apt:
+    packages:
+    - cmake
+    - make
+    - lcov
+  coverity_scan:
+    project:
+      name: folksgl/challenger
+      version: 0.1
+      description: Challenger Chess Engine
+    build_command_prepend: cmake -H. -Bbuild
+    build_command: cd build/ && make
+    branch_pattern: master
 compiler: gcc
 before_install:
-    - pip install --user cpp-coveralls
+- pip install --user cpp-coveralls
 script:
-    - cmake -H. -Bbuild
-    - cd build/
-    - make -j 8 && make test
+- cmake -H. -Bbuild
+- cd build/
+- make -j 8 && make test
 after_success:
-    - make coverage
-    - coveralls -l challenger.info
+- make coverage
+- coveralls -l challenger.info
