@@ -10,7 +10,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
 if(result)
   message(FATAL_ERROR "CMake step for googletest failed: ${result}")
 endif()
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
+execute_process(COMMAND ${CMAKE_COMMAND} --build . -- --no-print-directory
   RESULT_VARIABLE result
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
 if(result)
@@ -64,7 +64,7 @@ set(COVERAGE_OUTPUT_FILE challenger.info)
 add_custom_target(coverage
     COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/${SRC_DIR}/ --zerocounters 
     COMMAND make test 
-    COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/${SRC_DIR}/ --directory ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR} --capture --no-external --output-file ${COVERAGE_OUTPUT_FILE}
+    COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/${SRC_DIR}/ --directory ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR} --capture --no-external --output-file ${COVERAGE_OUTPUT_FILE} --quiet
     BYPRODUCTS ${COVERAGE_OUTPUT_FILE}
     )
 #add_custom_target()
