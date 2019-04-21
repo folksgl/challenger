@@ -1,6 +1,12 @@
 all: compile
 
-compile:
+
+build_dir:
+	if [ ! -d "./build" ];then     \
+			cmake -H. -Bbuild ; \
+	fi
+
+compile: build_dir
 	cd build/ && $(MAKE) --no-print-directory -j8 --silent
 
 clean:
