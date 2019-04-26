@@ -30,15 +30,19 @@ Percentages will be determined by playing 10 games and recording winnings.
 - [x] Evaluate possible moves
 
 ## Installation
+
+**IMPORTANT**
+
+**Arena, the UCI GUI that challenger initially used to gauge its progress and play matches, has since become unavailable and the website returns http 500 responses. I am in the process of switching to a new GUI and will update the installation documentation accordingly.**
+
 To install the challenger engine and run it against another chess engine, you will need to install a UCI (Universal Chess Interface) compatible chess program. I recommend Arena, as it is the one I use for challenger.
 
 1) Download and Install [Arena](http://www.playwitharena.com/?Download).
-2) Starting with version 1.0, you can head over to the release page and download the challenger executable for your platform. Until then, clone and compile challenger. The following should work for most linux systems:
+2) Starting with version 1.0, you can head over to the [release page](https://github.com/folksgl/challenger/releases) and download the challenger executable for your platform. Until then, clone and compile challenger. The following should work for most linux systems:
    ```
    git clone https://github.com/folksgl/challenger.git
    cd challenger/
-   cmake -H. -Bbuild
-   cd build/ && make
+   make
    ```
    For more make options, including building for developers please review the contributing page.
    
