@@ -37,7 +37,7 @@ Percentages will be determined by playing 10 games and recording winnings.
 
 To install the challenger engine and run it against another chess engine, you will need to install a UCI (Universal Chess Interface) compatible chess program. I recommend Arena, as it is the one I use for challenger.
 
-1) Download and Install [Arena](http://www.playwitharena.com/?Download).
+1) ~~Download and Install Arena.~~
 2) Starting with version 1.0, you can head over to the [release page](https://github.com/folksgl/challenger/releases) and download the challenger executable for your platform. Until then, clone and compile challenger. The following should work for most linux systems:
    ```
    git clone https://github.com/folksgl/challenger.git
