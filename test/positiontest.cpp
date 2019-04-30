@@ -1024,7 +1024,7 @@ TEST(copy_constructor, deep_moves) {
 }
 
 //
-// START TO_FEN_STRING TESTS
+// START TO_FEN_STRING TESTS //////////////////////////////////////////////
 //
 
 TEST(to_fen_string, startposition) {
@@ -1049,5 +1049,93 @@ TEST(to_fen_string, random2) {
     string actualstring = actualpos.to_fen_string();
 
     EXPECT_EQ (actualstring, test2);
+}
+
+//
+// START EQUAL_OPERATOR TESTS /////////////////////////////////////////////
+//
+
+TEST(equality_operator, equal) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    string test2 = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    Position actualpos2(test2);
+
+    bool equal = (actualpos == actualpos2);
+
+    EXPECT_TRUE(equal);
+}
+
+TEST(equality_operator, not_equal_maps) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    string test2 = "Rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    Position actualpos2(test2);
+
+    bool equal = (actualpos == actualpos2);
+
+    EXPECT_FALSE(equal);
+}
+
+TEST(equality_operator, not_equal_active_color) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    string test2 = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+    Position actualpos(test);
+    Position actualpos2(test2);
+
+    bool equal = (actualpos == actualpos2);
+
+    EXPECT_FALSE(equal);
+}
+
+TEST(equality_operator, not_equal_castling) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    string test2 = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Qkq - 0 1";
+    Position actualpos(test);
+    Position actualpos2(test2);
+
+    bool equal = (actualpos == actualpos2);
+
+    EXPECT_FALSE(equal);
+}
+
+//
+// START IS_X_MOVE TESTS //////////////////////////////////////////////////
+//
+
+TEST(is_x_move, white) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+
+    bool white_move = actualpos.is_white_move();
+
+    EXPECT_TRUE(white_move);
+}
+
+TEST(is_x_move, not_white) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+    Position actualpos(test);
+
+    bool white_move = actualpos.is_white_move();
+
+    EXPECT_FALSE(white_move);
+}
+
+TEST(is_x_move, black) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+    Position actualpos(test);
+
+    bool black_move = actualpos.is_black_move();
+
+    EXPECT_TRUE(black_move);
+}
+
+TEST(is_x_move, not_black) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+
+    bool black_move = actualpos.is_black_move();
+
+    EXPECT_FALSE(black_move);
 }
 
