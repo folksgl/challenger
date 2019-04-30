@@ -301,6 +301,8 @@ void Position::move(string move) {
             case 'n': piece = b_knight; break;
             case 'B': piece = w_bishop; break;
             case 'b': piece = b_bishop; break;
+            case 'R': piece = w_rook;   break;
+            case 'r': piece = b_rook;   break;
             case 'Q': piece = w_queen;  break;
             case 'q': piece = b_queen;  break;
         }
