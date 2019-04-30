@@ -1,7 +1,7 @@
 
 ![](.github/IMG/challenger.svg)
 
-[![Build Status](https://travis-ci.com/folksgl/challenger.svg?branch=master)](https://travis-ci.com/folksgl/challenger)
+![Travis (.com)](https://img.shields.io/travis/com/folksgl/challenger.svg)
 ![Coveralls github](https://img.shields.io/coveralls/github/folksgl/challenger.svg)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
