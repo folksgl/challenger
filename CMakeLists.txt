@@ -65,6 +65,8 @@ add_custom_target(coverage
     COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/${SRC_DIR}/ --zerocounters 
     COMMAND make test 
     COMMAND lcov --directory ./CMakeFiles/${TEST_FILE_NAME}.dir/${SRC_DIR}/ --directory ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR} --capture --no-external --output-file ${COVERAGE_OUTPUT_FILE} --quiet
+    COMMAND lcov --remove ${COVERAGE_OUTPUT_FILE} *.h -o coverage_tmp
+    COMMAND mv coverage_tmp ${COVERAGE_OUTPUT_FILE}
     BYPRODUCTS ${COVERAGE_OUTPUT_FILE}
     )
 #add_custom_target()
