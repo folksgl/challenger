@@ -12,3 +12,6 @@ positions.txt
 # Profiling files
 gmon.out
 
+# Swap files
+*.swp
+*.swo
