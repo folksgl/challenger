@@ -563,112 +563,8 @@ TEST(zero_at, square_63) {
 }
 
 //
-// START GET SQUARE NUM TEST //////////////////////////////////////////////
-//
-
-TEST(get_sq_num, a1) {
-    int square = get_square_num("a1");
-    EXPECT_EQ (square, 0);
-}
-
-TEST(get_sq_num, b2) {
-    int square = get_square_num("b2");
-    EXPECT_EQ (square, 9);
-}
-
-TEST(get_sq_num, c3) {
-    int square = get_square_num("c3");
-    EXPECT_EQ (square, 18);
-}
-
-TEST(get_sq_num, d4) {
-    int square = get_square_num("d4");
-    EXPECT_EQ (square, 27);
-}
-
-TEST(get_sq_num, e5) {
-    int square = get_square_num("e5");
-    EXPECT_EQ (square, 36);
-}
-
-TEST(get_sq_num, f6) {
-    int square = get_square_num("f6");
-    EXPECT_EQ (square, 45);
-}
-
-TEST(get_sq_num, g7) {
-    int square = get_square_num("g7");
-    EXPECT_EQ (square, 54);
-}
-
-TEST(get_sq_num, h8) {
-    int square = get_square_num("h8");
-    EXPECT_EQ (square, 63);
-}
-
-//
-// START FILE TO NUM TEST /////////////////////////////////////////////////
-//
-
-TEST(file_to_num, a) {
-    int file = file_to_num('a');
-    EXPECT_EQ (file, 0);
-}
-
-TEST(file_to_num, b) {
-    int file = file_to_num('b');
-    EXPECT_EQ (file, 1);
-}
-
-TEST(file_to_num, c) {
-    int file = file_to_num('c');
-    EXPECT_EQ (file, 2);
-}
-
-TEST(file_to_num, d) {
-    int file = file_to_num('d');
-    EXPECT_EQ (file, 3);
-}
-
-TEST(file_to_num, e) {
-    int file = file_to_num('e');
-    EXPECT_EQ (file, 4);
-}
-
-TEST(file_to_num, f) {
-    int file = file_to_num('f');
-    EXPECT_EQ (file, 5);
-}
-
-TEST(file_to_num, g) {
-    int file = file_to_num('g');
-    EXPECT_EQ (file, 6);
-}
-
-TEST(file_to_num, h) {
-    int file = file_to_num('h');
-    EXPECT_EQ (file, 7);
-}
-
-//
 // START GAME MOVE TEST ///////////////////////////////////////////////////
 //
-    //EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
-    //EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
-    //EXPECT_EQ (actualpos.maps[b_knight], 0x4200000000000000); // b_knight
-    //EXPECT_EQ (actualpos.maps[b_bishop], 0x2400000000000000); // b_bishop
-    //EXPECT_EQ (actualpos.maps[b_queen],  0x0800000000000000); // b_queen
-    //EXPECT_EQ (actualpos.maps[b_king],   0x1000000000000000); // b_king
-    //EXPECT_EQ (actualpos.maps[b_pieces], 0xFFFF000000000000); // b_pieces
-
-    //EXPECT_EQ (actualpos.maps[w_pawn],   0x000000000000FF00); // w_pawn
-    //EXPECT_EQ (actualpos.maps[w_rook],   0x0000000000000081); // w_rook
-    //EXPECT_EQ (actualpos.maps[w_knight], 0x0000000000000042); // w_knight
-    //EXPECT_EQ (actualpos.maps[w_bishop], 0x0000000000000024); // w_bishop
-    //EXPECT_EQ (actualpos.maps[w_queen],  0x0000000000000008); // w_queen
-    //EXPECT_EQ (actualpos.maps[w_king],   0x0000000000000010); // w_king
-    //EXPECT_EQ (actualpos.maps[w_pieces], 0x000000000000FFFF); // w_pieces
-
 
 TEST(game_move, a2a4) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -1137,5 +1033,37 @@ TEST(is_x_move, not_black) {
     bool black_move = actualpos.is_black_move();
 
     EXPECT_FALSE(black_move);
+}
+
+//
+// START EVALUATE TESTS  //////////////////////////////////////////////////
+//
+
+TEST(evaluate, evaluation_is_number) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+
+    actualpos.evaluate();
+
+    bool isNumber = false;
+
+    if (actualpos.evaluation_score <= 0 || actualpos.evaluation_score > 0) {
+        isNumber = true;
+    }
+
+    EXPECT_TRUE(isNumber);
+}
+
+// 
+// START GENERATE_MOVES TESTS /////////////////////////////////////////////
+//
+
+TEST(generate_moves, vector_not_empty) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+
+    actualpos.generate_moves();
+
+    EXPECT_FALSE(actualpos.moves.empty());
 }
 
