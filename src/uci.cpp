@@ -142,9 +142,8 @@ void process_position_command(std::string uci_input) {
  *  process_go_command handles the "go..." command given by the gui
  */
 void process_go_command(std::string uci_input) {
-    G_movestore->clear();
     search(G_game_position);
-    cout << "bestmove " << G_movestore->best_move() << endl;
+    cout << "bestmove " << G_game_position->moves[0].movestring << endl;
     return;
 }
 
