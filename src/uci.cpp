@@ -94,7 +94,7 @@ void process_position_command(std::string uci_input) {
     char * command = new char [uci_input.length()+1];
     strcpy (command, uci_input.c_str());
 
-    // First token is the "position command", disregard this and get to the fen string.
+    // First token is the "position" command, disregard this and get to the fen string.
     char *token = strtok(command, " "); 
     token = strtok(NULL, " "); 
 
@@ -113,7 +113,7 @@ void process_position_command(std::string uci_input) {
         string uci_fen = token;
         for (int i = 0; i < 5; i++) {
             token = strtok(NULL, " ");
-            uci_fen += ' ' + token;
+            uci_fen += " " + string(token);
         }
         G_game_position = new Position(uci_fen);
     }
