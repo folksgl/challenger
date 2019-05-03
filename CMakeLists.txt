@@ -38,16 +38,36 @@ endif()
 
 # Add src and test files
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "-Wall -g3 -Og -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS "-Wall -g3 -Og --coverage")
 
 set(SRC_DIR src)
 set(TEST_DIR "test")
+
+# list contains all .cpp files in the source directory
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
-file(GLOB_RECURSE TEST_FILES ${TEST_DIR}/*.cpp ${SRC_FILES}/*.cpp)
+
+# list contains all .cpp files in the source and test directory
+file(GLOB_RECURSE TEST_FILES ${TEST_DIR}/*.cpp)
+file(GLOB_RECURSE TEST_FILES2 ${SRC_DIR}/*.cpp)
+list(APPEND TEST_FILES ${TEST_FILES2})
+
 set(SRC_FILE_LIST ${SRC_FILES})
 set(TEST_FILE_LIST ${TEST_FILES})
+
+# remove duplicate main in src for the test executable
 list(REMOVE_ITEM TEST_FILE_LIST ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 
+# Show all source files (in case a problem arises, makes debugging easier)
+message("Source files:")
+foreach(SOURCE_FILE ${SRC_FILE_LIST})
+    message("  ${SOURCE_FILE}")
+endforeach()
+
+# Show all test files (in case a problem arises, makes debugging easier)
+message("Test files:")
+foreach(TEST_FILE ${TEST_FILE_LIST})
+    message("  ${TEST_FILE}")
+endforeach()
 
 add_executable(challenger ${SRC_FILE_LIST})
 
