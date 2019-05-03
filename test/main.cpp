@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-
 #include "../src/position.h"
 #include "../src/game_variables.h"
 
