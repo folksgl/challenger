@@ -107,6 +107,8 @@ Position::Position(const Position& other) {
     evaluation_score = other.evaluation_score;
 
     moves = other.moves;
+
+    movestring = other.movestring;
 }
 
 /*
@@ -223,7 +225,7 @@ void Position::set_passant_target_sq(char* fen_tok) {
     }
 
     else {
-        passant_target_sq = fen_tok;
+        passant_target_sq = string(fen_tok);
     }
 
     return;
