@@ -1,8 +1,10 @@
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "../src/uci.h"
 #include "../src/game_variables.h"
 
 using namespace std;
+using ::testing::MatchesRegex;
 
 TEST (process_command, uci) { 
     testing::internal::CaptureStdout();
@@ -63,23 +65,70 @@ TEST (process_command, position_pawns_forward_as_fen) {
 }
 
 
-TEST (process_command, go) { 
-    testing::internal::CaptureStdout();
-    process_uci_command();
-    std::string output = testing::internal::GetCapturedStdout();
+//TEST (process_command, go) { 
+//}
 
+//TEST (process_command, stop) { 
+    //ASSERT_EQ();
+//}
+
+//TEST (process_command, ponderhit) { 
+    //ASSERT_EQ();
+//}
+
+TEST (process_uci_inputs, quit) { 
+    string uci_command = "quit\n";
+    istringstream iss(uci_command);
+
+    EXPECT_EXIT(process_uci_inputs(iss), ::testing::ExitedWithCode(0), "");
+}
+
+TEST (process_uci_inputs, uci_quit) { 
+    string uci_command = "uci\nquit\n";
+    istringstream iss(uci_command);
+
+    testing::internal::CaptureStdout();
+    EXPECT_EXIT(process_uci_inputs(iss), ::testing::ExitedWithCode(0), "");
+    string output = testing::internal::GetCapturedStdout();
     ASSERT_EQ (output, "id name Challenger\nid author folksgl\nuciok\n");
 }
 
-//TEST (process_command, stop) { 
-    //ASSERT_EQ ();
-//}
+TEST (process_uci_inputs, debug_off_quit) { 
+    string uci_command = "debug off\nquit\n";
+    istringstream iss(uci_command);
 
-TEST (process_command, ponderhit) { 
+    EXPECT_EXIT(process_uci_inputs(iss), ::testing::ExitedWithCode(0), "");
+
+    ASSERT_FALSE(G_debug);
+}
+
+TEST (process_uci_inputs, isready_quit) { 
+    string uci_command = "isready\nquit\n";
+    istringstream iss(uci_command);
+
     testing::internal::CaptureStdout();
-    process_uci_command();
-    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_EXIT(process_uci_inputs(iss), ::testing::ExitedWithCode(0), "");
+    string output = testing::internal::GetCapturedStdout();
+    ASSERT_EQ (output, "readyok\n");
+}
 
-    ASSERT_EQ (output, "id name Challenger\nid author folksgl\nuciok\n");
+TEST (process_uci_inputs, go_quit_startpos) { 
+    string uci_command = "position startpos\ngo\nquit\n";
+    istringstream iss(uci_command);
+
+    testing::internal::CaptureStdout();
+    EXPECT_EXIT(process_uci_inputs(iss), ::testing::ExitedWithCode(0), "");
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(output, MatchesRegex("^bestmove\\s\\w\\w\\w\\w\\w?\\s$"));
+}
+
+TEST (process_uci_inputs, go_quit_nullpos) { 
+    string uci_command = "position 8/8/8/8/8/8/8/8 w - - 0 1\ngo\nquit\n";
+    istringstream iss(uci_command);
+
+    testing::internal::CaptureStdout();
+    EXPECT_EXIT(process_uci_inputs(iss), ::testing::ExitedWithCode(0), "");
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "Fatal error, no moves found.\n");
 }
 
