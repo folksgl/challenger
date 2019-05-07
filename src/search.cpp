@@ -9,17 +9,17 @@ using namespace std;
 /*
  * Perform a search of the position given.
  */
-void search(Position* pos) {
+void search(Position* pos, int depth) {
     int alpha = std::numeric_limits<int>::min();
     int beta  = std::numeric_limits<int>::max();
     if (pos->active_color == 'w') {
-        alphaBetaMax(pos, alpha, beta, 5);
+        alphaBetaMax(pos, alpha, beta, depth);
         std::sort(pos->moves.begin(), pos->moves.end(), 
                 [](Position const &a, Position const &b) { return b.evaluation_score < a.evaluation_score; });
         
     }
-    else if (pos->active_color == 'b') {
-        alphaBetaMin(pos, alpha, beta, 5);
+    else {
+        alphaBetaMin(pos, alpha, beta, depth);
         std::sort(pos->moves.begin(), pos->moves.end(), 
                           [](Position const &a, Position const &b) { return a.evaluation_score < b.evaluation_score; });
     }
