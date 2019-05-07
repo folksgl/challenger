@@ -19,19 +19,7 @@ int get_square_num(std::string square_string) {
  */
 int file_to_num(char file) {
 
-    int number = 0;
-
-    switch(file) {
-        case 'b': number = 1; break;
-        case 'c': number = 2; break;
-        case 'd': number = 3; break;
-        case 'e': number = 4; break;
-        case 'f': number = 5; break;
-        case 'g': number = 6; break;
-        case 'h': number = 7; break;
-    }
-
-    return number;
+    return file - 'a';
 }
 
 
