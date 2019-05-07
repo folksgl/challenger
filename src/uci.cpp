@@ -1,4 +1,3 @@
-#include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include <cstdlib>
@@ -13,13 +12,13 @@ using namespace std;
  *  process_uci_inputs reads in input from stdin (given by a uci-compatible gui) and
  *  processes the instructions given to manipulate game progression.
  */
-void process_uci_inputs() {
+void process_uci_inputs(istream& is) {
 
     string uci_input;   // The current line read from stdin.
     string uci_command; // The first token of uci_input that should be a uci command
 
     // Get command from stdin and process
-    while (getline(cin, uci_input)) 
+    while (getline(is, uci_input)) 
     {
         uci_command = uci_input.substr(0, uci_input.find_first_of(" "));
 
@@ -142,7 +141,7 @@ void process_position_command(std::string uci_input) {
  *  process_go_command handles the "go..." command given by the gui
  */
 void process_go_command(std::string uci_input) {
-    search(G_game_position);
+    search(G_game_position, 1);
     if (!G_game_position->moves.empty()) {
         cout << "bestmove " << G_game_position->moves[0].movestring << endl;
     }

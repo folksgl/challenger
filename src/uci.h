@@ -1,7 +1,11 @@
+#include <iostream>
+
 #ifndef UCI_H
 #define UCI_H
 
-void process_uci_inputs();
+using namespace std;
+
+void process_uci_inputs(istream& is);
 
 void process_uci_command();
 
