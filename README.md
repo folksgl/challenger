@@ -26,7 +26,7 @@ Percentages will be determined by playing 10 games and recording winnings.
 - [x] Create board representation
 - [x] Implement input move handling
 - [ ] Implement move generation
-- [ ] Search possible moves
+- [x] Search possible moves
 - [x] Evaluate possible moves
 
 ## Installation
