@@ -29,11 +29,11 @@ int evaluate_position(Position* pos) {
 int get_white_material_value(Position* pos) {
     int material_val = 0;
     
-    material_val += (PAWN   * num_set_bits(pos->maps[w_pawn]));
-    material_val += (KNIGHT * num_set_bits(pos->maps[w_knight]));
-    material_val += (BISHOP * num_set_bits(pos->maps[w_bishop]));
-    material_val += (ROOK   * num_set_bits(pos->maps[w_rook]));
-    material_val += (QUEEN  * num_set_bits(pos->maps[w_queen]));
+    material_val += (PAWN   * __builtin_popcountll(pos->maps[w_pawn]));
+    material_val += (KNIGHT * __builtin_popcountll(pos->maps[w_knight]));
+    material_val += (BISHOP * __builtin_popcountll(pos->maps[w_bishop]));
+    material_val += (ROOK   * __builtin_popcountll(pos->maps[w_rook]));
+    material_val += (QUEEN  * __builtin_popcountll(pos->maps[w_queen]));
 
     if (pos->maps[w_king]) {
         material_val += KING;
@@ -49,11 +49,11 @@ int get_white_material_value(Position* pos) {
 int get_black_material_value(Position* pos) {
     int material_val = 0;
     
-    material_val -= (PAWN   * num_set_bits(pos->maps[b_pawn]));
-    material_val -= (KNIGHT * num_set_bits(pos->maps[b_knight]));
-    material_val -= (BISHOP * num_set_bits(pos->maps[b_bishop]));
-    material_val -= (ROOK   * num_set_bits(pos->maps[b_rook]));
-    material_val -= (QUEEN  * num_set_bits(pos->maps[b_queen]));
+    material_val -= (PAWN   * __builtin_popcountll(pos->maps[b_pawn]));
+    material_val -= (KNIGHT * __builtin_popcountll(pos->maps[b_knight]));
+    material_val -= (BISHOP * __builtin_popcountll(pos->maps[b_bishop]));
+    material_val -= (ROOK   * __builtin_popcountll(pos->maps[b_rook]));
+    material_val -= (QUEEN  * __builtin_popcountll(pos->maps[b_queen]));
 
     if (pos->maps[w_king]) {
         material_val -= KING;

@@ -27,62 +27,62 @@ namespace {
     //
 
     TEST_F(NumBitPosition, start_black_pawn) {
-        int bits_set = num_set_bits(numpos->maps[b_pawn]);
+        int bits_set = __builtin_popcountll(numpos->maps[b_pawn]);
         EXPECT_EQ (bits_set, 8); 
     }
 
     TEST_F(NumBitPosition, start_black_knight) {
-        int bits_set = num_set_bits(numpos->maps[b_knight]);
+        int bits_set = __builtin_popcountll(numpos->maps[b_knight]);
         EXPECT_EQ (bits_set, 2);
     }
 
     TEST_F(NumBitPosition, start_black_bishop) {
-        int bits_set = num_set_bits(numpos->maps[b_bishop]);
+        int bits_set = __builtin_popcountll(numpos->maps[b_bishop]);
         EXPECT_EQ (bits_set, 2); 
     }
 
     TEST_F(NumBitPosition, start_black_rook) {
-        int bits_set = num_set_bits(numpos->maps[b_rook]);
+        int bits_set = __builtin_popcountll(numpos->maps[b_rook]);
         EXPECT_EQ (bits_set, 2);
     }
 
     TEST_F(NumBitPosition, start_black_queen) {
-        int bits_set = num_set_bits(numpos->maps[b_queen]);
+        int bits_set = __builtin_popcountll(numpos->maps[b_queen]);
         EXPECT_EQ (bits_set, 1); 
     }
 
     TEST_F(NumBitPosition, start_black_king) {
-        int bits_set = num_set_bits(numpos->maps[b_king]);
+        int bits_set = __builtin_popcountll(numpos->maps[b_king]);
         EXPECT_EQ (bits_set, 1);
     }
 
     TEST_F(NumBitPosition, start_white_pawn) {
-        int bits_set = num_set_bits(numpos->maps[w_pawn]);
+        int bits_set = __builtin_popcountll(numpos->maps[w_pawn]);
         EXPECT_EQ (bits_set, 8); 
     }
 
     TEST_F(NumBitPosition, start_white_knight) {
-        int bits_set = num_set_bits(numpos->maps[w_knight]);
+        int bits_set = __builtin_popcountll(numpos->maps[w_knight]);
         EXPECT_EQ (bits_set, 2);
     }
 
     TEST_F(NumBitPosition, start_white_bishop) {
-        int bits_set = num_set_bits(numpos->maps[w_bishop]);
+        int bits_set = __builtin_popcountll(numpos->maps[w_bishop]);
         EXPECT_EQ (bits_set, 2); 
     }
 
     TEST_F(NumBitPosition, start_white_rook) {
-        int bits_set = num_set_bits(numpos->maps[w_rook]);
+        int bits_set = __builtin_popcountll(numpos->maps[w_rook]);
         EXPECT_EQ (bits_set, 2);
     }
 
     TEST_F(NumBitPosition, start_white_queen) {
-        int bits_set = num_set_bits(numpos->maps[w_queen]);
+        int bits_set = __builtin_popcountll(numpos->maps[w_queen]);
         EXPECT_EQ (bits_set, 1); 
     }
 
     TEST_F(NumBitPosition, start_white_king) {
-        int bits_set = num_set_bits(numpos->maps[w_king]);
+        int bits_set = __builtin_popcountll(numpos->maps[w_king]);
         EXPECT_EQ (bits_set, 1);
     }
 }
