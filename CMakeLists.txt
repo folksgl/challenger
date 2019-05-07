@@ -76,6 +76,7 @@ set (TEST_FILE_NAME runtest)
 add_executable(${TEST_FILE_NAME} ${TEST_FILE_LIST})
 
 target_link_libraries(${TEST_FILE_NAME} gtest)
+target_link_libraries(${TEST_FILE_NAME} gmock)
 
 add_test(unit_tests ${TEST_FILE_NAME} --gtest_color=yes)
 
