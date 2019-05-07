@@ -143,7 +143,12 @@ void process_position_command(std::string uci_input) {
  */
 void process_go_command(std::string uci_input) {
     search(G_game_position);
-    cout << "bestmove " << G_game_position->moves[0].movestring << endl;
+    if (!G_game_position->moves.empty()) {
+        cout << "bestmove " << G_game_position->moves[0].movestring << endl;
+    }
+    else {
+        cout << "Fatal error, no moves found." << endl;
+    }
     return;
 }
 
