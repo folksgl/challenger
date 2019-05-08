@@ -90,5 +90,8 @@ add_custom_target(coverage
     COMMAND mv coverage_tmp ${COVERAGE_OUTPUT_FILE}
     BYPRODUCTS ${COVERAGE_OUTPUT_FILE}
     )
-#add_custom_target()
 
+add_custom_target(optimized
+    COMMAND g++ -o optimized_challenger -O3 ${SRC_FILE_LIST}
+    BYPRODUCTS optimized_challenger
+    )

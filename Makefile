@@ -22,3 +22,6 @@ coverage: compile test
 	cd build/ && $(MAKE) --no-print-directory coverage
 	rm -rf ./build/html
 	genhtml --output-directory ./build/html ./build/challenger.info
+
+optimized: build_dir
+	cd build/ && $(MAKE) optimized --no-print-directory -j8 --silent
