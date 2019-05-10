@@ -42,13 +42,13 @@ int alphaBetaMax(Position* pos, int alpha, int beta, int depth) {
     std::sort(pos->moves.begin(), pos->moves.end(), 
                       [](Position const &a, Position const &b) { return b.evaluation_score < a.evaluation_score; });
 
-    for (vector<Position>::iterator p = pos->moves.begin(); p != pos->moves.end(); p++) {
-        p->evaluation_score = alphaBetaMin(&(*p), alpha, beta, depth - 1);
-        if (p->evaluation_score >= beta) {
+    for (auto p : pos->moves) {
+        p.evaluation_score = alphaBetaMin(&p, alpha, beta, depth - 1);
+        if (p.evaluation_score >= beta) {
             return beta;
         }
-        if (p->evaluation_score > alpha) {
-            alpha = p->evaluation_score;
+        if (p.evaluation_score > alpha) {
+            alpha = p.evaluation_score;
         }
     }
     return alpha;
@@ -65,13 +65,13 @@ int alphaBetaMin(Position* pos, int alpha, int beta, int depth) {
     std::sort(pos->moves.begin(), pos->moves.end(), 
                       [](Position const &a, Position const &b) { return a.evaluation_score < b.evaluation_score; });
 
-    for (vector<Position>::iterator p = pos->moves.begin(); p != pos->moves.end(); p++) {
-        p->evaluation_score = alphaBetaMax(&(*p), alpha, beta, depth - 1);
-        if (p->evaluation_score <= alpha) {
+    for (auto p : pos->moves) {
+        p.evaluation_score = alphaBetaMax(&p, alpha, beta, depth - 1);
+        if (p.evaluation_score <= alpha) {
             return alpha;
         }
-        if (p->evaluation_score < beta) {
-            beta = p->evaluation_score;
+        if (p.evaluation_score < beta) {
+            beta = p.evaluation_score;
         }
     }
     return beta;
