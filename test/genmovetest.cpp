@@ -215,8 +215,7 @@ TEST(number_of_moves_generated, startpos_white_knight) {
 
     generate_w_knight_moves(&startpos);
 
-    EXPECT_EQ (startpos.moves.size(), 0);
-    //EXPECT_EQ (startpos.moves.size(), 4);
+    EXPECT_EQ (startpos.moves.size(), 4);
 }
 
 //
@@ -229,8 +228,7 @@ TEST(number_of_moves_generated, startpos_black_knight) {
 
     generate_b_knight_moves(&startpos);
 
-    EXPECT_EQ (startpos.moves.size(), 0);
-    //EXPECT_EQ (startpos.moves.size(), 4);
+    EXPECT_EQ (startpos.moves.size(), 4);
 }
 
 //
