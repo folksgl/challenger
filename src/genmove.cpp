@@ -40,6 +40,13 @@ void generate_black_moves(Position* pos) {
     return;
 }
 
+void add_move(Position* pos, Position* new_pos, string src, string dest) {
+    new_pos->movestring = src + dest;
+    new_pos->move(src + dest);
+    new_pos->evaluate();
+    pos->moves.push_back(*new_pos);
+}
+
 void generate_w_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[w_pawn];
     // check if there are any pawns to generate moves for
@@ -70,36 +77,24 @@ void generate_w_pawn_moves(Position* pos) {
                 Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index+7]);
                 if (dest.at(1) == '8') { dest += 'q'; }
-                pawnmove.movestring = src + dest;
-                pawnmove.move(src+dest);
-                pawnmove.evaluate();
-                pos->moves.push_back(pawnmove);
+                add_move(pos, &pawnmove, src, dest);
             }
             if (squarei & right_attacks) {
                 Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index+9]);
                 if (dest.at(1) == '8') { dest += 'q'; }
-                pawnmove.movestring = src + dest;
-                pawnmove.move(src+dest);
-                pawnmove.evaluate();
-                pos->moves.push_back(pawnmove);
+                add_move(pos, &pawnmove, src, dest);
             }
             if (squarei & forward) {
                 Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index+8]);
                 if (dest.at(1) == '8') { dest += 'q'; }
-                pawnmove.movestring = src + dest;
-                pawnmove.move(src+dest);
-                pawnmove.evaluate();
-                pos->moves.push_back(pawnmove);
+                add_move(pos, &pawnmove, src, dest);
             }
             if (squarei & double_forward) {
                 Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index+16]);
-                pawnmove.movestring = src + dest;
-                pawnmove.move(src+dest);
-                pawnmove.evaluate();
-                pos->moves.push_back(pawnmove);
+                add_move(pos, &pawnmove, src, dest);
             }
 
             pawns = pawns & (~squarei);
@@ -110,7 +105,31 @@ void generate_w_pawn_moves(Position* pos) {
 }
 
 void generate_w_knight_moves(Position* pos) {
+    bitboard knights = pos->maps[w_knight];
+    bitboard white = pos->maps[w_pieces];
 
+    // Loop over the knights on the board
+    int index = __builtin_ffsll(knights) - 1;
+    while (index != -1) {
+        bitboard squarei = squares[index];
+        bitboard attacks = knight_attacks[index] & ~(white);
+
+        string src =  bit_to_square.at(squarei);
+
+        // Loop over the current knights attacks and add positions
+        int inner_index = __builtin_ffsll(attacks) - 1;
+        while (inner_index != -1) {
+            bitboard squarej = squares[inner_index];
+            Position knightmove(*pos);
+            string dest = bit_to_square.at(squarej);
+            add_move(pos, &knightmove, src, dest);
+
+            attacks = attacks & (~squarej);
+            inner_index = __builtin_ffsll(attacks) - 1;
+        }
+        knights = knights & (~squarei);
+        index = __builtin_ffsll(knights) - 1;
+    }
     return;
 }
 
@@ -162,36 +181,24 @@ void generate_b_pawn_moves(Position* pos) {
                 Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index-7]);
                 if (dest.at(1) == '8') { dest += 'q'; }
-                pawnmove.movestring = src + dest;
-                pawnmove.move(src+dest);
-                pawnmove.evaluate();
-                pos->moves.push_back(pawnmove);
+                add_move(pos, &pawnmove, src, dest);
             }
             if (squarei & right_attacks) {
                 Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index-9]);
                 if (dest.at(1) == '1') { dest += 'q'; }
-                pawnmove.movestring = src + dest;
-                pawnmove.move(src+dest);
-                pawnmove.evaluate();
-                pos->moves.push_back(pawnmove);
+                add_move(pos, &pawnmove, src, dest);
             }
             if (squarei & forward) {
                 Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index-8]);
                 if (dest.at(1) == '1') { dest += 'q'; }
-                pawnmove.movestring = src + dest;
-                pawnmove.move(src+dest);
-                pawnmove.evaluate();
-                pos->moves.push_back(pawnmove);
+                add_move(pos, &pawnmove, src, dest);
             }
             if (squarei & double_forward) {
                 Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index-16]);
-                pawnmove.movestring = src + dest;
-                pawnmove.move(src+dest);
-                pawnmove.evaluate();
-                pos->moves.push_back(pawnmove);
+                add_move(pos, &pawnmove, src, dest);
             }
 
             pawns = pawns & (~squarei);
@@ -202,6 +209,31 @@ void generate_b_pawn_moves(Position* pos) {
 }
 
 void generate_b_knight_moves(Position* pos) {
+    bitboard knights = pos->maps[b_knight];
+    bitboard black = pos->maps[b_pieces];
+
+    // Loop over the knights on the board
+    int index = __builtin_ffsll(knights) - 1;
+    while (index != -1) {
+        bitboard squarei = squares[index];
+        bitboard attacks = knight_attacks[index] & ~(black);
+
+        string src =  bit_to_square.at(squarei);
+
+        // Loop over the current knights attacks and add positions
+        int inner_index = __builtin_ffsll(attacks) - 1;
+        while (inner_index != -1) {
+            bitboard squarej = squares[inner_index];
+            Position knightmove(*pos);
+            string dest = bit_to_square.at(squarej);
+            add_move(pos, &knightmove, src, dest);
+
+            attacks = attacks & (~squarej);
+            inner_index = __builtin_ffsll(attacks) - 1;
+        }
+        knights = knights & (~squarei);
+        index = __builtin_ffsll(knights) - 1;
+    }
     return;
 }
 
