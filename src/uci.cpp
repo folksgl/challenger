@@ -155,7 +155,6 @@ void process_go_command(std::string uci_input) {
 
     while (token != NULL) {
         string tok(token);
-        cout << "item after go: " << tok << endl;
         if (tok == "depth") {
             token = strtok(NULL, " ");
             if (token == NULL) {
@@ -178,11 +177,11 @@ void process_go_command(std::string uci_input) {
     delete[] command;
 
     search(G_game_position, depth);
-    if (!G_game_position->moves.empty()) {
-        cout << "bestmove " << G_game_position->moves[0].movestring << endl;
+    if (G_game_position == NULL || G_game_position->moves.empty()) {
+        cout << "Fatal error, no moves found." << endl;
     }
     else {
-        cout << "Fatal error, no moves found." << endl;
+        cout << "bestmove " << G_game_position->moves[0].movestring << endl;
     }
 
     return;
