@@ -9,7 +9,10 @@ build_dir:
 compile: build_dir
 	cd build/ && $(MAKE) --no-print-directory -j8 --silent
 
-clean:
+clean: build_dir
+	cd ./build && make clean --no-print-directory
+
+really_clean:
 	$(RM) -rf build/
 
 build:
@@ -25,3 +28,15 @@ coverage: compile test
 
 optimized: build_dir
 	cd build/ && $(MAKE) optimized --no-print-directory -j8 --silent
+
+profile: compile
+	if [ -f "./gmon.out" ]; then \
+			$(RM) "./gmon.out"; \
+	fi
+	if [ -f "./analysis" ]; then \
+			$(RM) "./analysis"; \
+	fi
+	echo "position startpos\ngo depth 1\nquit" > tmp_input_challenger
+	./build/challenger < tmp_input_challenger
+	$(RM) tmp_input_challenger
+	gprof -b ./build/challenger gmon.out > analysis
