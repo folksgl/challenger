@@ -123,7 +123,7 @@ TEST (process_uci_inputs, go_quit_startpos) {
 }
 
 TEST (process_uci_inputs, go_quit_nullpos) { 
-    string uci_command = "position 8/8/8/8/8/8/8/8 w - - 0 1\ngo\nquit\n";
+    string uci_command = "position 8/8/8/8/8/8/8/8 w - - 0 1\ngo depth 1\nquit\n";
     istringstream iss(uci_command);
 
     testing::internal::CaptureStdout();
