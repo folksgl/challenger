@@ -30,9 +30,7 @@ Position::Position(string fen) {
 }
 
 bool Position::operator == (const Position& other) const {
-    for (unsigned int i = 0; i < maps.size(); i++) {
-        if (maps[i] != other.maps[i]) { return false; }
-    }
+    if (maps != other.maps) { return false; }
 
     if (active_color != other.active_color) { return false; }
 
