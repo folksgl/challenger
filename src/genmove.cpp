@@ -112,7 +112,7 @@ void generate_w_knight_moves(Position* pos) {
     int index = __builtin_ffsll(knights) - 1;
     while (index != -1) {
         bitboard squarei = squares[index];
-        bitboard attacks = knight_attacks[index] & ~(white);
+        bitboard attacks = knight_moves[index] & ~(white);
 
         string src =  bit_to_square.at(squarei);
 
@@ -216,7 +216,7 @@ void generate_b_knight_moves(Position* pos) {
     int index = __builtin_ffsll(knights) - 1;
     while (index != -1) {
         bitboard squarei = squares[index];
-        bitboard attacks = knight_attacks[index] & ~(black);
+        bitboard attacks = knight_moves[index] & ~(black);
 
         string src =  bit_to_square.at(squarei);
 
