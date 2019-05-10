@@ -146,6 +146,29 @@ void generate_w_queen_moves(Position* pos) {
 }
 
 void generate_w_king_moves(Position* pos) {
+    bitboard king = pos->maps[w_king];
+    if (king) {
+        bitboard white = pos->maps[w_pieces];
+
+        // Only one white king on the board
+        int index = __builtin_ffsll(king) - 1;
+
+        bitboard attacks = king_moves[index] & ~(white);
+
+        string src =  bit_to_square.at(squares[index]);
+
+        // Loop over the current king attacks and add positions
+        int inner_index = __builtin_ffsll(attacks) - 1;
+        while (inner_index != -1) {
+            bitboard squarei = squares[inner_index];
+            Position knightmove(*pos);
+            string dest = bit_to_square.at(squarei);
+            add_move(pos, &knightmove, src, dest);
+
+            attacks = attacks & (~squarei);
+            inner_index = __builtin_ffsll(attacks) - 1;
+        }
+    }
     return;
 }
 
@@ -250,6 +273,29 @@ void generate_b_queen_moves(Position* pos) {
 }
 
 void generate_b_king_moves(Position* pos) {
+    bitboard king = pos->maps[b_king];
+    if (king) {
+        bitboard black = pos->maps[b_pieces];
+
+        // Only one black king on the board
+        int index = __builtin_ffsll(king) - 1;
+
+        bitboard attacks = king_moves[index] & ~(black);
+
+        string src =  bit_to_square.at(squares[index]);
+
+        // Loop over the current king attacks and add positions
+        int inner_index = __builtin_ffsll(attacks) - 1;
+        while (inner_index != -1) {
+            bitboard squarei = squares[inner_index];
+            Position knightmove(*pos);
+            string dest = bit_to_square.at(squarei);
+            add_move(pos, &knightmove, src, dest);
+
+            attacks = attacks & (~squarei);
+            inner_index = __builtin_ffsll(attacks) - 1;
+        }
+    }
     return;
 }
 
