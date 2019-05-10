@@ -141,13 +141,46 @@ void process_position_command(std::string uci_input) {
  *  process_go_command handles the "go..." command given by the gui
  */
 void process_go_command(std::string uci_input) {
-    search(G_game_position, 1);
+    // Convert uci_input into char array.
+    char * command = new char [uci_input.length()+1];
+    strcpy (command, uci_input.c_str());
+
+    // First token is the "go" command, disregard this and get to the rest of the command.
+    char *token = strtok(command, " "); 
+    token = strtok(NULL, " "); 
+
+    int depth = 15; // Default to searching to a depth of 25 plys ahead
+
+    while (token != NULL) {
+        string tok(token);
+        cout << "item after go: " << tok << endl;
+        if (tok == "depth") {
+            token = strtok(NULL, " ");
+            if (token == NULL) {
+                break;
+            }
+            tok = string(token);
+            if (tok.find_first_not_of("0123456789") == std::string::npos) {
+                depth = stoi(token);
+            }
+        }
+        //else if (tok == "wtime") {
+
+        //}
+        //else if (tok == "btime") {
+
+        //}
+        token = strtok(NULL, " ");
+    }
+
+    search(G_game_position, depth);
     if (!G_game_position->moves.empty()) {
         cout << "bestmove " << G_game_position->moves[0].movestring << endl;
     }
     else {
         cout << "Fatal error, no moves found." << endl;
     }
+
     return;
 }
 
