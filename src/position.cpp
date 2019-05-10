@@ -86,7 +86,7 @@ void Position::set_defaults() {
     halfmove_clock = 0;
     fullmove_number = 0;
 
-    int evaluation_score = 0;
+    evaluation_score = 0;
 
     string movestring = "";
 }
