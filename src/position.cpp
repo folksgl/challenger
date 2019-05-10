@@ -25,6 +25,8 @@ Position::Position(string fen) {
 
     evaluation_score = evaluate_position(this);
     movestring = "";
+
+    delete[] fenstring;
 }
 
 bool Position::operator == (const Position& other) const {

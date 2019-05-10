@@ -134,6 +134,8 @@ void process_position_command(std::string uci_input) {
         token = strtok(NULL, " ");
     } 
 
+    delete[] command;
+
     return;
 }
 
@@ -149,7 +151,7 @@ void process_go_command(std::string uci_input) {
     char *token = strtok(command, " "); 
     token = strtok(NULL, " "); 
 
-    int depth = 15; // Default to searching to a depth of 25 plys ahead
+    int depth = 1; // Default to searching to a depth of 25 plys ahead
 
     while (token != NULL) {
         string tok(token);
@@ -172,6 +174,8 @@ void process_go_command(std::string uci_input) {
         //}
         token = strtok(NULL, " ");
     }
+
+    delete[] command;
 
     search(G_game_position, depth);
     if (!G_game_position->moves.empty()) {
