@@ -10,6 +10,10 @@ using namespace std;
  * Perform a search of the position given.
  */
 void search(Position* pos, int depth) {
+
+    if (pos == NULL) {
+        return;
+    }
     int alpha = std::numeric_limits<int>::min();
     int beta  = std::numeric_limits<int>::max();
     if (pos->active_color == 'w') {
