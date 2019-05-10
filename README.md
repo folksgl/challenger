@@ -20,14 +20,17 @@ The "Percentage winning next level" label indicates challenger's progress in bea
 
 Percentages will be determined by playing 10 games and recording winnings.
 
-## TODO
-- [x] Implement base UCI compatibility
+## Ongoing Work:
 - [ ] Implement all UCI compatibility
-- [x] Create board representation
-- [x] Implement input move handling
 - [ ] Implement move generation
-- [x] Search possible moves
-- [x] Evaluate possible moves
+  - [x] Pawn move generation
+  - [x] Knight move generation
+  - [ ] Bishop move generation
+  - [ ] Rook move generation
+  - [ ] Queen move generation
+  - [x] King move generation
+- [ ] Improve position evaluation
+- [ ] Improve move generation
 
 ## Installation
 
