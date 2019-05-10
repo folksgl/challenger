@@ -14,6 +14,32 @@ using namespace std;
  */
 
 //
+// START WHITE MOVE TESTS //////////////////////////////////////////////////////
+//
+
+TEST(number_of_moves_generated, startpos_white) {
+    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_white_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 20);
+}
+
+//
+// START BLACK MOVE TESTS //////////////////////////////////////////////////////
+//
+
+TEST(number_of_moves_generated, startpos_black) {
+    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_black_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 20);
+}
+
+//
 // START WHITE PAWN GENERATION TESTS ///////////////////////////////////////////
 //
 
@@ -218,6 +244,48 @@ TEST(number_of_moves_generated, startpos_white_knight) {
     EXPECT_EQ (startpos.moves.size(), 4);
 }
 
+TEST(correct_moves_generated, startpos_white_knight) {
+    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_knight_moves(&startpos);
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 4);
+
+    EXPECT_EQ(startpos.moves[0].movestring,   "b1a3");
+    EXPECT_EQ(startpos.moves[1].movestring,   "b1c3");
+    EXPECT_EQ(startpos.moves[2].movestring,   "g1f3");
+    EXPECT_EQ(startpos.moves[3].movestring,   "g1h3");
+}
+
+TEST(correct_moves_generated, e5_white_knight) {
+    std::string test = "rnbqkbnr/pppppppp/8/4N3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_knight_moves(&startpos);
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 12);
+
+    EXPECT_EQ(startpos.moves[0].movestring,   "b1a3");
+    EXPECT_EQ(startpos.moves[1].movestring,   "b1c3");
+
+    EXPECT_EQ(startpos.moves[2].movestring,   "e5c4");
+    EXPECT_EQ(startpos.moves[3].movestring,   "e5c6");
+    EXPECT_EQ(startpos.moves[4].movestring,   "e5d3");
+    EXPECT_EQ(startpos.moves[5].movestring,   "e5d7");
+    EXPECT_EQ(startpos.moves[6].movestring,   "e5f3");
+    EXPECT_EQ(startpos.moves[7].movestring,   "e5f7");
+    EXPECT_EQ(startpos.moves[8].movestring,   "e5g4");
+    EXPECT_EQ(startpos.moves[9].movestring,   "e5g6");
+
+    EXPECT_EQ(startpos.moves[10].movestring,   "g1f3");
+    EXPECT_EQ(startpos.moves[11].movestring,   "g1h3");
+}
+
 //
 // START BLACK KNIGHT GENERATION TESTS /////////////////////////////////////////
 //
@@ -229,6 +297,48 @@ TEST(number_of_moves_generated, startpos_black_knight) {
     generate_b_knight_moves(&startpos);
 
     EXPECT_EQ (startpos.moves.size(), 4);
+}
+
+TEST(correct_moves_generated, startpos_black_knight) {
+    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_knight_moves(&startpos);
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 4);
+
+    EXPECT_EQ(startpos.moves[0].movestring,   "b8a6");
+    EXPECT_EQ(startpos.moves[1].movestring,   "b8c6");
+    EXPECT_EQ(startpos.moves[2].movestring,   "g8f6");
+    EXPECT_EQ(startpos.moves[3].movestring,   "g8h6");
+}
+
+TEST(correct_moves_generated, e4_black_knight) {
+    std::string test = "rnbqkbnr/pppppppp/8/8/4n3/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_knight_moves(&startpos);
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 12);
+
+    EXPECT_EQ(startpos.moves[0].movestring,   "b8a6");
+    EXPECT_EQ(startpos.moves[1].movestring,   "b8c6");
+
+    EXPECT_EQ(startpos.moves[2].movestring,   "e4c3");
+    EXPECT_EQ(startpos.moves[3].movestring,   "e4c5");
+    EXPECT_EQ(startpos.moves[4].movestring,   "e4d2");
+    EXPECT_EQ(startpos.moves[5].movestring,   "e4d6");
+    EXPECT_EQ(startpos.moves[6].movestring,   "e4f2");
+    EXPECT_EQ(startpos.moves[7].movestring,   "e4f6");
+    EXPECT_EQ(startpos.moves[8].movestring,   "e4g3");
+    EXPECT_EQ(startpos.moves[9].movestring,   "e4g5");
+
+    EXPECT_EQ(startpos.moves[10].movestring,   "g8f6");
+    EXPECT_EQ(startpos.moves[11].movestring,   "g8h6");
 }
 
 //
@@ -322,6 +432,44 @@ TEST(number_of_moves_generated, startpos_white_king) {
     EXPECT_EQ (startpos.moves.size(), 0);
 }
 
+TEST(number_of_moves_generated, middleboard_white_king) {
+    std::string test = "rnbqkbnr/pppppppp/8/8/4K3/8/PPPPPPPP/RNBQ1BNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_king_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 8);
+}
+
+TEST(number_of_moves_generated, pressed_white_king) {
+    std::string test = "rnbqkbnr/pppppppp/4K3/8/8/8/PPPPPPPP/RNBQ1BNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_king_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 8);
+}
+
+TEST(correct_moves_generated, middleboard_white_king) {
+    std::string test = "rnbqkbnr/pppppppp/8/4K3/8/8/PPPPPPPP/RNBQ1BNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_king_moves(&startpos);
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 8);
+
+    EXPECT_EQ(startpos.moves[0].movestring,   "e5d4");
+    EXPECT_EQ(startpos.moves[1].movestring,   "e5d5");
+    EXPECT_EQ(startpos.moves[2].movestring,   "e5d6");
+    EXPECT_EQ(startpos.moves[3].movestring,   "e5e4");
+    EXPECT_EQ(startpos.moves[4].movestring,   "e5e6");
+    EXPECT_EQ(startpos.moves[5].movestring,   "e5f4");
+    EXPECT_EQ(startpos.moves[6].movestring,   "e5f5");
+    EXPECT_EQ(startpos.moves[7].movestring,   "e5f6");
+}
+
 //
 // START BLACK KING GENERATION TESTS ///////////////////////////////////////////
 //
@@ -334,4 +482,43 @@ TEST(number_of_moves_generated, startpos_black_king) {
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
+
+TEST(number_of_moves_generated, middleboard_black_king) {
+    std::string test = "rnbq1bnr/pppppppp/8/4k3/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_king_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 8);
+}
+
+TEST(number_of_moves_generated, pressed_black_king) {
+    std::string test = "rnbq1bnr/pppppppp/8/8/8/4k3/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_king_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 8);
+}
+
+TEST(correct_moves_generated, middleboard_black_king) {
+    std::string test = "rnbq1bnr/pppppppp/8/4k3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_king_moves(&startpos);
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 8);
+
+    EXPECT_EQ(startpos.moves[0].movestring,   "e5d4");
+    EXPECT_EQ(startpos.moves[1].movestring,   "e5d5");
+    EXPECT_EQ(startpos.moves[2].movestring,   "e5d6");
+    EXPECT_EQ(startpos.moves[3].movestring,   "e5e4");
+    EXPECT_EQ(startpos.moves[4].movestring,   "e5e6");
+    EXPECT_EQ(startpos.moves[5].movestring,   "e5f4");
+    EXPECT_EQ(startpos.moves[6].movestring,   "e5f5");
+    EXPECT_EQ(startpos.moves[7].movestring,   "e5f6");
+}
+
 
