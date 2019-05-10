@@ -40,11 +40,12 @@ void generate_black_moves(Position* pos) {
     return;
 }
 
-void add_move(Position* pos, Position* new_pos, string src, string dest) {
-    new_pos->movestring = src + dest;
-    new_pos->move(src + dest);
-    new_pos->evaluate();
-    pos->moves.push_back(*new_pos);
+void add_move(Position* pos, string src, string dest) {
+    pos->moves.push_back(*pos);
+    Position* p = &pos->moves.back();
+    p->movestring = src + dest;
+    p->move(src + dest);
+    p->evaluate();
 }
 
 void generate_w_pawn_moves(Position* pos) {
@@ -74,27 +75,23 @@ void generate_w_pawn_moves(Position* pos) {
             src = bit_to_square.at(squarei);
 
             if (squarei & left_attacks) {
-                Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index+7]);
                 if (dest.at(1) == '8') { dest += 'q'; }
-                add_move(pos, &pawnmove, src, dest);
+                add_move(pos, src, dest);
             }
             if (squarei & right_attacks) {
-                Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index+9]);
                 if (dest.at(1) == '8') { dest += 'q'; }
-                add_move(pos, &pawnmove, src, dest);
+                add_move(pos, src, dest);
             }
             if (squarei & forward) {
-                Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index+8]);
                 if (dest.at(1) == '8') { dest += 'q'; }
-                add_move(pos, &pawnmove, src, dest);
+                add_move(pos, src, dest);
             }
             if (squarei & double_forward) {
-                Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index+16]);
-                add_move(pos, &pawnmove, src, dest);
+                add_move(pos, src, dest);
             }
 
             pawns = pawns & (~squarei);
@@ -120,9 +117,8 @@ void generate_w_knight_moves(Position* pos) {
         int inner_index = __builtin_ffsll(attacks) - 1;
         while (inner_index != -1) {
             bitboard squarej = squares[inner_index];
-            Position knightmove(*pos);
             string dest = bit_to_square.at(squarej);
-            add_move(pos, &knightmove, src, dest);
+            add_move(pos, src, dest);
 
             attacks = attacks & (~squarej);
             inner_index = __builtin_ffsll(attacks) - 1;
@@ -161,9 +157,8 @@ void generate_w_king_moves(Position* pos) {
         int inner_index = __builtin_ffsll(attacks) - 1;
         while (inner_index != -1) {
             bitboard squarei = squares[inner_index];
-            Position knightmove(*pos);
             string dest = bit_to_square.at(squarei);
-            add_move(pos, &knightmove, src, dest);
+            add_move(pos, src, dest);
 
             attacks = attacks & (~squarei);
             inner_index = __builtin_ffsll(attacks) - 1;
@@ -201,27 +196,23 @@ void generate_b_pawn_moves(Position* pos) {
             src = bit_to_square.at(squarei);
 
             if (squarei & left_attacks) {
-                Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index-7]);
                 if (dest.at(1) == '8') { dest += 'q'; }
-                add_move(pos, &pawnmove, src, dest);
+                add_move(pos, src, dest);
             }
             if (squarei & right_attacks) {
-                Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index-9]);
                 if (dest.at(1) == '1') { dest += 'q'; }
-                add_move(pos, &pawnmove, src, dest);
+                add_move(pos, src, dest);
             }
             if (squarei & forward) {
-                Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index-8]);
                 if (dest.at(1) == '1') { dest += 'q'; }
-                add_move(pos, &pawnmove, src, dest);
+                add_move(pos, src, dest);
             }
             if (squarei & double_forward) {
-                Position pawnmove(*pos);
                 dest = bit_to_square.at(squares[index-16]);
-                add_move(pos, &pawnmove, src, dest);
+                add_move(pos, src, dest);
             }
 
             pawns = pawns & (~squarei);
@@ -247,9 +238,8 @@ void generate_b_knight_moves(Position* pos) {
         int inner_index = __builtin_ffsll(attacks) - 1;
         while (inner_index != -1) {
             bitboard squarej = squares[inner_index];
-            Position knightmove(*pos);
             string dest = bit_to_square.at(squarej);
-            add_move(pos, &knightmove, src, dest);
+            add_move(pos, src, dest);
 
             attacks = attacks & (~squarej);
             inner_index = __builtin_ffsll(attacks) - 1;
@@ -288,9 +278,8 @@ void generate_b_king_moves(Position* pos) {
         int inner_index = __builtin_ffsll(attacks) - 1;
         while (inner_index != -1) {
             bitboard squarei = squares[inner_index];
-            Position knightmove(*pos);
             string dest = bit_to_square.at(squarei);
-            add_move(pos, &knightmove, src, dest);
+            add_move(pos, src, dest);
 
             attacks = attacks & (~squarei);
             inner_index = __builtin_ffsll(attacks) - 1;
