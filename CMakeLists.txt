@@ -38,7 +38,7 @@ endif()
 
 # Add src and test files
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "-Wall -g3 -Og --coverage")
+set(CMAKE_CXX_FLAGS "-Wall -ggdb -Og -pg --coverage")
 
 set(SRC_DIR src)
 set(TEST_DIR "test")
