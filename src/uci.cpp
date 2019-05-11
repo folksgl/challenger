@@ -1,12 +1,16 @@
 #include <stdio.h>
-#include <string.h>
 #include <cstdlib>
+#include <string>
+#include <sstream>
+#include <iterator>
+#include <regex>
 #include "uci.h"
 #include "game_variables.h"
 #include "position.h"
 #include "search.h"
 
 using namespace std;
+
 
 /*
  *  process_uci_inputs reads in input from stdin (given by a uci-compatible gui) and
@@ -20,6 +24,9 @@ void process_uci_inputs(istream& is) {
     // Get command from stdin and process
     while (getline(is, uci_input)) 
     {
+        // Remove all leading, trailing, and double spaces in the input text
+        uci_input = std::regex_replace(uci_input, std::regex("^ +| +$|( ) +"), "$1");
+
         uci_command = uci_input.substr(0, uci_input.find_first_of(" "));
 
         if (uci_command == "uci") {
@@ -89,53 +96,46 @@ void process_setoption_command(std::string uci_input) {
  *  process_position_command handles the "position..." command given by the gui
  */
 void process_position_command(std::string uci_input) {
-    // Convert uci_input into char array.
-    char * command = new char [uci_input.length()+1];
-    strcpy (command, uci_input.c_str());
 
-    // First token is the "position" command, disregard this and get to the fen string.
-    char *token = strtok(command, " "); 
-    token = strtok(NULL, " "); 
+    // Turn inputs into a vector of strings, split by spaces.
+    std::istringstream iss(uci_input);
+    vector<string> tokens(istream_iterator<string>{iss}, istream_iterator<string>());
 
-    string startpos = "startpos";
-
-    // Check for bad (empty) position command.
-    if (token == NULL) {
+    if (tokens.size() < 2 || tokens[0] != "position") {
+        // only "position" was given or position was not the first token
         return;
     }
-
-    // If the "startpos" position is given, use the starting position.
-    if (startpos.compare(token) == 0) {
+    // remove "position" token
+    tokens.erase(tokens.begin());
+    if (tokens[0] == "startpos") {
         G_game_position = new Position();
+        tokens.erase(tokens.begin());
     }
     else {
-        string uci_fen = token;
-        for (int i = 0; i < 5; i++) {
-            token = strtok(NULL, " ");
-            uci_fen += " " + string(token);
+        // Not enough tokens to build a valid fen-string
+        if (tokens.size() < 6) { 
+            return; 
         }
-        G_game_position = new Position(uci_fen);
+
+        string fen = tokens[0] + " " + tokens[1] + " " + tokens[2] + " " +
+                     tokens[3] + " " + tokens[4] + " " + tokens[5];
+
+        G_game_position = new Position(fen);
+
+        // Remove fen tokens
+        for (int i = 0; i < 6; i++) {
+            tokens.erase(tokens.begin());
+        }
     }
-
-    // Reset the command string to the full command.
-    strcpy (command, uci_input.c_str());
-    token = strtok(command, " ");
-
-    while (token != NULL) 
-    {
-        if (strncmp(token, "moves", 6) == 0) {
-            token = strtok(NULL, " "); 
-            while (token != NULL) {
-                (*G_game_position).move(token);
-                token = strtok(NULL, " "); 
-            }
-            break;
-        }
-        token = strtok(NULL, " ");
-    } 
-
-    delete[] command;
-
+    if (tokens.size() < 2 || tokens[0] != "moves") {
+        // Not enough tokens to have moves + <move> or token was invalid
+        return;
+    }
+    // Clear "moves" token and process remaining moves
+    tokens.erase(tokens.begin());
+    for (auto tok : tokens) {
+        G_game_position->move(tok);
+    }
     return;
 }
 
@@ -143,6 +143,10 @@ void process_position_command(std::string uci_input) {
  *  process_go_command handles the "go..." command given by the gui
  */
 void process_go_command(std::string uci_input) {
+
+    if (G_game_position == NULL) {
+        cout << "ERROR: no position has been given. Ignoring go command." << endl;
+    }
     // Convert uci_input into char array.
     char * command = new char [uci_input.length()+1];
     strcpy (command, uci_input.c_str());
