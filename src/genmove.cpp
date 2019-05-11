@@ -58,12 +58,13 @@ void generate_w_pawn_moves(Position* pos) {
         }
 
         bitboard black = pos->maps[b_pieces] | passant_bit;
+        bitboard unoccupied = (~pos->maps[w_pieces]) & (~pos->maps[b_pieces]);
 
         // left/right/forward contain the start squares of pawns that can perform those moves.
         bitboard left_attacks  = (((pawns & (~a_file)) << 7) & black) >> 7;
         bitboard right_attacks = (((pawns & (~h_file)) << 9) & black) >> 9;
-        bitboard forward = ((pawns << 8) & (~black)) >> 8;
-        bitboard double_forward = ((((pawns & rank_2) & forward) << 16) & (~black)) >> 16;
+        bitboard forward = ((pawns << 8) & unoccupied) >> 8;
+        bitboard double_forward = (((rank_2 & forward) << 16) & unoccupied) >> 16;
 
         string src, dest;
 
@@ -179,12 +180,13 @@ void generate_b_pawn_moves(Position* pos) {
         }
 
         bitboard white = pos->maps[w_pieces] | passant_bit;
+        bitboard unoccupied = (~pos->maps[w_pieces]) & (~pos->maps[b_pieces]);
 
         // left/right/forward contain the start squares of pawns that can perform those moves.
         bitboard left_attacks  = (((pawns & (~h_file)) >> 7) & white) << 7;
         bitboard right_attacks = (((pawns & (~a_file)) >> 9) & white) << 9;
-        bitboard forward = ((pawns >> 8) & (~white)) << 8;
-        bitboard double_forward = ((((pawns & rank_7) & forward) >> 16) & (~white)) << 16;
+        bitboard forward = ((pawns >> 8) & unoccupied) << 8;
+        bitboard double_forward = (((rank_7 & forward) >> 16) & unoccupied) << 16;
 
         string src, dest;
 
