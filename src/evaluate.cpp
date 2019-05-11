@@ -60,7 +60,5 @@ int get_black_material_value(Position* pos) {
     }
 
     return material_val;
-
-
 }
 
