@@ -42,6 +42,7 @@ class Position {
 
         Position(void) : Position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {}
         Position(std::string fen);
+        Position(const Position& other);
 
         // Comparisons
         bool operator == (const Position& other) const;

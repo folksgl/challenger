@@ -89,6 +89,26 @@ void Position::set_defaults() {
     string movestring = "";
 }
 
+Position::Position(const Position& other) {
+    maps = other.maps;
+
+    active_color = other.active_color;
+
+    w_kingside_castle  = other.w_kingside_castle;
+    w_queenside_castle = other.w_queenside_castle;
+    b_kingside_castle  = other.b_kingside_castle;
+    b_queenside_castle = other.b_queenside_castle;
+
+    passant_target_sq = other.passant_target_sq;
+
+    halfmove_clock = other.halfmove_clock;
+    fullmove_number = other.fullmove_number;
+
+    evaluation_score = 0;
+
+    movestring = other.movestring;
+}
+
 /*
  *  set_piece_positions sets the value of all the bitboards in board_position
  *  to the values found in fen_tok.
