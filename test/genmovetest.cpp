@@ -656,3 +656,20 @@ TEST(correct_moves_generated, troublepos2) {
     EXPECT_EQ(startpos.moves[25].movestring,    "h7h6");
 }
 
+TEST(correct_moves_generated, troublepos3) {
+    std::string test = "r1bqkbnr/ppppp1pp/5p2/4P3/5PP1/3n4/PPPP3P/RNBQKBNR b KQkq - 0 5";
+    Position startpos(test);
+
+    generate_black_moves(&startpos);
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    //for (auto p : startpos.moves) {
+        //cout << p.movestring << endl;
+    //}
+    ASSERT_EQ(26, 26);
+
+}
+
+
+
