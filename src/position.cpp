@@ -104,7 +104,7 @@ Position::Position(const Position& other) {
     halfmove_clock = other.halfmove_clock;
     fullmove_number = other.fullmove_number;
 
-    evaluation_score = 0;
+    evaluation_score = other.evaluation_score;
 
     movestring = other.movestring;
 }
