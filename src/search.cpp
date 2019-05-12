@@ -19,9 +19,6 @@ bool asc_sort (Position const &a, Position const &b) {
  */
 void search(Position* pos, int depth) {
 
-    if (pos == NULL) {
-        return;
-    }
     int alpha = std::numeric_limits<int>::min();
     int beta  = std::numeric_limits<int>::max();
     if (pos->active_color == 'w') {
