@@ -48,6 +48,71 @@ void add_move(Position* pos, string src, string dest) {
     p->evaluate();
 }
 
+bitboard get_bishop_attacks(bitboard board, int index) {
+    return slider_attacks.BishopAttacks(board, index);
+}
+
+bitboard get_rook_attacks(bitboard board, int index) {
+    return slider_attacks.RookAttacks(board, index);
+}
+
+bitboard get_queen_attacks(bitboard board, int index) {
+    return slider_attacks.QueenAttacks(board, index);
+}
+
+void leap_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, const bitboard move_database[64]) {
+    // Loop over the leaper on the board
+    int index = __builtin_ffsll(leaper) - 1;
+    while (index != -1) {
+        bitboard squarei = squares[index];
+        bitboard attacks = move_database[index] & not_own_pieces;
+
+        string src =  bit_to_square.at(squarei);
+
+        // Loop over the current leaper pieces attacks and add positions
+        int inner_index = __builtin_ffsll(attacks) - 1;
+        while (inner_index != -1) {
+            bitboard squarej = squares[inner_index];
+            string dest = bit_to_square.at(squarej);
+            add_move(pos, src, dest);
+
+            // "Increment" loop index.
+            attacks = attacks & (~squarej);
+            inner_index = __builtin_ffsll(attacks) - 1;
+        }
+        // "Increment" loop index.
+        leaper = leaper & (~squarei);
+        index = __builtin_ffsll(leaper) - 1;
+    }
+}
+
+void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int)) {
+    bitboard whole_board = pos->maps[w_pieces] | pos->maps[b_pieces];
+
+    int index = __builtin_ffsll(bishops) - 1;
+    while (index != -1) {
+        bitboard squarei = squares[index];
+        string src =  bit_to_square.at(squarei);
+        bitboard attacks = (*attack_function)(whole_board, index);
+        attacks &= not_own_pieces;
+
+        // Loop over the current bishop attacks and add positions
+        int inner_index = __builtin_ffsll(attacks) - 1;
+        while (inner_index != -1) {
+            bitboard squarej = squares[inner_index];
+            string dest = bit_to_square.at(squarej);
+            add_move(pos, src, dest);
+
+            attacks = attacks & (~squarej);
+            inner_index = __builtin_ffsll(attacks) - 1;
+        }
+        bishops = bishops & (~squarei);
+        index = __builtin_ffsll(bishops) - 1;
+    }
+
+    return;
+}
+
 void generate_w_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[w_pawn];
     // check if there are any pawns to generate moves for
@@ -104,67 +169,60 @@ void generate_w_pawn_moves(Position* pos) {
 
 void generate_w_knight_moves(Position* pos) {
     bitboard knights = pos->maps[w_knight];
-    bitboard white = pos->maps[w_pieces];
+    bitboard not_own_white = ~(pos->maps[w_pieces]);
 
-    // Loop over the knights on the board
-    int index = __builtin_ffsll(knights) - 1;
-    while (index != -1) {
-        bitboard squarei = squares[index];
-        bitboard attacks = knight_moves[index] & ~(white);
+    leap_generator(pos, knights, not_own_white, knight_moves);
 
-        string src =  bit_to_square.at(squarei);
-
-        // Loop over the current knights attacks and add positions
-        int inner_index = __builtin_ffsll(attacks) - 1;
-        while (inner_index != -1) {
-            bitboard squarej = squares[inner_index];
-            string dest = bit_to_square.at(squarej);
-            add_move(pos, src, dest);
-
-            attacks = attacks & (~squarej);
-            inner_index = __builtin_ffsll(attacks) - 1;
-        }
-        knights = knights & (~squarei);
-        index = __builtin_ffsll(knights) - 1;
-    }
     return;
 }
 
+void PrintBitBoard(const bitboard bb) {
+  for (int row = 7; row >= 0; --row) {
+    for (int col = 0; col <= 7; ++col) {
+      if (bb & (1ULL << ((row * 8) + col))) {
+        std::cout << "1 ";
+      } else {
+        std::cout << "0 ";
+      }
+    }
+    std::cout << std::endl;
+  }
+}
+
+
 void generate_w_bishop_moves(Position* pos) {
+    bitboard bishops = pos->maps[w_bishop];
+    bitboard not_own_white = ~(pos->maps[w_pieces]);
+
+    slide_generator(pos, bishops, not_own_white, &get_bishop_attacks);
+
     return;
 }
 
 void generate_w_rook_moves(Position* pos) {
+    bitboard rooks = pos->maps[w_rook];
+    bitboard not_own_white = ~(pos->maps[w_pieces]);
+
+    slide_generator(pos, rooks, not_own_white, &get_rook_attacks);
+
     return;
 }
 
 void generate_w_queen_moves(Position* pos) {
+    bitboard queen = pos->maps[w_queen];
+    bitboard not_own_white = ~(pos->maps[w_pieces]);
+
+    slide_generator(pos, queen, not_own_white, &get_queen_attacks);
+
     return;
 }
 
 void generate_w_king_moves(Position* pos) {
     bitboard king = pos->maps[w_king];
-    if (king) {
-        bitboard white = pos->maps[w_pieces];
+    bitboard not_own_white = ~(pos->maps[w_pieces]);
 
-        // Only one white king on the board
-        int index = __builtin_ffsll(king) - 1;
+    leap_generator(pos, king, not_own_white, king_moves);
 
-        bitboard attacks = king_moves[index] & ~(white);
-
-        string src =  bit_to_square.at(squares[index]);
-
-        // Loop over the current king attacks and add positions
-        int inner_index = __builtin_ffsll(attacks) - 1;
-        while (inner_index != -1) {
-            bitboard squarei = squares[inner_index];
-            string dest = bit_to_square.at(squarei);
-            add_move(pos, src, dest);
-
-            attacks = attacks & (~squarei);
-            inner_index = __builtin_ffsll(attacks) - 1;
-        }
-    }
     return;
 }
 
@@ -226,67 +284,46 @@ void generate_b_pawn_moves(Position* pos) {
 
 void generate_b_knight_moves(Position* pos) {
     bitboard knights = pos->maps[b_knight];
-    bitboard black = pos->maps[b_pieces];
+    bitboard not_own_black = ~(pos->maps[b_pieces]);
 
-    // Loop over the knights on the board
-    int index = __builtin_ffsll(knights) - 1;
-    while (index != -1) {
-        bitboard squarei = squares[index];
-        bitboard attacks = knight_moves[index] & ~(black);
+    leap_generator(pos, knights, not_own_black, knight_moves);
 
-        string src =  bit_to_square.at(squarei);
-
-        // Loop over the current knights attacks and add positions
-        int inner_index = __builtin_ffsll(attacks) - 1;
-        while (inner_index != -1) {
-            bitboard squarej = squares[inner_index];
-            string dest = bit_to_square.at(squarej);
-            add_move(pos, src, dest);
-
-            attacks = attacks & (~squarej);
-            inner_index = __builtin_ffsll(attacks) - 1;
-        }
-        knights = knights & (~squarei);
-        index = __builtin_ffsll(knights) - 1;
-    }
     return;
+
 }
 
 void generate_b_bishop_moves(Position* pos) {
+    bitboard bishops = pos->maps[b_bishop];
+    bitboard not_own_black = ~(pos->maps[b_pieces]);
+
+    slide_generator(pos, bishops, not_own_black, &get_bishop_attacks);
     return;
 }
 
 void generate_b_rook_moves(Position* pos) {
+    bitboard rook = pos->maps[b_rook];
+    bitboard not_own_black = ~(pos->maps[b_pieces]);
+
+    slide_generator(pos, rook, not_own_black, &get_rook_attacks);
+
     return;
 }
 
 void generate_b_queen_moves(Position* pos) {
+    bitboard queen = pos->maps[b_queen];
+    bitboard not_own_black = ~(pos->maps[b_pieces]);
+
+    slide_generator(pos, queen, not_own_black, &get_queen_attacks);
+
     return;
 }
 
 void generate_b_king_moves(Position* pos) {
     bitboard king = pos->maps[b_king];
-    if (king) {
-        bitboard black = pos->maps[b_pieces];
+    bitboard not_own_black = ~(pos->maps[b_pieces]);
 
-        // Only one black king on the board
-        int index = __builtin_ffsll(king) - 1;
+    leap_generator(pos, king, not_own_black, king_moves);
 
-        bitboard attacks = king_moves[index] & ~(black);
-
-        string src =  bit_to_square.at(squares[index]);
-
-        // Loop over the current king attacks and add positions
-        int inner_index = __builtin_ffsll(attacks) - 1;
-        while (inner_index != -1) {
-            bitboard squarei = squares[inner_index];
-            string dest = bit_to_square.at(squarei);
-            add_move(pos, src, dest);
-
-            attacks = attacks & (~squarei);
-            inner_index = __builtin_ffsll(attacks) - 1;
-        }
-    }
     return;
 }
 

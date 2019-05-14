@@ -1,5 +1,6 @@
 #include "position.h"
 #include "common.h"
+#include "game_variables.h"
 #include <unordered_map>
 
 #ifndef GENMOVE_H
