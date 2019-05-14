@@ -9,10 +9,12 @@ using namespace std;
 // included in compilation of tests.                                   //
 bool G_debug;                                                          // 
 Position* G_game_position;                                              //
+SliderAttacks slider_attacks;
                                                                        //
 /////////////////////////////////////////////////////////////////////////
 
 int main(int argc, char **argv) {
+    slider_attacks.Initialize();
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

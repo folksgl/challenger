@@ -410,6 +410,36 @@ TEST(number_of_moves_generated, startpos_white_bishop) {
     EXPECT_EQ (startpos.moves.size(), 0);
 }
 
+TEST(number_of_moves_generated, e5_white_bishop) {
+    std::string test = "rnbqkbnr/pppppppp/8/4B3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_bishop_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 8);
+}
+
+TEST(correct_moves_generated, e5_white_bishop) {
+    std::string test = "rnbqkbnr/pppppppp/8/4B3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_bishop_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 8);
+
+    EXPECT_EQ(startpos.moves[0].movestring,   "e5c3");
+    EXPECT_EQ(startpos.moves[1].movestring,   "e5c7");
+    EXPECT_EQ(startpos.moves[2].movestring,   "e5d4");
+    EXPECT_EQ(startpos.moves[3].movestring,   "e5d6");
+    EXPECT_EQ(startpos.moves[4].movestring,   "e5f4");
+    EXPECT_EQ(startpos.moves[5].movestring,   "e5f6");
+    EXPECT_EQ(startpos.moves[6].movestring,   "e5g3");
+    EXPECT_EQ(startpos.moves[7].movestring,   "e5g7");
+}
+
 //
 // START BLACK BISHOP GENERATION TESTS ///////////////////////////////////////////
 //
@@ -421,6 +451,36 @@ TEST(number_of_moves_generated, startpos_black_bishop) {
     generate_b_bishop_moves(&startpos);
 
     EXPECT_EQ (startpos.moves.size(), 0);
+}
+
+TEST(number_of_moves_generated, e5_black_bishop) {
+    std::string test = "rnbqkbnr/pppppppp/8/4b3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_bishop_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 8);
+}
+
+TEST(correct_moves_generated, e5_black_bishop) {
+    std::string test = "rnbqkbnr/pppppppp/8/4b3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_bishop_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 8);
+
+    EXPECT_EQ(startpos.moves[0].movestring,   "e5b2");
+    EXPECT_EQ(startpos.moves[1].movestring,   "e5c3");
+    EXPECT_EQ(startpos.moves[2].movestring,   "e5d4");
+    EXPECT_EQ(startpos.moves[3].movestring,   "e5d6");
+    EXPECT_EQ(startpos.moves[4].movestring,   "e5f4");
+    EXPECT_EQ(startpos.moves[5].movestring,   "e5f6");
+    EXPECT_EQ(startpos.moves[6].movestring,   "e5g3");
+    EXPECT_EQ(startpos.moves[7].movestring,   "e5h2");
 }
 
 //
@@ -436,6 +496,39 @@ TEST(number_of_moves_generated, startpos_white_rook) {
     EXPECT_EQ (startpos.moves.size(), 0);
 }
 
+TEST(number_of_moves_generated, e5_white_rook) {
+    std::string test = "rnbqkbnr/pppppppp/8/4R3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_rook_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 11);
+}
+
+TEST(correct_moves_generated, e5_white_rook) {
+    std::string test = "rnbqkbnr/pppppppp/8/4R3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_rook_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 11);
+
+    EXPECT_EQ(startpos.moves[0].movestring,    "e5a5");
+    EXPECT_EQ(startpos.moves[1].movestring,    "e5b5");
+    EXPECT_EQ(startpos.moves[2].movestring,    "e5c5");
+    EXPECT_EQ(startpos.moves[3].movestring,    "e5d5");
+    EXPECT_EQ(startpos.moves[4].movestring,    "e5e3");
+    EXPECT_EQ(startpos.moves[5].movestring,    "e5e4");
+    EXPECT_EQ(startpos.moves[6].movestring,    "e5e6");
+    EXPECT_EQ(startpos.moves[7].movestring,    "e5e7");
+    EXPECT_EQ(startpos.moves[8].movestring,    "e5f5");
+    EXPECT_EQ(startpos.moves[9].movestring,    "e5g5");
+    EXPECT_EQ(startpos.moves[10].movestring,   "e5h5");
+}
+
 //
 // START BLACK ROOK GENERATION TESTS ///////////////////////////////////////////
 //
@@ -447,6 +540,39 @@ TEST(number_of_moves_generated, startpos_black_rook) {
     generate_b_rook_moves(&startpos);
 
     EXPECT_EQ (startpos.moves.size(), 0);
+}
+
+TEST(number_of_moves_generated, e5_black_rook) {
+    std::string test = "rnbqkbnr/pppppppp/8/4r3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_rook_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 11);
+}
+
+TEST(correct_moves_generated, e5_black_rook) {
+    std::string test = "rnbqkbnr/pppppppp/8/4r3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_rook_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 11);
+
+    EXPECT_EQ(startpos.moves[0].movestring,    "e5a5");
+    EXPECT_EQ(startpos.moves[1].movestring,    "e5b5");
+    EXPECT_EQ(startpos.moves[2].movestring,    "e5c5");
+    EXPECT_EQ(startpos.moves[3].movestring,    "e5d5");
+    EXPECT_EQ(startpos.moves[4].movestring,    "e5e2");
+    EXPECT_EQ(startpos.moves[5].movestring,    "e5e3");
+    EXPECT_EQ(startpos.moves[6].movestring,    "e5e4");
+    EXPECT_EQ(startpos.moves[7].movestring,    "e5e6");
+    EXPECT_EQ(startpos.moves[8].movestring,    "e5f5");
+    EXPECT_EQ(startpos.moves[9].movestring,    "e5g5");
+    EXPECT_EQ(startpos.moves[10].movestring,   "e5h5");
 }
 
 //
@@ -462,6 +588,47 @@ TEST(number_of_moves_generated, startpos_white_queen) {
     EXPECT_EQ (startpos.moves.size(), 0);
 }
 
+TEST(number_of_moves_generated, e5_white_queen) {
+    std::string test = "rnbqkbnr/pppppppp/8/4Q3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_queen_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 19);
+}
+
+TEST(correct_moves_generated, e5_white_queen) {
+    std::string test = "rnbqkbnr/pppppppp/8/4Q3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_w_queen_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 19);
+
+    EXPECT_EQ(startpos.moves[0].movestring,     "e5a5");
+    EXPECT_EQ(startpos.moves[1].movestring,     "e5b5");
+    EXPECT_EQ(startpos.moves[2].movestring,     "e5c3");
+    EXPECT_EQ(startpos.moves[3].movestring,     "e5c5");
+    EXPECT_EQ(startpos.moves[4].movestring,     "e5c7");
+    EXPECT_EQ(startpos.moves[5].movestring,     "e5d4");
+    EXPECT_EQ(startpos.moves[6].movestring,     "e5d5");
+    EXPECT_EQ(startpos.moves[7].movestring,     "e5d6");
+    EXPECT_EQ(startpos.moves[8].movestring,     "e5e3");
+    EXPECT_EQ(startpos.moves[9].movestring,     "e5e4");
+    EXPECT_EQ(startpos.moves[10].movestring,    "e5e6");
+    EXPECT_EQ(startpos.moves[11].movestring,    "e5e7");
+    EXPECT_EQ(startpos.moves[12].movestring,    "e5f4");
+    EXPECT_EQ(startpos.moves[13].movestring,    "e5f5");
+    EXPECT_EQ(startpos.moves[14].movestring,    "e5f6");
+    EXPECT_EQ(startpos.moves[15].movestring,    "e5g3");
+    EXPECT_EQ(startpos.moves[16].movestring,    "e5g5");
+    EXPECT_EQ(startpos.moves[17].movestring,    "e5g7");
+    EXPECT_EQ(startpos.moves[18].movestring,    "e5h5");
+}
+
 //
 // START BLACK QUEEN GENERATION TESTS ///////////////////////////////////////////
 //
@@ -473,6 +640,47 @@ TEST(number_of_moves_generated, startpos_black_queen) {
     generate_b_queen_moves(&startpos);
 
     EXPECT_EQ (startpos.moves.size(), 0);
+}
+
+TEST(number_of_moves_generated, e5_black_queen) {
+    std::string test = "rnbqkbnr/pppppppp/8/4q3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_queen_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 19);
+}
+
+TEST(correct_moves_generated, e5_black_queen) {
+    std::string test = "rnbqkbnr/pppppppp/8/4q3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_b_queen_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
+
+    ASSERT_EQ(startpos.moves.size(), 19);
+
+    EXPECT_EQ(startpos.moves[0].movestring,     "e5a5");
+    EXPECT_EQ(startpos.moves[1].movestring,     "e5b2");
+    EXPECT_EQ(startpos.moves[2].movestring,     "e5b5");
+    EXPECT_EQ(startpos.moves[3].movestring,     "e5c3");
+    EXPECT_EQ(startpos.moves[4].movestring,     "e5c5");
+    EXPECT_EQ(startpos.moves[5].movestring,     "e5d4");
+    EXPECT_EQ(startpos.moves[6].movestring,     "e5d5");
+    EXPECT_EQ(startpos.moves[7].movestring,     "e5d6");
+    EXPECT_EQ(startpos.moves[8].movestring,     "e5e2");
+    EXPECT_EQ(startpos.moves[9].movestring,     "e5e3");
+    EXPECT_EQ(startpos.moves[10].movestring,    "e5e4");
+    EXPECT_EQ(startpos.moves[11].movestring,    "e5e6");
+    EXPECT_EQ(startpos.moves[12].movestring,    "e5f4");
+    EXPECT_EQ(startpos.moves[13].movestring,    "e5f5");
+    EXPECT_EQ(startpos.moves[14].movestring,    "e5f6");
+    EXPECT_EQ(startpos.moves[15].movestring,    "e5g3");
+    EXPECT_EQ(startpos.moves[16].movestring,    "e5g5");
+    EXPECT_EQ(startpos.moves[17].movestring,    "e5h2");
+    EXPECT_EQ(startpos.moves[18].movestring,    "e5h5");
 }
 
 //
@@ -585,9 +793,6 @@ TEST(correct_moves_generated, troublepos) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
 
-    for (auto p : startpos.moves) {
-        cout << p.movestring << endl;
-    }
     ASSERT_EQ(startpos.moves.size(), 23);
 
     EXPECT_EQ(startpos.moves[0].movestring,    "a7a5");
@@ -623,9 +828,6 @@ TEST(correct_moves_generated, troublepos2) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
 
-    for (auto p : startpos.moves) {
-        cout << p.movestring << endl;
-    }
     ASSERT_EQ(startpos.moves.size(), 26);
 
     EXPECT_EQ(startpos.moves[0].movestring,    "a7a5");
@@ -655,21 +857,4 @@ TEST(correct_moves_generated, troublepos2) {
     EXPECT_EQ(startpos.moves[24].movestring,    "h7h5");
     EXPECT_EQ(startpos.moves[25].movestring,    "h7h6");
 }
-
-TEST(correct_moves_generated, troublepos3) {
-    std::string test = "r1bqkbnr/ppppp1pp/5p2/4P3/5PP1/3n4/PPPP3P/RNBQKBNR b KQkq - 0 5";
-    Position startpos(test);
-
-    generate_black_moves(&startpos);
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
-            [](Position const &a, Position const &b) { return a.movestring < b.movestring; });
-
-    //for (auto p : startpos.moves) {
-        //cout << p.movestring << endl;
-    //}
-    ASSERT_EQ(26, 26);
-
-}
-
-
 
