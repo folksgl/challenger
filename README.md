@@ -44,7 +44,7 @@ To install the challenger engine and run it against another chess engine, you wi
    ```
    git clone https://github.com/folksgl/challenger.git
    cd challenger/
-   make
+   make optimized
    ```
    For more make options, including building for developers please review the contributing page.
    
