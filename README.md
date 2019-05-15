@@ -22,13 +22,6 @@ Percentages will be determined by playing 10 games and recording winnings.
 
 ## Ongoing Work:
 - [ ] Implement all UCI compatibility
-- [ ] Implement move generation
-  - [x] Pawn move generation
-  - [x] Knight move generation
-  - [ ] Bishop move generation
-  - [ ] Rook move generation
-  - [ ] Queen move generation
-  - [x] King move generation
 - [ ] Improve position evaluation
 - [ ] Improve move generation
 
