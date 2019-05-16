@@ -42,6 +42,7 @@ set(CMAKE_CXX_FLAGS "-Wall -ggdb -Og -pg --coverage")
 
 set(SRC_DIR src)
 set(TEST_DIR "test")
+set(BENCH_DIR "benchmarks")
 
 # list contains all .cpp files in the source directory
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
@@ -57,9 +58,16 @@ set(TEST_FILE_LIST ${TEST_FILES})
 # remove duplicate main in src for the test executable
 list(REMOVE_ITEM TEST_FILE_LIST ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 
+file(GLOB_RECURSE BENCH_FILES ${BENCH_DIR}/*.cpp)
+file(GLOB_RECURSE BENCH_FILES2 ${SRC_DIR}/*.cpp)
+list(APPEND BENCH_FILES ${BENCH_FILES2})
+
+set(BENCH_FILE_LIST ${BENCH_FILES})
+
+list(REMOVE_ITEM BENCH_FILE_LIST ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 # Show all source files (in case a problem arises, makes debugging easier)
-#message("Source files:")
-#foreach(SOURCE_FILE ${SRC_FILE_LIST})
+#message("Bench files:")
+#foreach(SOURCE_FILE ${BENCH_FILE_LIST})
     #message("  ${SOURCE_FILE}")
 #endforeach()
 
@@ -95,3 +103,9 @@ add_custom_target(optimized
     COMMAND g++ -o optimized_challenger -O3 ${SRC_FILE_LIST}
     BYPRODUCTS optimized_challenger
     )
+
+add_custom_target(benchmark
+    COMMAND g++ -o benchmark_challenger -O3 ${BENCH_FILE_LIST}
+    BYPRODUCTS benchmark_challenger
+    )
+

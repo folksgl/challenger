@@ -30,6 +30,9 @@ coverage: compile test
 optimized: build_dir
 	@cd build/ && $(MAKE) optimized --no-print-directory -j8 --silent
 
+benchmark: build_dir
+	@cd build/ && $(MAKE) benchmark --no-print-directory -j8 --silent
+
 profile: compile
 	@if [ -f "./gmon.out" ]; then \
 			$(RM) "./gmon.out"; \
