@@ -1,4 +1,3 @@
-#include "position.h"
 #include "game_variables.h"
 #include "uci.h"
 
