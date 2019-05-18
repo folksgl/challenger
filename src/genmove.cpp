@@ -62,7 +62,7 @@ bitboard get_queen_attacks(bitboard board, int index) {
 
 void leap_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, const bitboard move_database[64]) {
     // Loop over the leaper on the board
-    int index = __builtin_ffsll(leaper) - 1;
+    int index = lsb(leaper);
     while (index != -1) {
         bitboard squarei = squares[index];
         bitboard attacks = move_database[index] & not_own_pieces;
@@ -70,7 +70,7 @@ void leap_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, con
         string src =  bit_to_square.at(squarei);
 
         // Loop over the current leaper pieces attacks and add positions
-        int inner_index = __builtin_ffsll(attacks) - 1;
+        int inner_index = lsb(attacks);
         while (inner_index != -1) {
             bitboard squarej = squares[inner_index];
             string dest = bit_to_square.at(squarej);
@@ -78,18 +78,18 @@ void leap_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, con
 
             // "Increment" loop index.
             attacks = attacks & (~squarej);
-            inner_index = __builtin_ffsll(attacks) - 1;
+            inner_index = lsb(attacks);
         }
         // "Increment" loop index.
         leaper = leaper & (~squarei);
-        index = __builtin_ffsll(leaper) - 1;
+        index = lsb(leaper);
     }
 }
 
 void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int)) {
     bitboard whole_board = pos->maps[w_pieces] | pos->maps[b_pieces];
 
-    int index = __builtin_ffsll(bishops) - 1;
+    int index = lsb(bishops);
     while (index != -1) {
         bitboard squarei = squares[index];
         string src =  bit_to_square.at(squarei);
@@ -97,17 +97,17 @@ void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, b
         attacks &= not_own_pieces;
 
         // Loop over the current bishop attacks and add positions
-        int inner_index = __builtin_ffsll(attacks) - 1;
+        int inner_index = lsb(attacks);
         while (inner_index != -1) {
             bitboard squarej = squares[inner_index];
             string dest = bit_to_square.at(squarej);
             add_move(pos, src, dest);
 
             attacks = attacks & (~squarej);
-            inner_index = __builtin_ffsll(attacks) - 1;
+            inner_index = lsb(attacks);
         }
         bishops = bishops & (~squarei);
-        index = __builtin_ffsll(bishops) - 1;
+        index = lsb(bishops);
     }
 
     return;
@@ -115,54 +115,49 @@ void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, b
 
 void generate_w_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[w_pawn];
-    // check if there are any pawns to generate moves for
-    if (pawns) {
-        bitboard passant_bit = 0;
-        if (pos->passant_target_sq != "-") {
-            passant_bit = squares[get_square_num(pos->passant_target_sq)];
+    bitboard passant_bit = 0;
+    if (pos->passant_target_sq != "-") {
+        passant_bit = squares[get_square_num(pos->passant_target_sq)];
+    }
+
+    bitboard black = pos->maps[b_pieces] | passant_bit;
+    bitboard unoccupied = (~pos->maps[w_pieces]) & (~pos->maps[b_pieces]);
+
+    // left/right/forward contain the start squares of pawns that can perform those moves.
+    bitboard left_attacks  = (((pawns & (~a_file)) << 7) & black) >> 7;
+    bitboard right_attacks = (((pawns & (~h_file)) << 9) & black) >> 9;
+    bitboard forward = ((pawns << 8) & unoccupied) >> 8;
+    bitboard double_forward = (((rank_2 & forward) << 16) & unoccupied) >> 16;
+
+    string src, dest;
+
+    // Loop over pawns and generate appropriate moves.
+    int index = lsb(pawns);
+    while (index != -1) {
+
+        bitboard squarei = squares[index];
+        src = bit_to_square.at(squarei);
+
+        if (squarei & left_attacks) {
+            dest = bit_to_square_pawn.at(squares[index+7]);
+            add_move(pos, src, dest);
         }
+        if (squarei & right_attacks) {
+            dest = bit_to_square_pawn.at(squares[index+9]);
+            add_move(pos, src, dest);
+        }
+        if (squarei & forward) {
+            dest = bit_to_square_pawn.at(squares[index+8]);
+            add_move(pos, src, dest);
 
-        bitboard black = pos->maps[b_pieces] | passant_bit;
-        bitboard unoccupied = (~pos->maps[w_pieces]) & (~pos->maps[b_pieces]);
-
-        // left/right/forward contain the start squares of pawns that can perform those moves.
-        bitboard left_attacks  = (((pawns & (~a_file)) << 7) & black) >> 7;
-        bitboard right_attacks = (((pawns & (~h_file)) << 9) & black) >> 9;
-        bitboard forward = ((pawns << 8) & unoccupied) >> 8;
-        bitboard double_forward = (((rank_2 & forward) << 16) & unoccupied) >> 16;
-
-        string src, dest;
-
-        // Loop over pawns and generate appropriate moves.
-        int index = __builtin_ffsll(pawns) - 1;
-        while (index != -1) {
-
-            bitboard squarei = squares[index];
-            src = bit_to_square.at(squarei);
-
-            if (squarei & left_attacks) {
-                dest = bit_to_square.at(squares[index+7]);
-                if (dest.at(1) == '8') { dest += 'q'; }
-                add_move(pos, src, dest);
-            }
-            if (squarei & right_attacks) {
-                dest = bit_to_square.at(squares[index+9]);
-                if (dest.at(1) == '8') { dest += 'q'; }
-                add_move(pos, src, dest);
-            }
-            if (squarei & forward) {
-                dest = bit_to_square.at(squares[index+8]);
-                if (dest.at(1) == '8') { dest += 'q'; }
-                add_move(pos, src, dest);
-            }
             if (squarei & double_forward) {
                 dest = bit_to_square.at(squares[index+16]);
                 add_move(pos, src, dest);
             }
-
-            pawns = pawns & (~squarei);
-            index = __builtin_ffsll(pawns) - 1;
         }
+
+        pawns = pawns & (~squarei);
+        index = lsb(pawns);
     }
     return;
 }
@@ -177,16 +172,16 @@ void generate_w_knight_moves(Position* pos) {
 }
 
 void PrintBitBoard(const bitboard bb) {
-  for (int row = 7; row >= 0; --row) {
-    for (int col = 0; col <= 7; ++col) {
-      if (bb & (1ULL << ((row * 8) + col))) {
-        std::cout << "1 ";
-      } else {
-        std::cout << "0 ";
-      }
+    for (int row = 7; row >= 0; --row) {
+        for (int col = 0; col <= 7; ++col) {
+            if (bb & (1ULL << ((row * 8) + col))) {
+                std::cout << "1 ";
+            } else {
+                std::cout << "0 ";
+            }
+        }
+        std::cout << std::endl;
     }
-    std::cout << std::endl;
-  }
 }
 
 
@@ -230,54 +225,49 @@ void generate_w_king_moves(Position* pos) {
 
 void generate_b_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[b_pawn];
-    // check if there are any pawns to generate moves for
-    if (pawns) {
-        bitboard passant_bit = 0;
-        if (pos->passant_target_sq != "-") {
-            passant_bit = squares[get_square_num(pos->passant_target_sq)];
+    bitboard passant_bit = 0;
+    if (pos->passant_target_sq != "-") {
+        passant_bit = squares[get_square_num(pos->passant_target_sq)];
+    }
+
+    bitboard white = pos->maps[w_pieces] | passant_bit;
+    bitboard unoccupied = (~pos->maps[w_pieces]) & (~pos->maps[b_pieces]);
+
+    // left/right/forward contain the start squares of pawns that can perform those moves.
+    bitboard left_attacks  = (((pawns & (~h_file)) >> 7) & white) << 7;
+    bitboard right_attacks = (((pawns & (~a_file)) >> 9) & white) << 9;
+    bitboard forward = ((pawns >> 8) & unoccupied) << 8;
+    bitboard double_forward = (((rank_7 & forward) >> 16) & unoccupied) << 16;
+
+    string src, dest;
+
+    // Loop over pawns and generate appropriate moves.
+    int index = lsb(pawns);
+    while (index != -1) {
+
+        bitboard squarei = squares[index];
+        src = bit_to_square.at(squarei);
+
+        if (squarei & left_attacks) {
+            dest = bit_to_square_pawn.at(squares[index-7]);
+            add_move(pos, src, dest);
         }
+        if (squarei & right_attacks) {
+            dest = bit_to_square_pawn.at(squares[index-9]);
+            add_move(pos, src, dest);
+        }
+        if (squarei & forward) {
+            dest = bit_to_square_pawn.at(squares[index-8]);
+            add_move(pos, src, dest);
 
-        bitboard white = pos->maps[w_pieces] | passant_bit;
-        bitboard unoccupied = (~pos->maps[w_pieces]) & (~pos->maps[b_pieces]);
-
-        // left/right/forward contain the start squares of pawns that can perform those moves.
-        bitboard left_attacks  = (((pawns & (~h_file)) >> 7) & white) << 7;
-        bitboard right_attacks = (((pawns & (~a_file)) >> 9) & white) << 9;
-        bitboard forward = ((pawns >> 8) & unoccupied) << 8;
-        bitboard double_forward = (((rank_7 & forward) >> 16) & unoccupied) << 16;
-
-        string src, dest;
-
-        // Loop over pawns and generate appropriate moves.
-        int index = __builtin_ffsll(pawns) - 1;
-        while (index != -1) {
-
-            bitboard squarei = squares[index];
-            src = bit_to_square.at(squarei);
-
-            if (squarei & left_attacks) {
-                dest = bit_to_square.at(squares[index-7]);
-                if (dest.at(1) == '8') { dest += 'q'; }
-                add_move(pos, src, dest);
-            }
-            if (squarei & right_attacks) {
-                dest = bit_to_square.at(squares[index-9]);
-                if (dest.at(1) == '1') { dest += 'q'; }
-                add_move(pos, src, dest);
-            }
-            if (squarei & forward) {
-                dest = bit_to_square.at(squares[index-8]);
-                if (dest.at(1) == '1') { dest += 'q'; }
-                add_move(pos, src, dest);
-            }
             if (squarei & double_forward) {
                 dest = bit_to_square.at(squares[index-16]);
                 add_move(pos, src, dest);
             }
-
-            pawns = pawns & (~squarei);
-            index = __builtin_ffsll(pawns) - 1;
         }
+
+        pawns = pawns & (~squarei);
+        index = lsb(pawns);
     }
     return;
 }
