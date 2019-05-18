@@ -105,7 +105,7 @@ add_custom_target(optimized
     )
 
 add_custom_target(benchmark
-    COMMAND g++ -o benchmark_challenger -O3 ${BENCH_FILE_LIST}
+    COMMAND g++ -o benchmark_challenger -O3 -DBENCHMARK ${BENCH_FILE_LIST}
     BYPRODUCTS benchmark_challenger
     )
 
