@@ -32,7 +32,7 @@ optimized: build_dir
 
 benchmark: build_dir
 	@cd build/ && $(MAKE) benchmark --no-print-directory -j8 --silent
-	./build/benchmark_challenger
+	./build/benchmark_challenger >> benchmarking_reference
 
 profile: compile
 	@if [ -f "./gmon.out" ]; then \
