@@ -24,7 +24,6 @@ Position::Position(string fen) {
     set_fullmove_number(fullmove_num);
 
     evaluation_score = evaluate_position(this);
-    movestring = "";
 
     delete[] fenstring;
 }
@@ -85,8 +84,6 @@ void Position::set_defaults() {
     fullmove_number = 0;
 
     evaluation_score = 0;
-
-    string movestring = "";
 }
 
 Position::Position(const Position& other) {
@@ -105,8 +102,6 @@ Position::Position(const Position& other) {
     fullmove_number = other.fullmove_number;
 
     evaluation_score = other.evaluation_score;
-
-    movestring = other.movestring;
 }
 
 /*

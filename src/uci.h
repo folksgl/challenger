@@ -1,4 +1,5 @@
 #include <iostream>
+#include "position.h"
 
 #ifndef UCI_H
 #define UCI_H
@@ -16,6 +17,8 @@ void process_setoption_command(std::string uci_token);
 void process_position_command(std::string uci_token);
 
 void process_go_command(std::string uci_token);
+
+string find_move_taken(Position* initial, Position* next);
 
 void process_stop_command();
 

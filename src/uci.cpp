@@ -6,8 +6,8 @@
 #include <regex>
 #include "uci.h"
 #include "game_variables.h"
-#include "position.h"
 #include "search.h"
+#include "common.h"
 
 using namespace std;
 
@@ -185,10 +185,75 @@ void process_go_command(std::string uci_input) {
         cout << "Fatal error, no moves found." << endl;
     }
     else {
-        cout << "bestmove " << G_game_position->moves[0].movestring << endl;
+        string movestring = find_move_taken(G_game_position, &G_game_position->moves[0]);
+        cout << "bestmove " << movestring << endl;
     }
 
     return;
+}
+
+string find_move_taken(Position* initial, Position* next) {
+    string src  = "";
+    string dest = "";
+
+    bitboard initial_king = (initial->active_color == 'w') ? initial->maps[w_king] : initial->maps[b_king];
+    bitboard next_king = (next->active_color == 'w') ? next->maps[b_king] : next->maps[w_king];
+    bitboard initial_rook = (initial->active_color == 'w') ? initial->maps[w_rook] : initial->maps[b_rook];
+    bitboard next_rook = (next->active_color == 'w') ? next->maps[b_rook] : next->maps[w_rook];
+
+    // Castling occured, adjust movestring
+    if ((initial_king != next_king) && (initial_rook != next_rook)) {
+        if (initial->active_color == 'w') {
+            src  = "e1";
+            if ((initial_rook & squares[0]) && !(next_rook & squares[0])) {
+                dest = "g1";
+            }
+            else {
+                dest = "c1";
+            }
+        }
+        else {
+            dest = "e8";
+            if ((initial_rook & squares[63]) && !(next_rook & squares[63])) {
+                dest = "g8";
+            }
+            else {
+                dest = "c8";
+            }
+        }
+        return src + dest;
+    }
+
+    bitboard initial_pieces = (initial->active_color == 'w') ? initial->maps[w_pieces] : initial->maps[b_pieces];
+    bitboard next_pieces = (next->active_color == 'w') ? next->maps[b_pieces] : next->maps[w_pieces];
+
+    // Normal moves will be set here. (i.e. not castling/promotion)
+    for (int i = 0; i < 64; i++) {
+        // check set bits
+        if (initial_pieces & squares[i]) {
+            if (!(next_pieces & squares[i])) {
+                src = bit_to_square.at(squares[i]);
+            }
+        }
+        // check unset bits
+        else {
+            if (next_pieces & squares[i]) {
+                dest = bit_to_square.at(squares[i]);
+            }
+        }
+    }
+
+    bitboard initial_pawn_7 = (initial->active_color == 'w') ? initial->maps[w_pawn] : initial->maps[b_pawn];
+    initial_pawn_7 &= rank_7;
+    bitboard next_pawn_7 = (next->active_color == 'w') ? next->maps[b_pawn] : next->maps[w_pawn];
+    next_pawn_7 &= rank_7;
+
+    // Pawn promotion happened, adjust movestring
+    if (initial_pawn_7 != next_pawn_7) {
+        dest += "q";
+    }
+
+    return src + dest;
 }
 
 /*

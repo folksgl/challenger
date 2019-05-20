@@ -34,8 +34,6 @@ class Position {
 
         int evaluation_score;
 
-        string movestring;
-
         std::vector<Position> moves;
 
         // Constructors

@@ -43,7 +43,6 @@ void generate_black_moves(Position* pos) {
 void add_move(Position* pos, string src, string dest) {
     pos->moves.push_back(*pos);
     Position* p = &pos->moves.back();
-    p->movestring = src + dest;
     p->move(src + dest);
     p->evaluate();
 }
