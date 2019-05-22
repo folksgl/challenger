@@ -33,10 +33,7 @@ bool Position::operator == (const Position& other) const {
 
     if (active_color != other.active_color) { return false; }
 
-    if (w_kingside_castle  != other.w_kingside_castle)  { return false; }
-    if (b_kingside_castle  != other.b_kingside_castle)  { return false; }
-    if (w_queenside_castle != other.w_queenside_castle) { return false; }
-    if (w_queenside_castle != other.w_queenside_castle) { return false; }
+    if (castling_rights_index != other.castling_rights_index) { return false; }
 
     if (passant_target_sq  != other.passant_target_sq)  { return false; }
 
@@ -52,6 +49,22 @@ bool Position::is_white_move(void) const {
 
 bool Position::is_black_move(void) const {
     return active_color == 'b';
+}
+
+bool Position::w_kingside_castle(void) const {
+    return castling_rights[castling_rights_index][c_w_king];
+}
+
+bool Position::w_queenside_castle(void) const {
+    return castling_rights[castling_rights_index][c_w_queen];
+}
+
+bool Position::b_kingside_castle(void) const {
+    return castling_rights[castling_rights_index][c_b_king];
+}
+
+bool Position::b_queenside_castle(void) const {
+    return castling_rights[castling_rights_index][c_b_queen];
 }
 
 void Position::generate_moves() {
@@ -73,10 +86,7 @@ void Position::set_defaults() {
 
     active_color = 'w';
 
-    w_kingside_castle = false;
-    w_queenside_castle = false;
-    b_kingside_castle = false;
-    b_queenside_castle = false;
+    castling_rights_index = castle_string_to_index.at("-");
 
     passant_target_sq = "-";
 
@@ -91,10 +101,7 @@ Position::Position(const Position& other) {
 
     active_color = other.active_color;
 
-    w_kingside_castle  = other.w_kingside_castle;
-    w_queenside_castle = other.w_queenside_castle;
-    b_kingside_castle  = other.b_kingside_castle;
-    b_queenside_castle = other.b_queenside_castle;
+    castling_rights_index = other.castling_rights_index;
 
     passant_target_sq = other.passant_target_sq;
 
@@ -172,20 +179,7 @@ void Position::set_castling_rights(char* fen_tok) {
         return;
     }
 
-    for (unsigned int i = 0; i < strlen(fen_tok); i++) {
-        if (fen_tok[i] == 'K') {
-            w_kingside_castle = true;
-        }
-        else if (fen_tok[i] == 'Q') {
-            w_queenside_castle = true;
-        }
-        else if (fen_tok[i] == 'k') {
-            b_kingside_castle = true;
-        }
-        else if (fen_tok[i] == 'q') {
-            b_queenside_castle = true;
-        }
-    }
+    castling_rights_index = castle_string_to_index.at(string(fen_tok));
 
     return;
 }
@@ -402,10 +396,10 @@ string Position::to_fen_string() {
 
     string castling = "";
 
-    if (w_kingside_castle)  { castling += "K"; }
-    if (w_queenside_castle) { castling += "Q"; }
-    if (b_kingside_castle)  { castling += "k"; }
-    if (b_queenside_castle) { castling += "q"; }
+    if (castling_rights[castling_rights_index][c_w_king])   { castling += "K"; }
+    if (castling_rights[castling_rights_index][c_w_queen])  { castling += "Q"; }
+    if (castling_rights[castling_rights_index][c_b_king])   { castling += "k"; }
+    if (castling_rights[castling_rights_index][c_b_queen])  { castling += "q"; }
 
     if (castling.empty()) {
         castling += "-";
