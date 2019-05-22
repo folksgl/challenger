@@ -6,7 +6,7 @@
  */
 void generate_moves(Position* pos) {
 
-    if (pos->active_color == 'w') {
+    if (pos->is_white_move()) {
         generate_white_moves(pos);
     }
     else {
