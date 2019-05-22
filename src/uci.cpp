@@ -193,17 +193,19 @@ void process_go_command(std::string uci_input) {
 }
 
 string find_move_taken(Position* initial, Position* next) {
-    string src  = "";
-    string dest = "";
+    string src  = "notset";
+    string dest = "notset";
 
-    bitboard initial_king = (initial->active_color == 'w') ? initial->maps[w_king] : initial->maps[b_king];
-    bitboard next_king = (next->active_color == 'w') ? next->maps[b_king] : next->maps[w_king];
-    bitboard initial_rook = (initial->active_color == 'w') ? initial->maps[w_rook] : initial->maps[b_rook];
-    bitboard next_rook = (next->active_color == 'w') ? next->maps[b_rook] : next->maps[w_rook];
+    bool white_turn = initial->is_white_move();
+
+    bitboard initial_king = (white_turn) ? initial->maps[w_king] : initial->maps[b_king];
+    bitboard initial_rook = (white_turn) ? initial->maps[w_rook] : initial->maps[b_rook];
+    bitboard next_king = (white_turn) ? next->maps[w_king] : next->maps[b_king];
+    bitboard next_rook = (white_turn) ? next->maps[w_rook] : next->maps[b_rook];
 
     // Castling occured, adjust movestring
     if ((initial_king != next_king) && (initial_rook != next_rook)) {
-        if (initial->active_color == 'w') {
+        if (white_turn) {
             src  = "e1";
             if ((initial_rook & squares[0]) && !(next_rook & squares[0])) {
                 dest = "g1";
@@ -224,8 +226,8 @@ string find_move_taken(Position* initial, Position* next) {
         return src + dest;
     }
 
-    bitboard initial_pieces = (initial->active_color == 'w') ? initial->maps[w_pieces] : initial->maps[b_pieces];
-    bitboard next_pieces = (next->active_color == 'w') ? next->maps[b_pieces] : next->maps[w_pieces];
+    bitboard initial_pieces = (white_turn) ? initial->maps[w_pieces] : initial->maps[b_pieces];
+    bitboard next_pieces = (white_turn) ? next->maps[w_pieces] : next->maps[b_pieces];
 
     // Normal moves will be set here. (i.e. not castling/promotion)
     for (int i = 0; i < 64; i++) {
@@ -243,13 +245,20 @@ string find_move_taken(Position* initial, Position* next) {
         }
     }
 
-    bitboard initial_pawn_7 = (initial->active_color == 'w') ? initial->maps[w_pawn] : initial->maps[b_pawn];
-    initial_pawn_7 &= rank_7;
-    bitboard next_pawn_7 = (next->active_color == 'w') ? next->maps[b_pawn] : next->maps[w_pawn];
-    next_pawn_7 &= rank_7;
+    bitboard initial_pawn = (white_turn) ? initial->maps[w_pawn] : initial->maps[b_pawn];
+    bitboard next_pawn = (white_turn) ? next->maps[w_pawn] : next->maps[b_pawn];
+
+    if (white_turn) {
+        initial_pawn &= rank_7;
+        next_pawn &= rank_7;
+    }
+    else {
+        initial_pawn &= rank_2;
+        next_pawn &= rank_2;
+    } 
 
     // Pawn promotion happened, adjust movestring
-    if (initial_pawn_7 != next_pawn_7) {
+    if (initial_pawn != next_pawn) {
         dest += "q";
     }
 
