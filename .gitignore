@@ -9,8 +9,9 @@ mytest
 run.sh
 positions.txt
 
-# Profiling files
+# Profiling/benchmark files
 gmon.out
+benchmarking_reference
 
 # Swap files
 *.swp
