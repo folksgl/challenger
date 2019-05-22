@@ -1,4 +1,5 @@
 #include "evaluate.h"
+#include "genmove.h"
 #include "common.h"
 
 using namespace std;
@@ -16,10 +17,15 @@ using namespace std;
  */
 int evaluate_position(Position* pos) {
 
-    int white_material = get_white_material_value(pos);
-    int black_material = get_black_material_value(pos);
+    int white_eval = get_white_material_value(pos);
+    white_eval += white_defending_pawns_bonus(pos);
 
-    return white_material + black_material;
+    int black_eval = get_black_material_value(pos);
+    black_eval += black_defending_pawns_bonus(pos);
+
+    int evaluation = white_eval + black_eval;
+
+    return evaluation;
 }
 
 /*
@@ -62,3 +68,34 @@ int get_black_material_value(Position* pos) {
     return material_val;
 }
 
+int white_defending_pawns_bonus(Position* pos) {
+    int bonus = 0;
+
+    int defending_bonus = 50;
+
+    bitboard pawns = pos->maps[w_pawn];
+    bitboard white = pos->maps[w_pieces];
+
+    bitboard left_defenders  = (((pawns & (~a_file)) << 7) & white) >> 7;
+    bitboard right_defenders = (((pawns & (~h_file)) << 9) & white) >> 9;
+
+    bonus = defending_bonus * (__builtin_popcountll(left_defenders) + __builtin_popcountll(right_defenders));
+
+    return bonus;
+}
+
+int black_defending_pawns_bonus(Position* pos) {
+    int bonus = 0;
+
+    int defending_bonus = -50;
+
+    bitboard pawns = pos->maps[b_pawn];
+    bitboard black = pos->maps[b_pieces];
+
+    bitboard left_defenders  = (((pawns & (~h_file)) >> 7) & black) << 7;
+    bitboard right_defenders = (((pawns & (~a_file)) >> 9) & black) << 9;
+
+    bonus = defending_bonus * (__builtin_popcountll(left_defenders) + __builtin_popcountll(right_defenders));
+
+    return bonus;
+}
