@@ -6,6 +6,10 @@
 
 using namespace std;
 
+#ifdef BENCHMARK
+extern unsigned long long positions_searched;
+#endif
+
 bool desc_sort (Position const &a, Position const &b) {
     return b.evaluation_score < a.evaluation_score;
 }
@@ -21,7 +25,7 @@ void search(Position* pos, int depth) {
 
     int alpha = std::numeric_limits<int>::min();
     int beta  = std::numeric_limits<int>::max();
-    if (pos->active_color == 'w') {
+    if (pos->is_white_move()) {
         alphaBetaMax(pos, alpha, beta, depth);
         std::sort(pos->moves.begin(), pos->moves.end(), desc_sort);
         
@@ -36,10 +40,17 @@ void search(Position* pos, int depth) {
 
 int alphaBetaMax(Position* pos, int alpha, int beta, int depth) {
     if (depth == 0) {
+        #ifdef BENCHMARK
+        positions_searched++;
+        #endif
         return pos->evaluation_score;
     }
 
     pos->generate_moves();
+
+    #ifdef BENCHMARK
+    positions_searched++;
+    #endif
 
     // Sort in descending order of evaluation scores
     std::sort(pos->moves.begin(), pos->moves.end(), desc_sort);
@@ -58,10 +69,17 @@ int alphaBetaMax(Position* pos, int alpha, int beta, int depth) {
 
 int alphaBetaMin(Position* pos, int alpha, int beta, int depth) {
     if (depth == 0) {
+        #ifdef BENCHMARK
+        positions_searched++;
+        #endif
         return pos->evaluation_score;
     }
 
     pos->generate_moves();
+
+    #ifdef BENCHMARK
+    positions_searched++;
+    #endif
 
     // Sort in ascending order of evaluation scores
     std::sort(pos->moves.begin(), pos->moves.end(), asc_sort);
