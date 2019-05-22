@@ -276,97 +276,97 @@ namespace {
 TEST(castling_rights, all_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.w_kingside_castle);
-    EXPECT_TRUE (actualpos.w_queenside_castle);
-    EXPECT_TRUE (actualpos.b_kingside_castle);
-    EXPECT_TRUE (actualpos.b_queenside_castle);
+    EXPECT_TRUE (actualpos.w_kingside_castle());
+    EXPECT_TRUE (actualpos.w_queenside_castle());
+    EXPECT_TRUE (actualpos.b_kingside_castle());
+    EXPECT_TRUE (actualpos.b_queenside_castle());
 }
 
 TEST(castling_rights, white_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.w_kingside_castle);
-    EXPECT_TRUE (actualpos.w_queenside_castle);
-    EXPECT_FALSE (actualpos.b_kingside_castle);
-    EXPECT_FALSE (actualpos.b_queenside_castle);
+    EXPECT_TRUE (actualpos.w_kingside_castle());
+    EXPECT_TRUE (actualpos.w_queenside_castle());
+    EXPECT_FALSE (actualpos.b_kingside_castle());
+    EXPECT_FALSE (actualpos.b_queenside_castle());
 }
 
 TEST(castling_rights, black_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w kq - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.b_kingside_castle);
-    EXPECT_TRUE (actualpos.b_queenside_castle);
-    EXPECT_FALSE (actualpos.w_kingside_castle);
-    EXPECT_FALSE (actualpos.w_queenside_castle);
+    EXPECT_TRUE (actualpos.b_kingside_castle());
+    EXPECT_TRUE (actualpos.b_queenside_castle());
+    EXPECT_FALSE (actualpos.w_kingside_castle());
+    EXPECT_FALSE (actualpos.w_queenside_castle());
 }
 
 TEST(castling_rights, white_kingside_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w K - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.w_kingside_castle);
-    EXPECT_FALSE (actualpos.w_queenside_castle);
-    EXPECT_FALSE (actualpos.b_kingside_castle);
-    EXPECT_FALSE (actualpos.b_queenside_castle);
+    EXPECT_TRUE (actualpos.w_kingside_castle());
+    EXPECT_FALSE (actualpos.w_queenside_castle());
+    EXPECT_FALSE (actualpos.b_kingside_castle());
+    EXPECT_FALSE (actualpos.b_queenside_castle());
 }
 
 TEST(castling_rights, black_kingside_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w k - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.b_kingside_castle);
-    EXPECT_FALSE (actualpos.b_queenside_castle);
-    EXPECT_FALSE (actualpos.w_kingside_castle);
-    EXPECT_FALSE (actualpos.w_queenside_castle);
+    EXPECT_TRUE (actualpos.b_kingside_castle());
+    EXPECT_FALSE (actualpos.b_queenside_castle());
+    EXPECT_FALSE (actualpos.w_kingside_castle());
+    EXPECT_FALSE (actualpos.w_queenside_castle());
 }
 
 TEST(castling_rights, white_queenside_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Q - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.w_queenside_castle);
-    EXPECT_FALSE (actualpos.w_kingside_castle);
-    EXPECT_FALSE (actualpos.b_queenside_castle);
-    EXPECT_FALSE (actualpos.b_kingside_castle);
+    EXPECT_TRUE (actualpos.w_queenside_castle());
+    EXPECT_FALSE (actualpos.w_kingside_castle());
+    EXPECT_FALSE (actualpos.b_queenside_castle());
+    EXPECT_FALSE (actualpos.b_kingside_castle());
 }
 
 TEST(castling_rights, black_queenside_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w q - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.b_queenside_castle);
-    EXPECT_FALSE (actualpos.b_kingside_castle);
-    EXPECT_FALSE (actualpos.w_kingside_castle);
-    EXPECT_FALSE (actualpos.w_queenside_castle);
+    EXPECT_TRUE (actualpos.b_queenside_castle());
+    EXPECT_FALSE (actualpos.b_kingside_castle());
+    EXPECT_FALSE (actualpos.w_kingside_castle());
+    EXPECT_FALSE (actualpos.w_queenside_castle());
 }
 
 TEST(castling_rights, no_castling_allowed_all) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_queenside_castle);
-    EXPECT_FALSE (actualpos.b_kingside_castle);
-    EXPECT_FALSE (actualpos.w_kingside_castle);
-    EXPECT_FALSE (actualpos.w_queenside_castle);
+    EXPECT_FALSE (actualpos.b_queenside_castle());
+    EXPECT_FALSE (actualpos.b_kingside_castle());
+    EXPECT_FALSE (actualpos.w_kingside_castle());
+    EXPECT_FALSE (actualpos.w_queenside_castle());
 }
 
 TEST(castling_rights, no_castling_allowed_q) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_queenside_castle);
+    EXPECT_FALSE (actualpos.b_queenside_castle());
 }
 
 TEST(castling_rights, no_castling_allowed_k) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_kingside_castle);
+    EXPECT_FALSE (actualpos.b_kingside_castle());
 }
 
 TEST(castling_rights, no_castling_allowed_Q) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.w_queenside_castle);
+    EXPECT_FALSE (actualpos.w_queenside_castle());
 }
 
 TEST(castling_rights, no_castling_allowed_K) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.w_kingside_castle);
+    EXPECT_FALSE (actualpos.w_kingside_castle());
 }
 
 
@@ -376,25 +376,25 @@ TEST(castling_rights, no_castling_allowed_K) {
 TEST(castling_rights, bk_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_kingside_castle);
+    EXPECT_FALSE (actualpos.b_kingside_castle());
 }
 
 TEST(castling_rights, wk_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.w_queenside_castle);
+    EXPECT_FALSE (actualpos.w_queenside_castle());
 }
 
 TEST(castling_rights, wq_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.w_queenside_castle);
+    EXPECT_FALSE (actualpos.w_queenside_castle());
 }
 
 TEST(castling_rights, bq_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_queenside_castle);
+    EXPECT_FALSE (actualpos.b_queenside_castle());
 }
 
 //
@@ -865,16 +865,6 @@ TEST(copy_constructor, deep_color) {
     copypos.active_color = 'G';
     EXPECT_EQ (actualpos.active_color, 'w');
     EXPECT_EQ (copypos.active_color,   'G');
-}
-
-TEST(copy_constructor, deep_castle) {
-    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    Position actualpos(test);
-    Position copypos = actualpos;
-
-    copypos.w_kingside_castle = false;
-    EXPECT_EQ (actualpos.w_kingside_castle, true);
-    EXPECT_EQ (copypos.w_kingside_castle,   false);
 }
 
 TEST(copy_constructor, deep_passant) {
