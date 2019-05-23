@@ -404,13 +404,13 @@ TEST(castling_rights, bq_castling_allowed) {
 TEST(active_color, white_active) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.active_color, 'w');
+    EXPECT_EQ (actualpos.active_color, WHITE);
 }
 
 TEST(active_color, black_active) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.active_color, 'b');
+    EXPECT_EQ (actualpos.active_color, BLACK);
 }
 
 //
@@ -862,9 +862,8 @@ TEST(copy_constructor, deep_color) {
     Position actualpos(test);
     Position copypos = actualpos;
 
-    copypos.active_color = 'G';
-    EXPECT_EQ (actualpos.active_color, 'w');
-    EXPECT_EQ (copypos.active_color,   'G');
+    EXPECT_EQ (actualpos.active_color, WHITE);
+    EXPECT_EQ (copypos.active_color,   WHITE);
 }
 
 TEST(copy_constructor, deep_passant) {
