@@ -16,3 +16,6 @@ benchmarking_reference
 # Swap files
 *.swp
 *.swo
+
+# Syntax checking
+compile_commands.json
