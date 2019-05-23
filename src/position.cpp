@@ -44,11 +44,11 @@ bool Position::operator == (const Position& other) const {
 }
 
 bool Position::is_white_move(void) const {
-    return active_color == 'w';
+    return active_color == WHITE;
 }
 
 bool Position::is_black_move(void) const {
-    return active_color == 'b';
+    return active_color == BLACK;
 }
 
 bool Position::w_kingside_castle(void) const {
@@ -84,7 +84,7 @@ void Position::set_defaults() {
         maps[i] = board_zero;
     }
 
-    active_color = 'w';
+    active_color = WHITE;
 
     castling_rights_index = castle_string_to_index.at("-");
 
@@ -195,7 +195,7 @@ void Position::set_active_color(char* fen_tok) {
         // Malformed active color string. Just assume that it is white's turn.
         return;
     }
-    active_color = fen_tok[0];
+    active_color = (fen_tok[0] == 'w') ? WHITE : BLACK;
 
     return;
 }
@@ -308,13 +308,10 @@ void Position::move(string move) {
         maps[b_pieces] |= (bitboard)1 << dest_square;
     }
 
-    if (active_color == 'b') {
+    if (active_color == BLACK) {
         fullmove_number++;
-        active_color = 'w';
     }
-    else {
-        active_color = 'b';
-    }
+    active_color = ~active_color;
 
     return;
 }
@@ -391,7 +388,7 @@ string Position::to_fen_string() {
     }
 
     fenstring += ' ';
-    fenstring += active_color;
+    fenstring += (active_color == WHITE) ? 'w' : 'b';
     fenstring += ' ';
 
     string castling = "";

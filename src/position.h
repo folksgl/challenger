@@ -55,13 +55,19 @@ const std::array<std::array<bool, 4>, 16> castling_rights {{
 enum Piece_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces, 
                    b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king, b_pieces };
 
+enum Color { WHITE, BLACK };
+
+constexpr Color operator~(Color c) {
+      return Color(c ^ BLACK); // Toggle color
+}
+
 class Position {
 
     public:
         // Class Attributes
         array<bitboard, 14> maps;
 
-        char active_color;
+        Color active_color;
 
         char castling_rights_index;
 
