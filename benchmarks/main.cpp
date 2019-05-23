@@ -16,6 +16,8 @@ int main()
     positions_generated = 0;
     slider_attacks.Initialize();
 
+    cout << endl << endl << endl;
+
     move_generation_perft(1);
     move_generation_perft(2);
     move_generation_perft(3);
