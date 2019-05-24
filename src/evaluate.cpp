@@ -11,11 +11,15 @@ using namespace std;
 #define QUEEN  1000
 #define KING   10000
 
+#define P_DEFEND 25
+
 /*
  *  evaluate_position takes in a single position and returns a single number representing its evaluation
  *  score -- positive means white has advantage, negative means black has advantage.
  */
-int evaluate_position(Position* pos) {
+bitboard evaluate_position(Position* pos) {
+
+    bitboard zero = std::numeric_limits<bitboard>::max() / 2;
 
     int white_eval = get_white_material_value(pos);
     white_eval += white_defending_pawns_bonus(pos);
@@ -23,7 +27,7 @@ int evaluate_position(Position* pos) {
     int black_eval = get_black_material_value(pos);
     black_eval += black_defending_pawns_bonus(pos);
 
-    int evaluation = white_eval + black_eval;
+    bitboard evaluation = (zero + white_eval) - abs(black_eval);
 
     return evaluation;
 }
@@ -71,7 +75,7 @@ int get_black_material_value(Position* pos) {
 int white_defending_pawns_bonus(Position* pos) {
     int bonus = 0;
 
-    int defending_bonus = 50;
+    int defending_bonus = P_DEFEND;
 
     bitboard pawns = pos->maps[w_pawn];
     bitboard white = pos->maps[w_pieces];
@@ -87,7 +91,7 @@ int white_defending_pawns_bonus(Position* pos) {
 int black_defending_pawns_bonus(Position* pos) {
     int bonus = 0;
 
-    int defending_bonus = -50;
+    int defending_bonus = -P_DEFEND;
 
     bitboard pawns = pos->maps[b_pawn];
     bitboard black = pos->maps[b_pieces];
