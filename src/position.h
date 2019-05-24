@@ -52,7 +52,7 @@ const std::array<std::array<bool, 4>, 16> castling_rights {{
       { false, false, false, false}  // 15 = -    
 }};
 
-enum Piece_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces, 
+enum map_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces, 
                    b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king, b_pieces };
 
 enum Color { WHITE, BLACK };
