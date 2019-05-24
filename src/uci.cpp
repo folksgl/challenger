@@ -155,7 +155,7 @@ void process_go_command(std::string uci_input) {
     char *token = strtok(command, " "); 
     token = strtok(NULL, " "); 
 
-    int depth = 1; // Default to searching to a depth of 25 plys ahead
+    int depth = 1; // Default to searching to a depth of depth plys ahead
 
     while (token != NULL) {
         string tok(token);
