@@ -114,10 +114,7 @@ void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, b
 
 void generate_w_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[w_pawn];
-    bitboard passant_bit = 0;
-    if (pos->passant_target_sq != "-") {
-        passant_bit = squares[get_square_num(pos->passant_target_sq)];
-    }
+    bitboard passant_bit = pos->maps[passant_sq];
 
     bitboard black = pos->maps[b_pieces] | passant_bit;
     bitboard unoccupied = (~pos->maps[w_pieces]) & (~pos->maps[b_pieces]);
@@ -224,10 +221,7 @@ void generate_w_king_moves(Position* pos) {
 
 void generate_b_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[b_pawn];
-    bitboard passant_bit = 0;
-    if (pos->passant_target_sq != "-") {
-        passant_bit = squares[get_square_num(pos->passant_target_sq)];
-    }
+    bitboard passant_bit = pos->maps[passant_sq];
 
     bitboard white = pos->maps[w_pieces] | passant_bit;
     bitboard unoccupied = (~pos->maps[w_pieces]) & (~pos->maps[b_pieces]);

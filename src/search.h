@@ -6,7 +6,7 @@
 
 void search(Position* pos, int depth);
 
-int alphaBetaMax(Position* pos, int alpha, int beta, int depth);
-int alphaBetaMin(Position* pos, int alpha, int beta, int depth);
+int alphaBetaMax(Position* pos, bitboard alpha, bitboard beta, int depth);
+int alphaBetaMin(Position* pos, bitboard alpha, bitboard beta, int depth);
 
 #endif
