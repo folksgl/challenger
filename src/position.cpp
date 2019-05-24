@@ -23,7 +23,7 @@ Position::Position(string fen) {
     set_halfmove_clock(halfmove_clk);
     set_fullmove_number(fullmove_num);
 
-    evaluation_score = evaluate_position(this);
+    maps[eval_score] = evaluate_position(this);
 
     delete[] fenstring;
 }
@@ -31,40 +31,31 @@ Position::Position(string fen) {
 bool Position::operator == (const Position& other) const {
     if (maps != other.maps) { return false; }
 
-    if (active_color != other.active_color) { return false; }
-
-    if (castling_rights_index != other.castling_rights_index) { return false; }
-
-    if (passant_target_sq  != other.passant_target_sq)  { return false; }
-
-    if (halfmove_clock  != other.halfmove_clock)  { return false; }
-    if (fullmove_number != other.fullmove_number) { return false; }
-
     return true;
 }
 
 bool Position::is_white_move(void) const {
-    return active_color == WHITE;
+    return maps[act_color] == WHITE;
 }
 
 bool Position::is_black_move(void) const {
-    return active_color == BLACK;
+    return maps[act_color] == BLACK;
 }
 
 bool Position::w_kingside_castle(void) const {
-    return castling_rights[castling_rights_index][c_w_king];
+    return castling_rights[maps[castle_rights]][c_w_king];
 }
 
 bool Position::w_queenside_castle(void) const {
-    return castling_rights[castling_rights_index][c_w_queen];
+    return castling_rights[maps[castle_rights]][c_w_queen];
 }
 
 bool Position::b_kingside_castle(void) const {
-    return castling_rights[castling_rights_index][c_b_king];
+    return castling_rights[maps[castle_rights]][c_b_king];
 }
 
 bool Position::b_queenside_castle(void) const {
-    return castling_rights[castling_rights_index][c_b_queen];
+    return castling_rights[maps[castle_rights]][c_b_queen];
 }
 
 void Position::generate_moves() {
@@ -73,7 +64,7 @@ void Position::generate_moves() {
 }
 
 void Position::evaluate() {
-    evaluation_score = ::evaluate_position(this);
+    maps[eval_score] = ::evaluate_position(this);
     return;
 }
 
@@ -84,31 +75,12 @@ void Position::set_defaults() {
         maps[i] = board_zero;
     }
 
-    active_color = WHITE;
+    maps[act_color] = WHITE;
 
-    castling_rights_index = castle_string_to_index.at("-");
+    maps[castle_rights] = castle_string_to_index.at("-");
 
-    passant_target_sq = "-";
+    maps[passant_sq] = passant_string_to_bit.at("-");
 
-    halfmove_clock = 0;
-    fullmove_number = 0;
-
-    evaluation_score = 0;
-}
-
-Position::Position(const Position& other) {
-    maps = other.maps;
-
-    active_color = other.active_color;
-
-    castling_rights_index = other.castling_rights_index;
-
-    passant_target_sq = other.passant_target_sq;
-
-    halfmove_clock = other.halfmove_clock;
-    fullmove_number = other.fullmove_number;
-
-    evaluation_score = other.evaluation_score;
 }
 
 /*
@@ -179,7 +151,7 @@ void Position::set_castling_rights(char* fen_tok) {
         return;
     }
 
-    castling_rights_index = castle_string_to_index.at(string(fen_tok));
+    maps[castle_rights] = castle_string_to_index.at(string(fen_tok));
 
     return;
 }
@@ -195,7 +167,7 @@ void Position::set_active_color(char* fen_tok) {
         // Malformed active color string. Just assume that it is white's turn.
         return;
     }
-    active_color = (fen_tok[0] == 'w') ? WHITE : BLACK;
+    maps[act_color] = (fen_tok[0] == 'w') ? WHITE : BLACK;
 
     return;
 }
@@ -212,7 +184,7 @@ void Position::set_passant_target_sq(char* fen_tok) {
     }
 
     else {
-        passant_target_sq = string(fen_tok);
+        maps[passant_sq] = passant_string_to_bit.at(string(fen_tok));
     }
 
     return;
@@ -237,7 +209,7 @@ void Position::set_halfmove_clock(char* fen_tok) {
 
     char* end;
 
-    halfmove_clock = strtoul(fen_tok, &end, 10);;
+    maps[hlf_clock] = strtoul(fen_tok, &end, 10);;
 
     return;
 }
@@ -260,7 +232,7 @@ void Position::set_fullmove_number(char* fen_tok) {
     }
 
     char* end;
-    fullmove_number = strtoul(fen_tok, &end, 10);
+    maps[full_num] = strtoul(fen_tok, &end, 10);
 
     return;
 }
@@ -279,8 +251,15 @@ void Position::move(string move) {
     int start_square = get_square_num(move.substr(0,2));
     int dest_square = get_square_num(move.substr(2,2));
 
-    // Zero out the start square
-    int piece = zero_at(start_square);
+    // Check if there is a piece on the dest square and remove if needed.
+    int dest_piece = get_moving_piece(dest_square);
+    if (dest_piece != -1) {
+        zero_at(dest_square, dest_piece);
+    }
+    // Get the piece that is moving
+    int piece = get_moving_piece(start_square);
+
+    zero_at(start_square, piece);
 
     // Check for pawn promotion
     if (move.length() == 5) {
@@ -298,20 +277,20 @@ void Position::move(string move) {
     }
 
     // Set the destination square
-    zero_at(dest_square);
-    maps[piece] |= (bitboard)1 << dest_square;
+    bitboard square_to_add = squares[dest_square];
+    maps[piece] |= square_to_add;
 
     if (piece < 6) {
-        maps[w_pieces] |= (bitboard)1 << dest_square;
+        maps[w_pieces] |= square_to_add;
     }
     else {
-        maps[b_pieces] |= (bitboard)1 << dest_square;
+        maps[b_pieces] |= square_to_add;
     }
 
-    if (active_color == BLACK) {
-        fullmove_number++;
+    if (maps[act_color] == BLACK) {
+        maps[full_num]++;
     }
-    active_color = ~active_color;
+    maps[act_color] = (maps[act_color] == WHITE) ? BLACK : WHITE;
 
     return;
 }
@@ -322,22 +301,32 @@ void Position::move(string move) {
  *
  *  return the map position of the piece changed
  */
-int Position::zero_at(int square) {
+void Position::zero_at(int square, int piece) {
 
-    bitboard square_bit = (bitboard)1 << square;
-    bitboard mask = 0xFFFFFFFFFFFFFFFF & ~square_bit;
+    bitboard square_bit = squares[square];
+    bitboard mask = ~square_bit;
 
-    maps[b_pieces] = ((bitboard)maps[b_pieces] & mask);
-    maps[w_pieces] = ((bitboard)maps[w_pieces] & mask);
+    if (piece < 6) {
+        maps[w_pieces] = ((bitboard)maps[w_pieces] & mask);
+    }
+    else {
+        maps[b_pieces] = ((bitboard)maps[b_pieces] & mask);
+    }
+    maps[piece] = maps[piece] & mask;
 
-    for (unsigned int i = 0; i < maps.size(); i++) {
+    return; //This should never return -1. A valid move WILL trigger one of the above cases.
+}
+
+int Position::get_moving_piece(int square) {
+    bitboard square_bit = squares[square];
+
+    for (unsigned int i = 0; i < 14; i++) {
         if (maps[i] & square_bit) {
-            maps[i] = ((bitboard)maps[i] & mask);
             return i;
         }
     }
 
-    return -1; //This should never return -1. A valid move WILL trigger one of the above cases.
+    return -1;
 }
 
 string Position::to_fen_string() {
@@ -388,24 +377,24 @@ string Position::to_fen_string() {
     }
 
     fenstring += ' ';
-    fenstring += (active_color == WHITE) ? 'w' : 'b';
+    fenstring += (maps[act_color] == WHITE) ? 'w' : 'b';
     fenstring += ' ';
 
     string castling = "";
 
-    if (castling_rights[castling_rights_index][c_w_king])   { castling += "K"; }
-    if (castling_rights[castling_rights_index][c_w_queen])  { castling += "Q"; }
-    if (castling_rights[castling_rights_index][c_b_king])   { castling += "k"; }
-    if (castling_rights[castling_rights_index][c_b_queen])  { castling += "q"; }
+    if (castling_rights[maps[castle_rights]][c_w_king])   { castling += "K"; }
+    if (castling_rights[maps[castle_rights]][c_w_queen])  { castling += "Q"; }
+    if (castling_rights[maps[castle_rights]][c_b_king])   { castling += "k"; }
+    if (castling_rights[maps[castle_rights]][c_b_queen])  { castling += "q"; }
 
     if (castling.empty()) {
         castling += "-";
     }
 
     fenstring += castling + " ";
-    fenstring += passant_target_sq + " ";
-    fenstring += to_string(halfmove_clock) + " ";
-    fenstring += to_string(fullmove_number);
+    fenstring += bit_to_square.at(maps[passant_sq]) + " ";
+    fenstring += to_string(maps[hlf_clock]) + " ";
+    fenstring += to_string(maps[full_num]);
 
     return fenstring;
 }

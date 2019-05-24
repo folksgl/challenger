@@ -15,23 +15,25 @@ using namespace std;
 enum Castling_names { c_w_king, c_w_queen, c_b_king, c_b_queen};
 
 const std::unordered_map<string, int> castle_string_to_index({
-        {"KQkq", 0},
-        {"KQk" , 1},
-        {"KQq" , 2},
-        {"KQ"  , 3},
-        {"Kkq" , 4},
-        {"Kk"  , 5},
-        {"Kq"  , 6},
-        {"K"   , 7},
-        {"Qkq" , 8},
-        {"Qk"  , 9},
-        {"Qq"  , 10},
-        {"Q"   , 11},
-        {"kq"  , 12},
-        {"k"   , 13},
-        {"q"   , 14},
-        {"-"   , 15},
+        {"KQkq", 0},  {"KQk" , 1},  {"KQq" , 2},  {"KQ"  , 3}, 
+        {"Kkq" , 4},  {"Kk"  , 5},  {"Kq"  , 6},  {"K"   , 7},
+        {"Qkq" , 8},  {"Qk"  , 9},  {"Qq"  , 10}, {"Q"   , 11},
+        {"kq"  , 12}, {"k"   , 13}, {"q"   , 14}, {"-"   , 15},
 });
+
+const std::unordered_map<string, bitboard> passant_string_to_bit({
+        {"a3", 0x0000000000010000}, {"b3", 0x0000000000020000},
+        {"c3", 0x0000000000040000}, {"d3", 0x0000000000080000}, 
+        {"e3", 0x0000000000100000}, {"f3", 0x0000000000200000},
+        {"g3", 0x0000000000400000}, {"h3", 0x0000000000800000},
+
+        {"a6", 0x0000010000000000}, {"b6", 0x0000020000000000},  
+        {"c6", 0x0000040000000000}, {"d6", 0x0000080000000000},
+        {"e6", 0x0000100000000000}, {"f6", 0x0000200000000000}, 
+        {"g6", 0x0000400000000000}, {"h6", 0x0000800000000000},
+        {"-",  0x0000000000000000}
+});
+
 
 const std::array<std::array<bool, 4>, 16> castling_rights {{
       { true, true, true, true    }, // 0  = KQkq
@@ -53,30 +55,16 @@ const std::array<std::array<bool, 4>, 16> castling_rights {{
 }};
 
 enum map_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces, 
-                 b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king, b_pieces };
+                 b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king, b_pieces,
+                 act_color, castle_rights, passant_sq, hlf_clock, full_num, eval_score };
 
-enum Color { WHITE, BLACK };
-
-constexpr Color operator~(Color c) {
-      return Color(c ^ BLACK); // Toggle color
-}
+enum Color { WHITE , BLACK };
 
 class Position {
 
     public:
         // Class Attributes
-        array<bitboard, 14> maps;
-
-        Color active_color;
-
-        char castling_rights_index;
-
-        string passant_target_sq;
-
-        unsigned short int halfmove_clock;
-        unsigned short int fullmove_number;
-
-        int evaluation_score;
+        array<bitboard, 20> maps;
 
         std::vector<Position> moves;
 
@@ -84,7 +72,8 @@ class Position {
 
         Position(void) : Position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {}
         Position(std::string fen);
-        Position(const Position& other);
+        Position(const Position& other) :
+            maps(other.maps) {}
 
         // Comparisons
         bool operator == (const Position& other) const;
@@ -109,7 +98,8 @@ class Position {
         void evaluate(void);
         void set_defaults();
         void move(std::string move_string);
-        int zero_at(int square);
+        void zero_at(int square, int piece);
+        int get_moving_piece(int square);
 
         std::string to_fen_string();
 };
