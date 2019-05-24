@@ -6,6 +6,7 @@ using namespace std;
 bool G_debug;
 Position* G_game_position;
 SliderAttacks slider_attacks;
+Zobrist zobrist;
 
 int main()
 {
