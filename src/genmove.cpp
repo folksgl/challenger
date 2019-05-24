@@ -40,7 +40,7 @@ void generate_black_moves(Position* pos) {
     return;
 }
 
-void add_move(Position* pos, string src, string dest) {
+void add_move(Position* pos, string& src, string& dest) {
     pos->moves.push_back(*pos);
     Position* p = &pos->moves.back();
     p->move(src + dest);
