@@ -35,7 +35,8 @@ TEST(position_eval, all) {
     std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position pos(test);
 
-    int position_value = evaluate_position(&pos);
-    EXPECT_EQ (position_value, 0);
+    bitboard position_value = evaluate_position(&pos);
+    bitboard half = std::numeric_limits<bitboard>::max() / 2;
+    EXPECT_EQ (position_value, half);
 }
 
