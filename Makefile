@@ -44,7 +44,7 @@ profile: compile
 	@if [ -f "./analysis" ]; then \
 			$(RM) "./analysis"; \
 	fi
-	@echo "position startpos\ngo depth 1\nquit" > tmp_input_challenger
+	@echo "position startpos\ngo depth 7\nquit" > tmp_input_challenger
 	@./build/challenger < tmp_input_challenger
 	@$(RM) tmp_input_challenger
 	gprof -b ./build/challenger gmon.out > analysis
