@@ -22,6 +22,7 @@ int main()
     move_generation_perft(2);
     move_generation_perft(3);
     move_generation_perft(4);
+    move_generation_perft(5);
 
     cout << endl;
 

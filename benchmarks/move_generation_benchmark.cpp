@@ -25,7 +25,7 @@ void move_generation_perft(int depth) {
 
     unsigned long long count = 0;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 20; i++) {
         // Reset position to default starting position
         G_game_position = new Position();
 
