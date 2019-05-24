@@ -35,6 +35,7 @@ const bitboard rank_7 = 0x00FF000000000000;
 const bitboard rank_8 = 0xFF00000000000000;
 
 const std::unordered_map<bitboard, std::string> bit_to_square({
+      {0x00, "-"},
       {0x01, "a1"}, {0x02, "b1"}, 
       {0x04, "c1"}, {0x08, "d1"},
       {0x10, "e1"}, {0x20, "f1"}, 
