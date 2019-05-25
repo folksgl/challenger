@@ -17,7 +17,66 @@ Zobrist::Zobrist(void) {
         zobrist_castling_rights[i] = random_number();
     }
 
-    for (int i = 0; i < 8; i++) {
-        zobrist_passant_file[i] = random_number();
+    for (int i = 0; i < 17; i++) {
+        zobrist_passant[i] = random_number();
     }
+}
+
+bitboard Zobrist::get_zobrist_key(Position* pos) {
+    bitboard zobrist_hashkey = 0;
+
+    for (int i = 0; i < 64; i++) {
+        bitboard square = squares[i];
+
+        // Piece is white
+        if (pos->maps[w_pieces] & square) {
+            if (pos->maps[w_pawn] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_w_pawn];
+            }
+            else if (pos->maps[w_knight] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_w_knight];
+            }
+            else if (pos->maps[w_rook] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_w_rook];
+            }
+            else if (pos->maps[w_bishop] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_w_bishop];
+            }
+            else if (pos->maps[w_queen] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_w_queen];
+            }
+            else if (pos->maps[w_king] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_w_king];
+            }
+        }
+        else if (pos->maps[b_pieces] & square) {
+            if (pos->maps[b_pawn] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_b_pawn];
+            }
+            else if (pos->maps[b_knight] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_b_knight];
+            }
+            else if (pos->maps[b_rook] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_b_rook];
+            }
+            else if (pos->maps[b_bishop] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_b_bishop];
+            }
+            else if (pos->maps[b_queen] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_b_queen];
+            }
+            else if (pos->maps[b_king] & square) {
+                zobrist_hashkey ^= zobrist_piece_rands[i][z_b_king];
+            }
+
+        }
+    }
+    zobrist_hashkey ^= zobrist_castling_rights[pos->maps[castle_rights]];     // Castling rights
+    zobrist_hashkey ^= zobrist_passant[zp_passant.at(pos->maps[passant_sq])]; // Passant Square
+
+    if (pos->is_black_move()) {
+        zobrist_hashkey ^= zobrist_black_move;
+    }
+
+    return zobrist_hashkey;
 }
