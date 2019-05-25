@@ -1,6 +1,8 @@
 #include "position.h"
 #include "evaluate.h"
 #include "genmove.h"
+#include "zobrist.h"
+#include "game_variables.h"
 
 Position::Position(string fen) {
 
@@ -15,7 +17,6 @@ Position::Position(string fen) {
     char *halfmove_clk  = strtok(NULL, " "); 
     char *fullmove_num  = strtok(NULL, " "); 
 
-    set_defaults();
     set_piece_positions(piece_string);
     set_active_color(active_color);
     set_castling_rights(castle_rights);
@@ -24,14 +25,13 @@ Position::Position(string fen) {
     set_fullmove_number(fullmove_num);
 
     maps[eval_score] = evaluate_position(this);
+    maps[zobrist_key] = zobrist.get_zobrist_key(this);
 
     delete[] fenstring;
 }
 
 bool Position::operator == (const Position& other) const {
-    if (maps != other.maps) { return false; }
-
-    return true;
+    return maps == other.maps;
 }
 
 bool Position::is_white_move(void) const {
@@ -66,21 +66,6 @@ void Position::generate_moves() {
 void Position::evaluate() {
     maps[eval_score] = ::evaluate_position(this);
     return;
-}
-
-void Position::set_defaults() {
-
-    bitboard board_zero = (bitboard)0;
-    for (unsigned int i = 0; i < maps.size(); i++) {
-        maps[i] = board_zero;
-    }
-
-    maps[act_color] = WHITE;
-
-    maps[castle_rights] = castle_string_to_index.at("-");
-
-    maps[passant_sq] = passant_string_to_bit.at("-");
-
 }
 
 /*
@@ -209,7 +194,7 @@ void Position::set_halfmove_clock(char* fen_tok) {
 
     char* end;
 
-    maps[hlf_clock] = strtoul(fen_tok, &end, 10);;
+    maps[hlf_clock] = Clock(strtoul(fen_tok, &end, 10));
 
     return;
 }
@@ -237,6 +222,7 @@ void Position::set_fullmove_number(char* fen_tok) {
     return;
 }
 
+
 /*
  *  game_move performs the move given in the move string on board_position.
  */
@@ -251,15 +237,20 @@ void Position::move(string move) {
     int start_square = get_square_num(move.substr(0,2));
     int dest_square = get_square_num(move.substr(2,2));
 
+
     // Check if there is a piece on the dest square and remove if needed.
     int dest_piece = get_moving_piece(dest_square);
+    int z_piece = (dest_piece > 6) ? dest_piece : dest_piece - 1;
     if (dest_piece != -1) {
+        maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
         zero_at(dest_square, dest_piece);
     }
     // Get the piece that is moving
     int piece = get_moving_piece(start_square);
+    z_piece = (piece > 6) ? piece : piece - 1;
 
     zero_at(start_square, piece);
+    maps[zobrist_key] ^= zobrist.zobrist_piece_rands[start_square][z_piece];
 
     // Check for pawn promotion
     if (move.length() == 5) {
@@ -276,6 +267,9 @@ void Position::move(string move) {
         }
     }
 
+    z_piece = (piece > 6) ? piece : piece - 1;
+    maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
+
     // Set the destination square
     bitboard square_to_add = squares[dest_square];
     maps[piece] |= square_to_add;
@@ -287,10 +281,14 @@ void Position::move(string move) {
         maps[b_pieces] |= square_to_add;
     }
 
-    if (maps[act_color] == BLACK) {
-        maps[full_num]++;
-    }
-    maps[act_color] = (maps[act_color] == WHITE) ? BLACK : WHITE;
+    // Increment move number based on current halfmove clock
+    maps[full_num] += maps[hlf_clock];
+
+    // Toggle the halfmove clock from 0 or 1
+    maps[hlf_clock] ^= ONE;
+
+    maps[zobrist_key] ^= zobrist.zobrist_black_move;
+    maps[act_color] ^= BLACK;
 
     return;
 }

@@ -15,10 +15,10 @@ using namespace std;
 enum Castling_names { c_w_king, c_w_queen, c_b_king, c_b_queen};
 
 const std::unordered_map<string, int> castle_string_to_index({
-        {"KQkq", 0},  {"KQk" , 1},  {"KQq" , 2},  {"KQ"  , 3}, 
-        {"Kkq" , 4},  {"Kk"  , 5},  {"Kq"  , 6},  {"K"   , 7},
-        {"Qkq" , 8},  {"Qk"  , 9},  {"Qq"  , 10}, {"Q"   , 11},
-        {"kq"  , 12}, {"k"   , 13}, {"q"   , 14}, {"-"   , 15},
+        {"KQkq", 1},  {"KQk" , 2},  {"KQq" , 3},  {"KQ"  , 4}, 
+        {"Kkq" , 5},  {"Kk"  , 6},  {"Kq"  , 7},  {"K"   , 8},
+        {"Qkq" , 9},  {"Qk"  , 10}, {"Qq"  , 11}, {"Q"   , 12},
+        {"kq"  , 13}, {"k"   , 14}, {"q"   , 15}, {"-"   , 0},
 });
 
 const std::unordered_map<string, bitboard> passant_string_to_bit({
@@ -36,35 +36,37 @@ const std::unordered_map<string, bitboard> passant_string_to_bit({
 
 
 const std::array<std::array<bool, 4>, 16> castling_rights {{
-      { true, true, true, true    }, // 0  = KQkq
-      { true, true, true, false   }, // 1  = KQk
-      { true, true, false, true   }, // 2  = KQq
-      { true, true, false, false  }, // 3  = KQ
-      { true, false, true, true   }, // 4  = Kkq
-      { true, false, true, false  }, // 5  = Kk
-      { true, false, false, true  }, // 6  = Kq
-      { true, false, false, false }, // 7  = K
-      { false, true, true, true   }, // 8  = Qkq
-      { false, true, true, false  }, // 9  = Qk
-      { false, true, false, true  }, // 10 = Qq
-      { false, true, false, false }, // 11 = Q
-      { false, false, true, true  }, // 12 = kq
-      { false, false, true, false }, // 13 = k
-      { false, false, false, true }, // 14 = q
-      { false, false, false, false}  // 15 = -    
+      { false, false, false, false}, // 0 = -    
+      { true, true, true, true    }, // 1  = KQkq
+      { true, true, true, false   }, // 2  = KQk
+      { true, true, false, true   }, // 3  = KQq
+      { true, true, false, false  }, // 4  = KQ
+      { true, false, true, true   }, // 5  = Kkq
+      { true, false, true, false  }, // 6  = Kk
+      { true, false, false, true  }, // 7  = Kq
+      { true, false, false, false }, // 8  = K
+      { false, true, true, true   }, // 9  = Qkq
+      { false, true, true, false  }, // 10 = Qk
+      { false, true, false, true  }, // 11 = Qq
+      { false, true, false, false }, // 12 = Q
+      { false, false, true, true  }, // 13 = kq
+      { false, false, true, false }, // 14 = k
+      { false, false, false, true }  // 15 = q
 }};
 
 enum map_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces, 
                  b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king, b_pieces,
-                 act_color, castle_rights, passant_sq, hlf_clock, full_num, eval_score };
+                 act_color, castle_rights, passant_sq, hlf_clock, full_num, eval_score,
+                 zobrist_key};
 
-enum Color { WHITE , BLACK };
+enum Color: bitboard { WHITE , BLACK };
+enum Clock: bitboard { ZERO, ONE};
 
 class Position {
 
     public:
         // Class Attributes
-        array<bitboard, 20> maps;
+        array<bitboard, 21> maps = {0};
 
         std::vector<Position> moves;
 
@@ -96,7 +98,6 @@ class Position {
 
         void generate_moves(void);
         void evaluate(void);
-        void set_defaults();
         void move(std::string move_string);
         void zero_at(int square, int piece);
         int get_moving_piece(int square);
