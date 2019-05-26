@@ -273,18 +273,17 @@ void Position::move(string move) {
  */
 void Position::zero_at(int square, int piece) {
 
-    bitboard square_bit = squares[square];
-    bitboard mask = ~square_bit;
+    bitboard mask = ~(squares[square]);
 
     if (piece < 6) {
-        maps[w_pieces] = ((bitboard)maps[w_pieces] & mask);
+        maps[w_pieces] &= mask;
     }
     else {
-        maps[b_pieces] = ((bitboard)maps[b_pieces] & mask);
+        maps[b_pieces] &= mask;
     }
-    maps[piece] = maps[piece] & mask;
+    maps[piece] &= mask;
 
-    return; //This should never return -1. A valid move WILL trigger one of the above cases.
+    return;
 }
 
 int Position::get_moving_piece(int square) {
