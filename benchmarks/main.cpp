@@ -7,6 +7,8 @@ using namespace std;
 bool G_debug;
 Position* G_game_position;
 SliderAttacks slider_attacks;
+Zobrist zobrist;
+
 unsigned long long positions_generated;
 unsigned long long positions_searched;
 
