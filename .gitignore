@@ -12,6 +12,7 @@ positions.txt
 # Profiling/benchmark files
 gmon.out
 benchmarking_reference
+analysis
 
 # Swap files
 *.swp
