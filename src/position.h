@@ -78,16 +78,16 @@ class Position {
             maps(other.maps) {}
 
         // Comparisons
-        bool operator == (const Position& other) const;
+        bool operator == (const Position& other) const { return maps == other.maps; }
 
         // Functions
-        bool is_white_move(void) const;
-        bool is_black_move(void) const;
+        bool is_white_move(void) const { return maps[act_color] == WHITE; } 
+        bool is_black_move(void) const { return maps[act_color] == BLACK; }
 
-        bool w_kingside_castle(void) const;
-        bool w_queenside_castle(void) const;
-        bool b_kingside_castle(void) const;
-        bool b_queenside_castle(void) const;
+        bool w_kingside_castle(void)  const { return castling_rights[maps[castle_rights]][c_w_king];  }
+        bool w_queenside_castle(void) const { return castling_rights[maps[castle_rights]][c_w_queen]; }
+        bool b_kingside_castle(void)  const { return castling_rights[maps[castle_rights]][c_b_king];  }
+        bool b_queenside_castle(void) const { return castling_rights[maps[castle_rights]][c_b_queen]; }
 
         void set_piece_positions(char* fen_tok);
         void set_active_color(char* fen_tok);

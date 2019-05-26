@@ -30,41 +30,13 @@ Position::Position(string fen) {
     delete[] fenstring;
 }
 
-bool Position::operator == (const Position& other) const {
-    return maps == other.maps;
-}
-
-bool Position::is_white_move(void) const {
-    return maps[act_color] == WHITE;
-}
-
-bool Position::is_black_move(void) const {
-    return maps[act_color] == BLACK;
-}
-
-bool Position::w_kingside_castle(void) const {
-    return castling_rights[maps[castle_rights]][c_w_king];
-}
-
-bool Position::w_queenside_castle(void) const {
-    return castling_rights[maps[castle_rights]][c_w_queen];
-}
-
-bool Position::b_kingside_castle(void) const {
-    return castling_rights[maps[castle_rights]][c_b_king];
-}
-
-bool Position::b_queenside_castle(void) const {
-    return castling_rights[maps[castle_rights]][c_b_queen];
-}
-
 void Position::generate_moves() {
     ::generate_moves(this);
     return;
 }
 
 void Position::evaluate() {
-    maps[eval_score] = ::evaluate_position(this);
+    maps[eval_score] = evaluate_position(this);
     return;
 }
 
@@ -256,14 +228,14 @@ void Position::move(string move) {
     if (move.length() == 5) {
         char promoted_to = move.at(4);
         switch (promoted_to) {
+            case 'q': piece = b_queen;  break;
+            case 'Q': piece = w_queen;  break;
             case 'N': piece = w_knight; break;
             case 'n': piece = b_knight; break;
             case 'B': piece = w_bishop; break;
             case 'b': piece = b_bishop; break;
             case 'R': piece = w_rook;   break;
             case 'r': piece = b_rook;   break;
-            case 'Q': piece = w_queen;  break;
-            case 'q': piece = b_queen;  break;
         }
     }
 
