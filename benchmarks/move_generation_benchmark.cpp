@@ -41,7 +41,7 @@ void move_generation_perft(int depth) {
     // Get the average of the 10 runs of the code.
     count /= 10;
     // Number of positions generated per run.
-    positions_generated /= 10;
+    positions_generated /= 20;
 
     string label = "";
     if (positions_generated != correct_perft[depth]) {
