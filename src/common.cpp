@@ -7,7 +7,7 @@ int get_square_num(std::string square_string) {
 
     // To get the square number for a string such as e4, translate the file to a 
     // number (a=0, b=1, etc) and add (rank_multiplier * 8) to get the square.
-    int rank_mult = atoi(square_string.substr(1, 1).c_str()) - 1;
+    int rank_mult = (square_string.at(1) - '0') - 1;
     int square_num = file_to_num(square_string.at(0)) + (rank_mult * 8);
 
     return square_num;
