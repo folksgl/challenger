@@ -256,11 +256,10 @@ void Position::move(string move) {
     // Increment move number based on current halfmove clock
     maps[full_num] += maps[hlf_clock];
 
-    // Toggle the halfmove clock from 0 or 1
-    maps[hlf_clock] ^= ONE;
+    maps[hlf_clock] ^= ONE; // Toggle halfmove clock.
 
-    maps[zobrist_key] ^= zobrist.zobrist_black_move;
-    maps[act_color] ^= BLACK;
+    maps[zobrist_key] ^= zobrist.zobrist_black_move; // Toggle Zobrist value for active color.
+    maps[act_color] ^= BLACK; // Toggle active color.
 
     return;
 }
