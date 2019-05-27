@@ -79,6 +79,9 @@ class Position {
 
         // Comparisons
         bool operator == (const Position& other) const { return maps == other.maps; }
+        bool operator < (const Position& other) const { 
+            return maps[eval_score] < other.maps[eval_score]; 
+        }
 
         // Functions
         bool is_white_move(void) const { return maps[act_color] == WHITE; } 
