@@ -10,13 +10,8 @@ using namespace std;
 extern unsigned long long positions_searched;
 #endif
 
-bool desc_sort (Position const &a, Position const &b) {
-    return b.maps[eval_score] < a.maps[eval_score];
-}
-
-bool asc_sort (Position const &a, Position const &b) {
-    return b.maps[eval_score] > a.maps[eval_score];
-}
+#define sort_ascending std::sort(pos->moves.rbegin(), pos->moves.rend())
+#define sort_descending std::sort(pos->moves.begin(), pos->moves.end())
 
 /*
  * Perform a search of the position given.
@@ -27,12 +22,11 @@ void search(Position* pos, int depth) {
     bitboard beta  = std::numeric_limits<bitboard>::max();
     if (pos->is_white_move()) {
         alphaBetaMax(pos, alpha, beta, depth);
-        std::sort(pos->moves.begin(), pos->moves.end(), desc_sort);
-        
+        sort_descending;
     }
     else {
         alphaBetaMin(pos, alpha, beta, depth);
-        std::sort(pos->moves.begin(), pos->moves.end(), asc_sort);
+        sort_ascending;
     }
 
     return;
@@ -53,7 +47,7 @@ int alphaBetaMax(Position* pos, bitboard alpha, bitboard beta, int depth) {
     #endif
 
     // Sort in descending order of evaluation scores
-    std::sort(pos->moves.begin(), pos->moves.end(), desc_sort);
+    sort_descending;
 
     for (auto p : pos->moves) {
         p.maps[eval_score] = alphaBetaMin(&p, alpha, beta, depth - 1);
@@ -82,8 +76,7 @@ int alphaBetaMin(Position* pos, bitboard alpha, bitboard beta, int depth) {
     #endif
 
     // Sort in ascending order of evaluation scores
-    std::sort(pos->moves.begin(), pos->moves.end(), asc_sort);
-
+    sort_ascending;
     for (auto p : pos->moves) {
         p.maps[eval_score] = alphaBetaMax(&p, alpha, beta, depth - 1);
         if (p.maps[eval_score] <= alpha) {
