@@ -27,7 +27,7 @@ bitboard evaluate_position(Position* pos) {
     int black_eval = get_black_material_value(pos);
     black_eval += black_defending_pawns_bonus(pos);
 
-    bitboard evaluation = (zero + white_eval) - abs(black_eval);
+    bitboard evaluation = (zero + white_eval) + black_eval;
 
     return evaluation;
 }
@@ -65,7 +65,7 @@ int get_black_material_value(Position* pos) {
     material_val -= (ROOK   * __builtin_popcountll(pos->maps[b_rook]));
     material_val -= (QUEEN  * __builtin_popcountll(pos->maps[b_queen]));
 
-    if (pos->maps[w_king]) {
+    if (pos->maps[b_king]) {
         material_val -= KING;
     }
 

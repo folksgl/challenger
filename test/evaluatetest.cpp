@@ -40,3 +40,39 @@ TEST(position_eval, all) {
     EXPECT_EQ (position_value, half);
 }
 
+TEST(position_eval, no_white_queen) {
+    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1";
+    Position pos(test);
+
+    bitboard position_value = evaluate_position(&pos);
+    bitboard half = std::numeric_limits<bitboard>::max() / 2;
+    EXPECT_EQ (position_value, half-1000);
+}
+
+TEST(position_eval, no_white_pieces) {
+    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/8/8 w KQkq - 0 1";
+    Position pos(test);
+
+    bitboard position_value = evaluate_position(&pos);
+    bitboard half = std::numeric_limits<bitboard>::max() / 2;
+    EXPECT_EQ (position_value, half-14250);
+}
+
+TEST(position_eval, no_black_queen) {
+    std::string test = "rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position pos(test);
+
+    bitboard position_value = evaluate_position(&pos);
+    bitboard half = std::numeric_limits<bitboard>::max() / 2;
+    EXPECT_EQ (position_value, half+1000);
+}
+
+TEST(position_eval, no_black_pieces) {
+    std::string test = "8/8/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position pos(test);
+
+    bitboard position_value = evaluate_position(&pos);
+    bitboard half = std::numeric_limits<bitboard>::max() / 2;
+    EXPECT_EQ (position_value, half+14250);
+}
+
