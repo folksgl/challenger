@@ -66,20 +66,20 @@ void Position::set_piece_positions(char* fen_tok) {
         char input = bit_oriented_string.at(i);
         switch(input) {
             // Lower case = Black Pieces
-            case 'p': maps[b_pawn]   |= ((bitboard)1 << sq_num--); break;
-            case 'r': maps[b_rook]   |= ((bitboard)1 << sq_num--); break;
-            case 'n': maps[b_knight] |= ((bitboard)1 << sq_num--); break;
-            case 'b': maps[b_bishop] |= ((bitboard)1 << sq_num--); break;
-            case 'q': maps[b_queen]  |= ((bitboard)1 << sq_num--); break;
-            case 'k': maps[b_king]   |= ((bitboard)1 << sq_num--); break;
+            case 'p': maps[b_pawn]   |= (single_bit << sq_num--); break;
+            case 'r': maps[b_rook]   |= (single_bit << sq_num--); break;
+            case 'n': maps[b_knight] |= (single_bit << sq_num--); break;
+            case 'b': maps[b_bishop] |= (single_bit << sq_num--); break;
+            case 'q': maps[b_queen]  |= (single_bit << sq_num--); break;
+            case 'k': maps[b_king]   |= (single_bit << sq_num--); break;
 
             // Upper case = White Pieces
-            case 'P': maps[w_pawn]   |= ((bitboard)1 << sq_num--); break;
-            case 'R': maps[w_rook]   |= ((bitboard)1 << sq_num--); break;
-            case 'N': maps[w_knight] |= ((bitboard)1 << sq_num--); break;
-            case 'B': maps[w_bishop] |= ((bitboard)1 << sq_num--); break;
-            case 'Q': maps[w_queen]  |= ((bitboard)1 << sq_num--); break;
-            case 'K': maps[w_king]   |= ((bitboard)1 << sq_num--); break;
+            case 'P': maps[w_pawn]   |= (single_bit << sq_num--); break;
+            case 'R': maps[w_rook]   |= (single_bit << sq_num--); break;
+            case 'N': maps[w_knight] |= (single_bit << sq_num--); break;
+            case 'B': maps[w_bishop] |= (single_bit << sq_num--); break;
+            case 'Q': maps[w_queen]  |= (single_bit << sq_num--); break;
+            case 'K': maps[w_king]   |= (single_bit << sq_num--); break;
 
             default :
                 if (isdigit(input)) {

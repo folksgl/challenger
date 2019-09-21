@@ -12,6 +12,8 @@
 
 using namespace std;
 
+const bitboard single_bit = (bitboard)1;
+
 enum Castling_names { c_w_king, c_w_queen, c_b_king, c_b_queen};
 
 const std::unordered_map<string, int> castle_string_to_index({
@@ -84,13 +86,13 @@ class Position {
         }
 
         // Functions
-        bool is_white_move(void) const { return maps[act_color] == WHITE; } 
-        bool is_black_move(void) const { return maps[act_color] == BLACK; }
+        inline bool is_white_move(void) const { return maps[act_color] == WHITE; } 
+        inline bool is_black_move(void) const { return maps[act_color] == BLACK; }
 
-        bool w_kingside_castle(void)  const { return castling_rights[maps[castle_rights]][c_w_king];  }
-        bool w_queenside_castle(void) const { return castling_rights[maps[castle_rights]][c_w_queen]; }
-        bool b_kingside_castle(void)  const { return castling_rights[maps[castle_rights]][c_b_king];  }
-        bool b_queenside_castle(void) const { return castling_rights[maps[castle_rights]][c_b_queen]; }
+        inline bool w_kingside_castle(void)  const { return castling_rights[maps[castle_rights]][c_w_king];  }
+        inline bool w_queenside_castle(void) const { return castling_rights[maps[castle_rights]][c_w_queen]; }
+        inline bool b_kingside_castle(void)  const { return castling_rights[maps[castle_rights]][c_b_king];  }
+        inline bool b_queenside_castle(void) const { return castling_rights[maps[castle_rights]][c_b_queen]; }
 
         void set_piece_positions(char* fen_tok);
         void set_active_color(char* fen_tok);
