@@ -17,9 +17,7 @@ int get_square_num(std::string square_string) {
  *  file_to_num translates a character representing a file on a chess board (i.e. a, b, etc)
  *  to a number representing its location on the board. a=0, b=1, c=2
  */
-int file_to_num(char file) {
-
+inline int file_to_num(char file) {
     return file - 'a';
 }
-
 

@@ -88,50 +88,6 @@ namespace {
 }
 
 //
-// START FILE TO NUM TEST /////////////////////////////////////////////////
-//
-
-TEST(file_to_num, a) {
-    int file = file_to_num('a');
-    EXPECT_EQ (file, 0);
-}
-
-TEST(file_to_num, b) {
-    int file = file_to_num('b');
-    EXPECT_EQ (file, 1);
-}
-
-TEST(file_to_num, c) {
-    int file = file_to_num('c');
-    EXPECT_EQ (file, 2);
-}
-
-TEST(file_to_num, d) {
-    int file = file_to_num('d');
-    EXPECT_EQ (file, 3);
-}
-
-TEST(file_to_num, e) {
-    int file = file_to_num('e');
-    EXPECT_EQ (file, 4);
-}
-
-TEST(file_to_num, f) {
-    int file = file_to_num('f');
-    EXPECT_EQ (file, 5);
-}
-
-TEST(file_to_num, g) {
-    int file = file_to_num('g');
-    EXPECT_EQ (file, 6);
-}
-
-TEST(file_to_num, h) {
-    int file = file_to_num('h');
-    EXPECT_EQ (file, 7);
-}
-
-//
 // START GET SQUARE NUM TEST //////////////////////////////////////////////
 //
 
@@ -140,12 +96,42 @@ TEST(get_sq_num, a1) {
     EXPECT_EQ (square, 0);
 }
 
+TEST(get_sq_num, a2) {
+    int square = get_square_num("a2");
+    EXPECT_EQ (square, 8);
+}
+
+TEST(get_sq_num, a3) {
+    int square = get_square_num("a3");
+    EXPECT_EQ (square, 16);
+}
+
 TEST(get_sq_num, b2) {
     int square = get_square_num("b2");
     EXPECT_EQ (square, 9);
 }
 
+TEST(get_sq_num, b3) {
+    int square = get_square_num("b3");
+    EXPECT_EQ (square, 17);
+}
+
+TEST(get_sq_num, b4) {
+    int square = get_square_num("b4");
+    EXPECT_EQ (square, 25);
+}
+
 TEST(get_sq_num, c3) {
+    int square = get_square_num("c3");
+    EXPECT_EQ (square, 18);
+}
+
+TEST(get_sq_num, c4) {
+    int square = get_square_num("c3");
+    EXPECT_EQ (square, 18);
+}
+
+TEST(get_sq_num, c5) {
     int square = get_square_num("c3");
     EXPECT_EQ (square, 18);
 }
@@ -155,9 +141,29 @@ TEST(get_sq_num, d4) {
     EXPECT_EQ (square, 27);
 }
 
+TEST(get_sq_num, d5) {
+    int square = get_square_num("d5");
+    EXPECT_EQ (square, 35);
+}
+
+TEST(get_sq_num, d6) {
+    int square = get_square_num("d6");
+    EXPECT_EQ (square, 43);
+}
+
 TEST(get_sq_num, e5) {
     int square = get_square_num("e5");
     EXPECT_EQ (square, 36);
+}
+
+TEST(get_sq_num, e6) {
+    int square = get_square_num("e6");
+    EXPECT_EQ (square, 44);
+}
+
+TEST(get_sq_num, e7) {
+    int square = get_square_num("e7");
+    EXPECT_EQ (square, 52);
 }
 
 TEST(get_sq_num, f6) {
@@ -165,13 +171,43 @@ TEST(get_sq_num, f6) {
     EXPECT_EQ (square, 45);
 }
 
+TEST(get_sq_num, f7) {
+    int square = get_square_num("f7");
+    EXPECT_EQ (square, 53);
+}
+
+TEST(get_sq_num, f8) {
+    int square = get_square_num("f8");
+    EXPECT_EQ (square, 61);
+}
+
 TEST(get_sq_num, g7) {
     int square = get_square_num("g7");
     EXPECT_EQ (square, 54);
 }
 
+TEST(get_sq_num, g8) {
+    int square = get_square_num("g8");
+    EXPECT_EQ (square, 62);
+}
+
+TEST(get_sq_num, g1) {
+    int square = get_square_num("g1");
+    EXPECT_EQ (square, 6);
+}
+
 TEST(get_sq_num, h8) {
     int square = get_square_num("h8");
     EXPECT_EQ (square, 63);
+}
+
+TEST(get_sq_num, h1) {
+    int square = get_square_num("h1");
+    EXPECT_EQ (square, 7);
+}
+
+TEST(get_sq_num, h2) {
+    int square = get_square_num("h2");
+    EXPECT_EQ (square, 15);
 }
 
