@@ -20,3 +20,7 @@ analysis
 
 # Syntax checking
 compile_commands.json
+
+# Cmake files
+CMakeCache.txt
+CMakeFiles
