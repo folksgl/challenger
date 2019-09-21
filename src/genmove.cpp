@@ -39,15 +39,15 @@ void add_move(Position* pos, string& src, string& dest) {
     p->evaluate();
 }
 
-bitboard get_bishop_attacks(bitboard board, int index) {
+inline bitboard get_bishop_attacks(bitboard board, int index) {
     return slider_attacks.BishopAttacks(board, index);
 }
 
-bitboard get_rook_attacks(bitboard board, int index) {
+inline bitboard get_rook_attacks(bitboard board, int index) {
     return slider_attacks.RookAttacks(board, index);
 }
 
-bitboard get_queen_attacks(bitboard board, int index) {
+inline bitboard get_queen_attacks(bitboard board, int index) {
     return slider_attacks.QueenAttacks(board, index);
 }
 
