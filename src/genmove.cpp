@@ -33,9 +33,19 @@ void generate_moves(Position* pos) {
 }
 
 void add_move(Position* pos, string& src, string& dest) {
-    pos->moves.push_back(*pos);
+    // Create a copy of the position and make the move
+    Position copy = *pos;
+    copy.move(src + dest);
+
+    // If the move introduces check for the player making the move, it is illegal and will not be considered.
+    bool is_check = copy.is_opposite_check();
+    if (is_check) { 
+        return; 
+    }
+
+    // Add the move the vector of moves possible from the current position and evaluate.
+    pos->moves.push_back(copy);
     Position* p = &pos->moves.back();
-    p->move(src + dest);
     p->evaluate();
 }
 

@@ -407,10 +407,24 @@ TEST(active_color, white_active) {
     EXPECT_EQ (actualpos.maps[act_color], WHITE);
 }
 
+TEST(active_color, white_active_change) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position actualpos(test);
+    actualpos.move("a2a3");
+    EXPECT_EQ (actualpos.maps[act_color], BLACK);
+}
+
 TEST(active_color, black_active) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position actualpos(test);
     EXPECT_EQ (actualpos.maps[act_color], BLACK);
+}
+
+TEST(active_color, black_active_change) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+    Position actualpos(test);
+    actualpos.move("a7a6");
+    EXPECT_EQ (actualpos.maps[act_color], WHITE);
 }
 
 //

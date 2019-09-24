@@ -297,6 +297,92 @@ int Position::get_moving_piece(int square) {
     return -1;
 }
 
+bool Position::is_opposite_check(void) {
+    bitboard attacked_squares = 0x0;
+
+    bitboard white = maps[w_pieces];
+    bitboard black = maps[b_pieces];
+    bitboard whole_board = white | black;
+    bitboard pawns, bishops, knights, rooks, queen, king = 0x0;
+
+    bool is_white_move = this->is_white_move();
+
+    if (is_white_move) {
+        pawns = maps[w_pawn];
+        bishops = maps[w_bishop];
+        knights = maps[w_knight];
+        rooks = maps[w_rook];
+        queen = maps[w_queen];
+        king = maps[w_king];
+
+        // Add pawn attacks
+        attacked_squares |= (pawns & (~a_file)) << 7;
+        attacked_squares |= (pawns & (~h_file)) << 9;
+    }
+    else {
+        pawns = maps[b_pawn];
+        bishops = maps[b_bishop];
+        knights = maps[b_knight];
+        rooks = maps[b_rook];
+        queen = maps[b_queen];
+        king = maps[b_king];
+
+        // Add pawn attacks
+        attacked_squares |= (pawns & (~h_file)) >> 7;
+        attacked_squares |= (pawns & (~a_file)) >> 9;
+    }
+
+    // Add the Bishop slider attacks
+    int index1 = lsb(bishops);
+    while (index1 != -1) {
+        attacked_squares |= slider_attacks.BishopAttacks(whole_board, index1);
+
+        // "Increment" loop index1.
+        bishops &= ~squares[index1];
+        index1 = lsb(bishops);
+    }
+
+    // Add the Rook slider attacks
+    int index2 = lsb(rooks);
+    while (index2 != -1) {
+        attacked_squares |= slider_attacks.RookAttacks(whole_board, index2);
+
+        // "Increment" loop index2.
+        rooks &= ~squares[index2];
+        index2 = lsb(rooks);
+    }
+
+    // Add the Queen slider attacks
+    int index3 = lsb(queen);
+    while (index3 != -1) {
+        attacked_squares |= slider_attacks.QueenAttacks(whole_board, index3);
+
+        // "Increment" loop index3.
+        queen &= ~squares[index3];
+        index3 = lsb(queen);
+    }
+
+    int index4 = lsb(knights);
+    while (index4 != -1) {
+        attacked_squares |= knight_moves[index4];
+
+        // "Increment" loop index4.
+        knights &= ~squares[index4];
+        index4 = lsb(knights);
+    }
+
+    int index5 = lsb(king);
+    attacked_squares |= king_moves[index5];
+
+    if (is_white_move && (maps[b_king] & attacked_squares)) {
+        return true;
+    }
+    if (!is_white_move && (maps[w_king] & attacked_squares)) {
+        return true;
+    }
+    return false;
+}
+
 string Position::to_fen_string() {
     string fenstring = "";
 

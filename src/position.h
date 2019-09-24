@@ -106,6 +106,7 @@ class Position {
         void move(std::string move_string);
         void zero_at(int square, int piece);
         int get_moving_piece(int square);
+        bool is_opposite_check(void);
 
         std::string to_fen_string();
 };
