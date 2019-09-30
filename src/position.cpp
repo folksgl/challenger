@@ -297,7 +297,7 @@ int Position::get_moving_piece(int square) {
     return -1;
 }
 
-bool Position::is_opposite_check(void) {
+bool Position::is_square_attacked(bitboard square) {
     bitboard attacked_squares = 0x0;
 
     bitboard white = maps[w_pieces];
@@ -374,10 +374,7 @@ bool Position::is_opposite_check(void) {
     int index5 = lsb(king);
     attacked_squares |= king_moves[index5];
 
-    if (is_white_move && (maps[b_king] & attacked_squares)) {
-        return true;
-    }
-    if (!is_white_move && (maps[w_king] & attacked_squares)) {
+    if (square & attacked_squares) {
         return true;
     }
     return false;
