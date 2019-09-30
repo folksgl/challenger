@@ -208,14 +208,14 @@ string find_move_taken(Position* initial, Position* next) {
         if (white_turn) {
             src  = "e1";
             if ((initial_rook & squares[0]) && !(next_rook & squares[0])) {
-                dest = "g1";
+                dest = "c1";
             }
             else {
-                dest = "c1";
+                dest = "g1";
             }
         }
         else {
-            dest = "e8";
+            src = "e8";
             if ((initial_rook & squares[63]) && !(next_rook & squares[63])) {
                 dest = "g8";
             }
@@ -259,7 +259,7 @@ string find_move_taken(Position* initial, Position* next) {
 
     // Pawn promotion happened, adjust movestring
     if (initial_pawn != next_pawn) {
-        dest += "q";
+        dest += (white_turn) ? "Q" : "q";
     }
 
     return src + dest;
