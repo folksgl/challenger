@@ -17,6 +17,8 @@ void generate_moves(Position* pos) {
         slide_generator(pos, pos->maps[w_rook],   not_own, &get_rook_attacks);   // rook moves
         slide_generator(pos, pos->maps[w_queen],  not_own, &get_queen_attacks);  // queen moves
         leap_generator (pos, pos->maps[w_king],   not_own, king_moves);          // king moves
+
+        castling_generator_w(pos);
     }
     else {
         not_own = ~(pos->maps[b_pieces]);
@@ -28,6 +30,8 @@ void generate_moves(Position* pos) {
         slide_generator(pos, pos->maps[b_rook],   not_own, &get_rook_attacks);   // rook moves
         slide_generator(pos, pos->maps[b_queen],  not_own, &get_queen_attacks);  // queen moves
         leap_generator (pos, pos->maps[b_king],   not_own, king_moves);          // king moves
+
+        castling_generator_b(pos);
     }
 
 }
@@ -38,8 +42,8 @@ void add_move(Position* pos, string& src, string& dest) {
     copy.move(src + dest);
 
     // If the move introduces check for the player making the move, it is illegal and will not be considered.
-    bool is_check = copy.is_opposite_check();
-    if (is_check) { 
+    bitboard king_square = copy.is_white_move() ? copy.maps[b_king] : copy.maps[w_king];
+    if (copy.is_square_attacked(king_square)) {
         return; 
     }
 
@@ -85,10 +89,10 @@ void leap_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, con
     }
 }
 
-void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int)) {
+void slide_generator(Position* pos, bitboard slider, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int)) {
     bitboard whole_board = pos->maps[w_pieces] | pos->maps[b_pieces];
 
-    int index = lsb(bishops);
+    int index = lsb(slider);
     while (index != -1) {
         string src =  bit_to_square_arr[index];
         bitboard attacks = (*attack_function)(whole_board, index);
@@ -103,11 +107,87 @@ void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, b
             attacks &= ~squares[inner_index];
             inner_index = lsb(attacks);
         }
-        bishops &= ~squares[index];
-        index = lsb(bishops);
+        slider &= ~squares[index];
+        index = lsb(slider);
     }
 
     return;
+}
+
+void castling_generator_w(Position* pos) {
+    string src = "e1";
+    string dest;
+    Position opposite_turn = *pos;
+    opposite_turn.maps[act_color] ^= BLACK; // Toggle active color.
+
+    if (pos->w_kingside_castle()) { // Check castling availability
+        if (pos->maps[w_king] && pos->maps[w_rook] & h_file & rank_1) { // Ensure king and rook are on the board
+            if (!(pos->maps[w_pieces] & w_kingside_castle_empty)) {     // Ensure the squares in-between are empty
+                bool enters_check = (opposite_turn.is_square_attacked(squares[4]) || 
+                        opposite_turn.is_square_attacked(squares[5]) || 
+                        opposite_turn.is_square_attacked(squares[6]));
+                if (!enters_check) {
+                    dest = "g1";
+                    pos->maps[w_rook] ^= 0x00000000000000A0;
+                    pos->maps[w_pieces] ^= 0x00000000000000A0;
+                    add_move(pos, src, dest);
+                }
+            }
+        }
+    }
+    if (pos->w_queenside_castle()) {
+        if (pos->maps[w_king] && (pos->maps[w_rook] & a_file & rank_1)) { 
+            if (!(pos->maps[w_pieces] & w_queenside_castle_empty)) {
+                bool enters_check = (opposite_turn.is_square_attacked(squares[2]) || 
+                        opposite_turn.is_square_attacked(squares[3]) || 
+                        opposite_turn.is_square_attacked(squares[4]));
+                if (!enters_check) {
+                    dest = "c1";
+                    pos->maps[w_rook] ^= 0x0000000000000009;
+                    pos->maps[w_pieces] ^= 0x0000000000000009;
+                    add_move(pos, src, dest);
+                }
+            }
+        }
+    }
+}
+
+void castling_generator_b(Position* pos) {
+    string src = "e8";
+    string dest;
+    Position opposite_turn = *pos;
+    opposite_turn.maps[act_color] ^= BLACK; // Toggle active color.
+
+    if (pos->b_kingside_castle()) {
+        if (pos->maps[b_king] && (pos->maps[b_rook] & h_file & rank_8)) {
+            if (!(pos->maps[b_pieces] & b_kingside_castle_empty)) {
+                bool enters_check = (opposite_turn.is_square_attacked(squares[60]) || 
+                        opposite_turn.is_square_attacked(squares[61]) || 
+                        opposite_turn.is_square_attacked(squares[62]));
+                if (!enters_check) {
+                    dest = "g8";
+                    pos->maps[b_rook] ^= 0xA000000000000000;
+                    pos->maps[b_pieces] ^= 0xA000000000000000;
+                    add_move(pos, src, dest);
+                }
+            }
+        }
+    }
+    if (pos->b_queenside_castle()) {
+        if (pos->maps[b_king] && (pos->maps[b_rook] & a_file & rank_8)) {
+            if (!(pos->maps[b_pieces] & b_queenside_castle_empty)) {
+                bool enters_check = (opposite_turn.is_square_attacked(squares[60]) || 
+                        opposite_turn.is_square_attacked(squares[59]) || 
+                        opposite_turn.is_square_attacked(squares[58]));
+                if (!enters_check) {
+                    dest = "c8";
+                    pos->maps[b_rook] ^= 0x0900000000000000;
+                    pos->maps[b_pieces] ^= 0x0900000000000000;
+                    add_move(pos, src, dest);
+                }
+            }
+        }
+    }
 }
 
 void generate_w_pawn_moves(Position* pos) {

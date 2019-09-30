@@ -18,6 +18,10 @@ void leap_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, con
 
 void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int));
 
+void castling_generator_w(Position* pos);
+
+void castling_generator_b(Position* pos);
+
 bitboard get_bishop_attacks(bitboard board, int index);
 
 bitboard get_rook_attacks(bitboard board, int index);
