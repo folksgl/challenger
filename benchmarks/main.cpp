@@ -19,6 +19,7 @@ int main()
     slider_attacks.Initialize();
 
     cout << endl << endl << endl;
+    cout << "Starting position" << endl;
 
     move_generation_perft(1);
     move_generation_perft(2);
@@ -35,6 +36,38 @@ int main()
     search_perft(5);
     search_perft(6);
     search_perft(7);
+
+    cout << endl;
+
+    cout << "Position 2" << endl;
+    move_generation_perft_from_position_2(1);
+    move_generation_perft_from_position_2(2);
+    move_generation_perft_from_position_2(3);
+    cout << endl;
+
+    cout << "Position 3" << endl;
+    move_generation_perft_from_position_3(1);
+    move_generation_perft_from_position_3(2);
+    move_generation_perft_from_position_3(3);
+    cout << endl;
+
+    cout << "Position 4" << endl;
+    move_generation_perft_from_position_4(1);
+    move_generation_perft_from_position_4(2);
+    move_generation_perft_from_position_4(3);
+    cout << endl;
+
+    cout << "Position 5" << endl;
+    move_generation_perft_from_position_5(1);
+    move_generation_perft_from_position_5(2);
+    move_generation_perft_from_position_5(3);
+    cout << endl;
+
+    cout << "Position 6" << endl;
+    move_generation_perft_from_position_6(1);
+    move_generation_perft_from_position_6(2);
+    move_generation_perft_from_position_6(3);
+    cout << endl;
 
     return 0;
 }
