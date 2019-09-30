@@ -45,7 +45,7 @@ TEST(number_of_moves_generated, startpos_black) {
 //
 
 TEST(number_of_moves_generated, startpos_white_pawns) {
-    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/8 w KQkq - 0 1";
+    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1P4P1 w KQkq - 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
@@ -82,7 +82,7 @@ TEST(correct_moves_generated, startpos_white_pawns) {
 }
 
 TEST(correct_moves_generated, tripple_pawn_standoff_white) {
-    std::string test = "rnbqkbnr/pp3ppp/8/2ppp3/2PPP3/8/PP3PPP/8 w KQkq - 0 1";
+    std::string test = "rnbqkbnr/pp3ppp/8/2ppp3/2PPP3/8/PP3PPP/1P4P1 w KQkq - 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
@@ -108,7 +108,7 @@ TEST(correct_moves_generated, tripple_pawn_standoff_white) {
 }
 
 TEST(correct_moves_generated, blocked_white_pawn) {
-    std::string test = "rnbqkbnr/pppppppp/8/8/8/p7/PPPPPPPP/8 w KQkq - 0 1";
+    std::string test = "rnbqkbnr/pppppppp/8/8/8/p7/PPPPPPPP/1P4P1 w KQkq - 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
@@ -136,7 +136,7 @@ TEST(correct_moves_generated, blocked_white_pawn) {
 
 
 TEST(capture_passant, white) {
-    std::string test = "rnbqkbnr/ppp1pppp/8/2Pp4/8/8/PP1PPPPP/8 w KQkq d6 0 1";
+    std::string test = "rnbqkbnr/ppp1pppp/8/2Pp4/8/8/PP1PPPPP/1P4P1 w KQkq d6 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
@@ -169,7 +169,7 @@ TEST(capture_passant, white) {
 //
 
 TEST(number_of_moves_generated, startpos_black_pawns) {
-    std::string test = "8/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+    std::string test = "1p4p1/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
@@ -177,8 +177,8 @@ TEST(number_of_moves_generated, startpos_black_pawns) {
     EXPECT_EQ (startpos.moves.size(), 16);
 }
 
-TEST(correct_moves_generated, startpos_black) {
-    std::string test = "8/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+TEST(correct_moves_generated, startpos_black_pawns) {
+    std::string test = "1p4p1/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
@@ -207,7 +207,7 @@ TEST(correct_moves_generated, startpos_black) {
 }
 
 TEST(correct_moves_generated, tripple_pawn_standoff_black) {
-    std::string test = "8/pp3ppp/8/2ppp3/2PPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 1";
+    std::string test = "1p4p1/pp3ppp/8/2ppp3/2PPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
@@ -233,7 +233,7 @@ TEST(correct_moves_generated, tripple_pawn_standoff_black) {
 }
 
 TEST(correct_moves_generated, blocked_black_pawn) {
-    std::string test = "8/pppppppp/P7/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+    std::string test = "1p4p1/pppppppp/P7/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
@@ -261,7 +261,7 @@ TEST(correct_moves_generated, blocked_black_pawn) {
 
 
 TEST(capture_passant, black) {
-    std::string test = "8/pp1ppppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR b KQkq d3 0 1";
+    std::string test = "1p4p1/pp1ppppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR b KQkq d3 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
@@ -862,6 +862,24 @@ TEST(correct_moves_generated, middleboard_black_king) {
     EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[7]),   "e5f6");
 }
 
+TEST(correct_moves_generated, white_pawn_promotion) {
+    std::string test = "rnbqkbnr/ppPppppp/8/8/8/8/8/1P4P1 w KQkq - 0 1";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    ASSERT_EQ(startpos.moves.size(), 4);
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[0]),   "b1b2");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[1]),   "c7b8Q");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[2]),   "c7d8Q");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[3]),   "g1g2");
+}
+
+
 // Complex positions found on https://www.chessprogramming.org/Perft_Results
 TEST(number_of_moves_generated, complex_position_2) { 
     std::string test = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
@@ -892,9 +910,18 @@ TEST(number_of_moves_generated, complex_position_4) {
 
 TEST(number_of_moves_generated, complex_position_5) {
     std::string test = "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8";
+    test = "rnbqkb1r/pp1p1ppp/2p5/4P3/2B5/8/PPP1NnPP/RNBQK2R w KQkq - 0 6";
     Position startpos(test);
 
     generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    for(auto move : startpos.moves) {
+        cout << find_move_taken(&startpos, &move) << endl;
+        cout << move.to_fen_string() << endl;
+    }
 
     EXPECT_EQ (startpos.moves.size(), 44);
 }
