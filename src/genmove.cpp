@@ -47,10 +47,58 @@ void add_move(Position* pos, string& src, string& dest) {
         return; 
     }
 
-    // Add the move the vector of moves possible from the current position and evaluate.
+    // Add the move to the vector of moves possible from the current position and evaluate.
     pos->moves.push_back(copy);
     Position* p = &pos->moves.back();
     p->evaluate();
+}
+
+void add_move_pawn_promotion(Position* pos, string& src, string& dest) {
+    // Create a copy of the position and make the move
+    Position copy_queen = *pos;
+    string queen_string, rook_string, knight_string, bishop_string;
+
+    if (copy_queen.is_white_move()) {
+        queen_string = "Q";
+        rook_string = "R";
+        knight_string = "N";
+        bishop_string = "B";
+    }
+    else {
+        queen_string = "q";
+        rook_string = "r";
+        knight_string = "n";
+        bishop_string = "b";
+    }
+    copy_queen.move_pawn_promotion(src + dest + queen_string);
+
+    // If the move introduces check for the player making the move, it is illegal and will not be considered.
+    bitboard king_square = copy_queen.is_white_move() ? copy_queen.maps[b_king] : copy_queen.maps[w_king];
+    if (copy_queen.is_square_attacked(king_square)) {
+        return; 
+    }
+
+    Position copy_rook = *pos;
+    Position copy_knight = *pos;
+    Position copy_bishop = *pos;
+
+    copy_rook.move_pawn_promotion(src + dest + rook_string);
+    copy_knight.move_pawn_promotion(src + dest + knight_string);
+    copy_bishop.move_pawn_promotion(src + dest + bishop_string);
+
+    // Add the moves to the vector of moves possible from the current position and evaluate.
+    pos->moves.push_back(copy_queen);
+    Position* p = &pos->moves.back();
+    p->evaluate();
+    pos->moves.push_back(copy_rook);
+    Position* p2 = &pos->moves.back();
+    p2->evaluate();
+    pos->moves.push_back(copy_knight);
+    Position* p3 = &pos->moves.back();
+    p3->evaluate();
+    pos->moves.push_back(copy_bishop);
+    Position* p4 = &pos->moves.back();
+    p4->evaluate();
 }
 
 inline bitboard get_bishop_attacks(bitboard board, int index) {
@@ -211,21 +259,37 @@ void generate_w_pawn_moves(Position* pos) {
         bitboard squarei = squares[index];
         src = bit_to_square_arr[index];
 
-        if (squarei & left_attacks) {
-            dest = bit_to_square_pawn_arr[index+7];
-            add_move(pos, src, dest);
+        if (squarei & rank_7) {
+            if (squarei & left_attacks) {
+                dest = bit_to_square_arr[index+7];
+                add_move_pawn_promotion(pos, src, dest);
+            }
+            if (squarei & right_attacks) {
+                dest = bit_to_square_arr[index+9];
+                add_move_pawn_promotion(pos, src, dest);
+            }
+            if (squarei & forward) {
+                dest = bit_to_square_arr[index+8];
+                add_move_pawn_promotion(pos, src, dest);
+            }
         }
-        if (squarei & right_attacks) {
-            dest = bit_to_square_pawn_arr[index+9];
-            add_move(pos, src, dest);
-        }
-        if (squarei & forward) {
-            dest = bit_to_square_pawn_arr[index+8];
-            add_move(pos, src, dest);
-
-            if (squarei & double_forward) {
-                dest = bit_to_square_arr[index+16];
+        else {
+            if (squarei & left_attacks) {
+                dest = bit_to_square_arr[index+7];
                 add_move(pos, src, dest);
+            }
+            if (squarei & right_attacks) {
+                dest = bit_to_square_arr[index+9];
+                add_move(pos, src, dest);
+            }
+            if (squarei & forward) {
+                dest = bit_to_square_arr[index+8];
+                add_move(pos, src, dest);
+
+                if (squarei & double_forward) {
+                    dest = bit_to_square_arr[index+16];
+                    add_move(pos, src, dest);
+                }
             }
         }
 
@@ -256,21 +320,37 @@ void generate_b_pawn_moves(Position* pos) {
         bitboard squarei = squares[index];
         src = bit_to_square_arr[index];
 
-        if (squarei & left_attacks) {
-            dest = bit_to_square_pawn_arr[index-7];
-            add_move(pos, src, dest);
+        if (squarei & rank_2) {
+            if (squarei & left_attacks) {
+                dest = bit_to_square_arr[index-7];
+                add_move_pawn_promotion(pos, src, dest);
+            }
+            if (squarei & right_attacks) {
+                dest = bit_to_square_arr[index-9];
+                add_move_pawn_promotion(pos, src, dest);
+            }
+            if (squarei & forward) {
+                dest = bit_to_square_arr[index-8];
+                add_move_pawn_promotion(pos, src, dest);
+            }
         }
-        if (squarei & right_attacks) {
-            dest = bit_to_square_pawn_arr[index-9];
-            add_move(pos, src, dest);
-        }
-        if (squarei & forward) {
-            dest = bit_to_square_pawn_arr[index-8];
-            add_move(pos, src, dest);
-
-            if (squarei & double_forward) {
-                dest = bit_to_square_arr[index-16];
+        else {
+            if (squarei & left_attacks) {
+                dest = bit_to_square_arr[index-7];
                 add_move(pos, src, dest);
+            }
+            if (squarei & right_attacks) {
+                dest = bit_to_square_arr[index-9];
+                add_move(pos, src, dest);
+            }
+            if (squarei & forward) {
+                dest = bit_to_square_arr[index-8];
+                add_move(pos, src, dest);
+
+                if (squarei & double_forward) {
+                    dest = bit_to_square_arr[index-16];
+                    add_move(pos, src, dest);
+                }
             }
         }
 
