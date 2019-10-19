@@ -229,10 +229,13 @@ string find_move_taken(Position* initial, Position* next) {
     bitboard initial_pieces = (white_turn) ? initial->maps[w_pieces] : initial->maps[b_pieces];
     bitboard next_pieces = (white_turn) ? next->maps[w_pieces] : next->maps[b_pieces];
 
+    int dest_square = 0;
+
     // Normal moves will be set here. (i.e. not castling/promotion)
     for (int i = 0; i < 64; i++) {
         // check set bits
         if (initial_pieces & squares[i]) {
+            // Set bit was changed to unset
             if (!(next_pieces & squares[i])) {
                 src = bit_to_square.at(squares[i]);
             }
@@ -240,6 +243,7 @@ string find_move_taken(Position* initial, Position* next) {
         // check unset bits
         else {
             if (next_pieces & squares[i]) {
+                dest_square = i;
                 dest = bit_to_square.at(squares[i]);
             }
         }
@@ -259,7 +263,18 @@ string find_move_taken(Position* initial, Position* next) {
 
     // Pawn promotion happened, adjust movestring
     if (initial_pawn != next_pawn) {
-        dest += (white_turn) ? "Q" : "q";
+        if (white_turn) {
+            if (squares[dest_square] & next->maps[w_queen])  { dest += "Q"; }
+            if (squares[dest_square] & next->maps[w_bishop]) { dest += "B"; }
+            if (squares[dest_square] & next->maps[w_knight]) { dest += "N"; }
+            if (squares[dest_square] & next->maps[w_rook])   { dest += "R"; }
+        }
+        else {
+            if (squares[dest_square] & next->maps[b_queen])  { dest += "q"; }
+            if (squares[dest_square] & next->maps[b_bishop]) { dest += "b"; }
+            if (squares[dest_square] & next->maps[b_knight]) { dest += "n"; }
+            if (squares[dest_square] & next->maps[b_rook])   { dest += "r"; }
+        }
     }
 
     return src + dest;

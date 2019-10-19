@@ -104,6 +104,7 @@ class Position {
         void generate_moves(void);
         void evaluate(void);
         void move(std::string move_string);
+        void move_pawn_promotion(string move);
         void zero_at(int square, int piece);
         int get_moving_piece(int square);
         bool is_square_attacked(bitboard square);

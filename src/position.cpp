@@ -196,11 +196,11 @@ void Position::set_fullmove_number(char* fen_tok) {
 
 
 /*
- *  game_move performs the move given in the move string on board_position.
+ *  move() performs the move given in the move string on board_position.
  */
 void Position::move(string move) {
 
-    if (move.length() != 4 && move.length() != 5) {
+    if (move.length() != 4) {
         // Malformed move string, ignore move and don't change the position.
         return;
     }
@@ -212,35 +212,31 @@ void Position::move(string move) {
 
     // Check if there is a piece on the dest square and remove if needed.
     int dest_piece = get_moving_piece(dest_square);
-    int z_piece = (dest_piece > 6) ? dest_piece : dest_piece - 1;
+    //int z_piece = (dest_piece > 6) ? dest_piece : dest_piece - 1;
     if (dest_piece != -1) {
-        maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
+        //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
         zero_at(dest_square, dest_piece);
     }
     // Get the piece that is moving
     int piece = get_moving_piece(start_square);
-    z_piece = (piece > 6) ? piece : piece - 1;
+
+    // If moving a pawn 2 spaces forward, set the en passant square.
+    if (piece == w_pawn && dest_square == (start_square + 16)) {
+        maps[passant_sq] = squares[start_square + 8];
+    }
+    else if (piece == b_pawn && dest_square == (start_square - 16)) {
+        maps[passant_sq] = squares[start_square - 8];
+    }
+    else {
+        maps[passant_sq] = 0x0000000000000000;
+    }
+    //z_piece = (piece > 6) ? piece : piece - 1;
 
     zero_at(start_square, piece);
-    maps[zobrist_key] ^= zobrist.zobrist_piece_rands[start_square][z_piece];
+    //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[start_square][z_piece];
 
-    // Check for pawn promotion
-    if (move.length() == 5) {
-        char promoted_to = move.at(4);
-        switch (promoted_to) {
-            case 'q': piece = b_queen;  break;
-            case 'Q': piece = w_queen;  break;
-            case 'N': piece = w_knight; break;
-            case 'n': piece = b_knight; break;
-            case 'B': piece = w_bishop; break;
-            case 'b': piece = b_bishop; break;
-            case 'R': piece = w_rook;   break;
-            case 'r': piece = b_rook;   break;
-        }
-    }
-
-    z_piece = (piece > 6) ? piece : piece - 1;
-    maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
+    //z_piece = (piece > 6) ? piece : piece - 1;
+    //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
 
     // Set the destination square
     bitboard square_to_add = squares[dest_square];
@@ -258,7 +254,77 @@ void Position::move(string move) {
 
     maps[hlf_clock] ^= ONE; // Toggle halfmove clock.
 
-    maps[zobrist_key] ^= zobrist.zobrist_black_move; // Toggle Zobrist value for active color.
+    //maps[zobrist_key] ^= zobrist.zobrist_black_move; // Toggle Zobrist value for active color.
+    maps[act_color] ^= BLACK; // Toggle active color.
+
+    return;
+}
+
+/*
+ *  move_pawn_promotion() performs pawn promotion given in the move string on board_position.
+ */
+void Position::move_pawn_promotion(string move) {
+
+    if (move.length() != 5) {
+        // Malformed move string, ignore move and don't change the position.
+        return;
+    }
+
+    // Extract start and destination squares from the move
+    int start_square = get_square_num(move.substr(0,2));
+    int dest_square = get_square_num(move.substr(2,2));
+
+
+    // Check if there is a piece on the dest square and remove if needed.
+    int dest_piece = get_moving_piece(dest_square);
+    //int z_piece = (dest_piece > 6) ? dest_piece : dest_piece - 1;
+    if (dest_piece != -1) {
+        //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
+        zero_at(dest_square, dest_piece);
+    }
+    // Get the piece that is moving
+    int piece = get_moving_piece(start_square);
+
+    // Reset the en passant square.
+    maps[passant_sq] = 0x0000000000000000;
+
+    //z_piece = (piece > 6) ? piece : piece - 1;
+
+    zero_at(start_square, piece);
+    //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[start_square][z_piece];
+
+    char promoted_to = move.at(4);
+    switch (promoted_to) {
+        case 'q': piece = b_queen;  break;
+        case 'Q': piece = w_queen;  break;
+        case 'N': piece = w_knight; break;
+        case 'n': piece = b_knight; break;
+        case 'B': piece = w_bishop; break;
+        case 'b': piece = b_bishop; break;
+        case 'R': piece = w_rook;   break;
+        case 'r': piece = b_rook;   break;
+    }
+
+    //z_piece = (piece > 6) ? piece : piece - 1;
+    //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
+
+    // Set the destination square
+    bitboard square_to_add = squares[dest_square];
+    maps[piece] |= square_to_add;
+
+    if (piece < 6) {
+        maps[w_pieces] |= square_to_add;
+    }
+    else {
+        maps[b_pieces] |= square_to_add;
+    }
+
+    // Increment move number based on current halfmove clock
+    maps[full_num] += maps[hlf_clock];
+
+    maps[hlf_clock] ^= ONE; // Toggle halfmove clock.
+
+    //maps[zobrist_key] ^= zobrist.zobrist_black_move; // Toggle Zobrist value for active color.
     maps[act_color] ^= BLACK; // Toggle active color.
 
     return;

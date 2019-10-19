@@ -676,7 +676,7 @@ TEST(game_move, a2a7_a7b7) {
 TEST(game_move, promote_w_knight_a2a8N) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a8N");
+    actualpos.move_pawn_promotion("a2a8N");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8000000000000000); // b_rook
@@ -699,7 +699,7 @@ TEST(game_move, promote_w_knight_a2a8N) {
 TEST(game_move, promote_b_knight_a2a8n) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a8n");
+    actualpos.move_pawn_promotion("a2a8n");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8000000000000000); // b_rook
@@ -722,7 +722,7 @@ TEST(game_move, promote_b_knight_a2a8n) {
 TEST(game_move, promote_w_bishop_a2a8B) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a8B");
+    actualpos.move_pawn_promotion("a2a8B");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8000000000000000); // b_rook
@@ -745,7 +745,7 @@ TEST(game_move, promote_w_bishop_a2a8B) {
 TEST(game_move, promote_b_bishop_a2a8b) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a8b");
+    actualpos.move_pawn_promotion("a2a8b");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8000000000000000); // b_rook
@@ -768,7 +768,7 @@ TEST(game_move, promote_b_bishop_a2a8b) {
 TEST(game_move, promote_w_rook_a2a8R) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a8R");
+    actualpos.move_pawn_promotion("a2a8R");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8000000000000000); // b_rook
@@ -791,7 +791,7 @@ TEST(game_move, promote_w_rook_a2a8R) {
 TEST(game_move, promote_b_rook_a2a8r) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a8r");
+    actualpos.move_pawn_promotion("a2a8r");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
@@ -814,7 +814,7 @@ TEST(game_move, promote_b_rook_a2a8r) {
 TEST(game_move, promote_w_queen_a2a8Q) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a8Q");
+    actualpos.move_pawn_promotion("a2a8Q");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8000000000000000); // b_rook
@@ -837,7 +837,7 @@ TEST(game_move, promote_w_queen_a2a8Q) {
 TEST(game_move, promote_b_queen_a2a8q) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a8q");
+    actualpos.move_pawn_promotion("a2a8q");
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8000000000000000); // b_rook
