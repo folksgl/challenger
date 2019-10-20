@@ -873,17 +873,119 @@ TEST(correct_moves_generated, white_pawn_promotion) {
 
     ASSERT_EQ(startpos.moves.size(), 4);
 
-    for(auto move : startpos.moves) {
-        cout << find_move_taken(&startpos, &move) << endl;
-        cout << move.to_fen_string() << endl;
-    }
-
     EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[0]),   "c7b8B");
     EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[1]),   "c7b8N");
     EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[2]),   "c7b8Q");
     EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[3]),   "c7b8R");
 }
 
+TEST(correct_moves_generated, custom_complex_position_1) {
+    std::string test = "r1bqkb1r/1pp2ppp/2n5/3pp3/2P5/8/P2PP1PP/qN1K1BNn w - - 0 10";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 17);
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[0]),    "a2a3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[1]),    "a2a4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[2]),    "c4c5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[3]),    "c4d5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[4]),    "d1c1");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[5]),    "d1c2");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[6]),    "d1e1");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[7]),    "d2d3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[8]),    "d2d4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[9]),    "e2e3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[10]),   "e2e4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[11]),   "g1f3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[12]),   "g1h3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[13]),   "g2g3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[14]),   "g2g4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[15]),   "h2h3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[16]),   "h2h4");
+}
+
+TEST(correct_moves_generated, custom_complex_position_1_b) {
+    std::string test = "r1bqkb1r/1pp2ppp/2n5/3pp3/2P5/8/P2PP1PP/qN1K1BNn b - - 0 10";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 50);
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[0]),    "a1a2");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[1]),    "a1b1");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[2]),    "a1b2");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[3]),    "a1c3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[4]),    "a1d4");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[5]),    "a8a2");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[6]),    "a8a3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[7]),    "a8a4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[8]),    "a8a5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[9]),   "a8a6");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[10]),   "a8a7");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[11]),   "a8b8");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[12]),   "b7b5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[13]),   "b7b6");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[14]),   "c6a5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[15]),   "c6a7");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[16]),   "c6b4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[17]),   "c6b8");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[18]),   "c6d4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[19]),   "c6e7");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[20]),   "c8d7");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[21]),   "c8e6");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[22]),   "c8f5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[23]),   "c8g4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[24]),   "c8h3");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[25]),   "d5c4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[26]),   "d5d4");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[27]),   "d8d6");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[28]),   "d8d7");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[29]),   "d8e7");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[30]),   "d8f6");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[31]),   "d8g5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[32]),   "d8h4");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[33]),   "e5e4");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[34]),   "e8d7");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[35]),   "e8e7");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[36]),   "f7f5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[37]),   "f7f6");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[38]),   "f8a3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[39]),   "f8b4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[40]),   "f8c5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[41]),   "f8d6");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[42]),   "f8e7");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[43]),   "g7g5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[44]),   "g7g6");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[45]),   "h1f2");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[46]),   "h1g3");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[47]),   "h7h5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[48]),   "h7h6");
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[49]),   "h8g8");
+
+}
 
 // Complex positions found on https://www.chessprogramming.org/Perft_Results
 TEST(number_of_moves_generated, complex_position_2) { 
@@ -923,11 +1025,6 @@ TEST(number_of_moves_generated, complex_position_5) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    for(auto move : startpos.moves) {
-        cout << find_move_taken(&startpos, &move) << endl;
-        cout << move.to_fen_string() << endl;
-    }
-
     EXPECT_EQ (startpos.moves.size(), 44);
 }
 
@@ -939,3 +1036,22 @@ TEST(number_of_moves_generated, complex_position_6) {
 
     EXPECT_EQ (startpos.moves.size(), 46);
 }
+
+TEST(number_of_moves_generated, custom_complex_position_1) {
+    std::string test = "r1bqkb1r/1pp2ppp/2n5/3pp3/2P5/8/P2PP1PP/qN1K1BNn w - - 0 10";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 17);
+}
+
+TEST(number_of_moves_generated, custom_complex_position_1_b) {
+    std::string test = "r1bqkb1r/1pp2ppp/2n5/3pp3/2P5/8/P2PP1PP/qN1K1BNn b - - 0 10";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    EXPECT_EQ (startpos.moves.size(), 50);
+}
+
