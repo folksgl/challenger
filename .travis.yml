@@ -11,8 +11,8 @@ before_install:
 - pip install --user cpp-coveralls
 script:
 - cmake -H. -Bbuild
-- cd build/
-- make -j 8 && make test
+- make -j 8 
+- make test
 after_success:
 - make coverage
 - coveralls -l challenger.info
