@@ -220,12 +220,26 @@ void Position::move(string move) {
     // Get the piece that is moving
     int piece = get_moving_piece(start_square);
 
-    // If moving a pawn 2 spaces forward, set the en passant square.
-    if (piece == w_pawn && dest_square == (start_square + 16)) {
-        maps[passant_sq] = squares[start_square + 8];
+    if (piece == w_pawn) {
+        // If moving a pawn 2 spaces forward, set the en passant square.
+        if (dest_square == (start_square + 16)) {
+            maps[passant_sq] = squares[start_square + 8];
+        }
+        // If capturing en passant, remove the captured pawn
+        else if (squares[dest_square] & maps[passant_sq]) {
+            zero_at(dest_square - 8, b_pawn);
+            maps[passant_sq] = 0x0000000000000000;
+        }
     }
-    else if (piece == b_pawn && dest_square == (start_square - 16)) {
-        maps[passant_sq] = squares[start_square - 8];
+    else if (piece == b_pawn) {
+        if (dest_square == (start_square - 16)) {
+            maps[passant_sq] = squares[start_square - 8];
+        }
+        // If capturing en passant, remove the captured pawn
+        else if (squares[dest_square] & maps[passant_sq]) {
+            zero_at(dest_square + 8, w_pawn);
+            maps[passant_sq] = 0x0000000000000000;
+        }
     }
     else {
         maps[passant_sq] = 0x0000000000000000;

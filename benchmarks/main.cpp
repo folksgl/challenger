@@ -26,7 +26,7 @@ int main()
     move_generation_perft(3);
     move_generation_perft(4);
     move_generation_perft(5);
-    move_generation_perft(6);
+    //move_generation_perft(6);
     //move_generation_perft(7); Takes too long to execute
 
     cout << endl;
