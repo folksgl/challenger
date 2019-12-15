@@ -23,6 +23,13 @@ const std::unordered_map<string, int> castle_string_to_index({
         {"kq"  , 13}, {"k"   , 14}, {"q"   , 15}, {"-"   , 0},
 });
 
+const std::unordered_map<int, string> castle_index_to_string({
+        {1, "KQkq"},  {2,  "KQk"},  {3,  "KQq"},  {4,  "KQ"}, 
+        {5,  "Kkq"},  {6,   "Kk"},  {7,   "Kq"},  {8,  "K"},
+        {9,  "Qkq"},  {10,  "Qk"},  {11,  "Qq"},  {12, "Q"},
+        {13,  "kq"},  {14,   "k"},  {15,   "q"},  {0, "-"},
+});
+
 const std::unordered_map<string, bitboard> passant_string_to_bit({
         {"a3", 0x0000000000010000}, {"b3", 0x0000000000020000},
         {"c3", 0x0000000000040000}, {"d3", 0x0000000000080000}, 
@@ -105,6 +112,11 @@ class Position {
         void evaluate(void);
         void move(std::string move_string);
         void move_pawn_promotion(string move);
+        void move_pawn_double_forward(string move);
+        void move_white_kingside_castle();
+        void move_white_queenside_castle();
+        void move_black_kingside_castle();
+        void move_black_queenside_castle();
         void zero_at(int square, int piece);
         int get_moving_piece(int square);
         bool is_square_attacked(bitboard square);

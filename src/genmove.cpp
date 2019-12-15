@@ -34,6 +34,9 @@ void generate_moves(Position* pos) {
         castling_generator_b(pos);
     }
 
+    for (auto move: pos->moves) {
+        move.evaluate();
+    }
 }
 
 void add_move(Position* pos, string& src, string& dest) {
@@ -49,8 +52,6 @@ void add_move(Position* pos, string& src, string& dest) {
 
     // Add the move to the vector of moves possible from the current position and evaluate.
     pos->moves.push_back(copy);
-    Position* p = &pos->moves.back();
-    p->evaluate();
 }
 
 void add_move_pawn_promotion(Position* pos, string& src, string& dest) {
@@ -78,27 +79,72 @@ void add_move_pawn_promotion(Position* pos, string& src, string& dest) {
         return; 
     }
 
+    // Create copies of the position for all possible promotions
     Position copy_rook = *pos;
     Position copy_knight = *pos;
     Position copy_bishop = *pos;
 
+    // Perform the moves
     copy_rook.move_pawn_promotion(src + dest + rook_string);
     copy_knight.move_pawn_promotion(src + dest + knight_string);
     copy_bishop.move_pawn_promotion(src + dest + bishop_string);
 
-    // Add the moves to the vector of moves possible from the current position and evaluate.
+    // Add the moves to the vector of moves possible from the current position
     pos->moves.push_back(copy_queen);
-    Position* p = &pos->moves.back();
-    p->evaluate();
     pos->moves.push_back(copy_rook);
-    Position* p2 = &pos->moves.back();
-    p2->evaluate();
     pos->moves.push_back(copy_knight);
-    Position* p3 = &pos->moves.back();
-    p3->evaluate();
     pos->moves.push_back(copy_bishop);
-    Position* p4 = &pos->moves.back();
-    p4->evaluate();
+}
+
+void add_move_pawn_double_forward(Position* pos, string& src, string& dest) {
+    // Create a copy of the position and make the move
+    Position copy = *pos;
+    copy.move_pawn_double_forward(src + dest);
+
+    // If the move introduces check for the player making the move, it is illegal and will not be considered.
+    bitboard king_square = copy.is_white_move() ? copy.maps[b_king] : copy.maps[w_king];
+    if (copy.is_square_attacked(king_square)) {
+        return; 
+    }
+
+    // Add the move to the vector of moves possible from the current position and evaluate.
+    pos->moves.push_back(copy);
+}
+
+void add_move_w_kingside_castle(Position* pos) {
+    // Create a copy of the position and make the move
+    Position copy = *pos;
+    copy.move_white_kingside_castle();
+
+    // Add the move to the vector of moves possible from the current position and evaluate.
+    pos->moves.push_back(copy);
+}
+
+void add_move_b_kingside_castle(Position* pos) {
+    // Create a copy of the position and make the move
+    Position copy = *pos;
+    copy.move_black_kingside_castle();
+
+    // Add the move to the vector of moves possible from the current position and evaluate.
+    pos->moves.push_back(copy);
+}
+
+void add_move_w_queenside_castle(Position* pos) {
+    // Create a copy of the position and make the move
+    Position copy = *pos;
+    copy.move_white_queenside_castle();
+
+    // Add the move to the vector of moves possible from the current position and evaluate.
+    pos->moves.push_back(copy);
+}
+
+void add_move_b_queenside_castle(Position* pos) {
+    // Create a copy of the position and make the move
+    Position copy = *pos;
+    copy.move_black_queenside_castle();
+
+    // Add the move to the vector of moves possible from the current position and evaluate.
+    pos->moves.push_back(copy);
 }
 
 inline bitboard get_bishop_attacks(bitboard board, int index) {
@@ -175,10 +221,7 @@ void castling_generator_w(Position* pos) {
                         opposite_turn.is_square_attacked(squares[5]) || 
                         opposite_turn.is_square_attacked(squares[6]));
                 if (!enters_check) {
-                    dest = "g1";
-                    pos->maps[w_rook] ^= 0x00000000000000A0;
-                    pos->maps[w_pieces] ^= 0x00000000000000A0;
-                    add_move(pos, src, dest);
+                    add_move_w_kingside_castle(pos);
                 }
             }
         }
@@ -190,10 +233,7 @@ void castling_generator_w(Position* pos) {
                         opposite_turn.is_square_attacked(squares[3]) || 
                         opposite_turn.is_square_attacked(squares[4]));
                 if (!enters_check) {
-                    dest = "c1";
-                    pos->maps[w_rook] ^= 0x0000000000000009;
-                    pos->maps[w_pieces] ^= 0x0000000000000009;
-                    add_move(pos, src, dest);
+                    add_move_w_queenside_castle(pos);
                 }
             }
         }
@@ -213,10 +253,7 @@ void castling_generator_b(Position* pos) {
                         opposite_turn.is_square_attacked(squares[61]) || 
                         opposite_turn.is_square_attacked(squares[62]));
                 if (!enters_check) {
-                    dest = "g8";
-                    pos->maps[b_rook] ^= 0xA000000000000000;
-                    pos->maps[b_pieces] ^= 0xA000000000000000;
-                    add_move(pos, src, dest);
+                    add_move_b_kingside_castle(pos);
                 }
             }
         }
@@ -228,10 +265,7 @@ void castling_generator_b(Position* pos) {
                         opposite_turn.is_square_attacked(squares[59]) || 
                         opposite_turn.is_square_attacked(squares[58]));
                 if (!enters_check) {
-                    dest = "c8";
-                    pos->maps[b_rook] ^= 0x0900000000000000;
-                    pos->maps[b_pieces] ^= 0x0900000000000000;
-                    add_move(pos, src, dest);
+                    add_move_b_queenside_castle(pos);
                 }
             }
         }
@@ -288,7 +322,7 @@ void generate_w_pawn_moves(Position* pos) {
 
                 if (squarei & double_forward) {
                     dest = bit_to_square_arr[index+16];
-                    add_move(pos, src, dest);
+                    add_move_pawn_double_forward(pos, src, dest);
                 }
             }
         }
@@ -349,7 +383,7 @@ void generate_b_pawn_moves(Position* pos) {
 
                 if (squarei & double_forward) {
                     dest = bit_to_square_arr[index-16];
-                    add_move(pos, src, dest);
+                    add_move_pawn_double_forward(pos, src, dest);
                 }
             }
         }

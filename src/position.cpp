@@ -217,6 +217,7 @@ void Position::move(string move) {
         //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
         zero_at(dest_square, dest_piece);
     }
+
     // Get the piece that is moving
     int piece = get_moving_piece(start_square);
 
@@ -291,21 +292,18 @@ void Position::move_pawn_promotion(string move) {
 
     // Check if there is a piece on the dest square and remove if needed.
     int dest_piece = get_moving_piece(dest_square);
-    //int z_piece = (dest_piece > 6) ? dest_piece : dest_piece - 1;
+
     if (dest_piece != -1) {
-        //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
         zero_at(dest_square, dest_piece);
     }
+
     // Get the piece that is moving
-    int piece = get_moving_piece(start_square);
+    int piece = this->is_white_move() ? w_pawn : b_pawn;
 
     // Reset the en passant square.
     maps[passant_sq] = 0x0000000000000000;
 
-    //z_piece = (piece > 6) ? piece : piece - 1;
-
     zero_at(start_square, piece);
-    //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[start_square][z_piece];
 
     char promoted_to = move.at(4);
     switch (promoted_to) {
@@ -319,8 +317,47 @@ void Position::move_pawn_promotion(string move) {
         case 'r': piece = b_rook;   break;
     }
 
-    //z_piece = (piece > 6) ? piece : piece - 1;
-    //maps[zobrist_key] ^= zobrist.zobrist_piece_rands[dest_square][z_piece];
+    // Set the destination square
+    bitboard square_to_add = squares[dest_square];
+    maps[piece] |= square_to_add;
+
+    if (piece < 6) {
+        maps[w_pieces] |= square_to_add;
+    }
+    else {
+        maps[b_pieces] |= square_to_add;
+    }
+
+    maps[full_num] += maps[hlf_clock]; // Increment move number.
+    maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
+    maps[act_color] ^= BLACK;          // Toggle active color.
+
+    return;
+}
+
+/*
+ *  move_pawn_double_forward() performs pawn promotion given in the move string on board_position.
+ */
+void Position::move_pawn_double_forward(string move) {
+
+    if (move.length() != 4) {
+        // Malformed move string, ignore move and don't change the position.
+        return;
+    }
+
+    // Extract start and destination squares from the move
+    int start_square = get_square_num(move.substr(0,2));
+    int dest_square = get_square_num(move.substr(2,2));
+
+    bool white_move = this->is_white_move();
+
+    // Get the piece that is moving
+    int piece = white_move ? w_pawn : b_pawn;
+
+    // Set the en passant square.
+    maps[passant_sq] = white_move? squares[dest_square - 8] : squares[dest_square + 8];
+
+    zero_at(start_square, piece);
 
     // Set the destination square
     bitboard square_to_add = squares[dest_square];
@@ -333,13 +370,117 @@ void Position::move_pawn_promotion(string move) {
         maps[b_pieces] |= square_to_add;
     }
 
-    // Increment move number based on current halfmove clock
-    maps[full_num] += maps[hlf_clock];
+    maps[full_num] += maps[hlf_clock]; // Increment move number.
+    maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
+    maps[act_color] ^= BLACK;          // Toggle active color.
 
-    maps[hlf_clock] ^= ONE; // Toggle halfmove clock.
+    return;
+}
 
-    //maps[zobrist_key] ^= zobrist.zobrist_black_move; // Toggle Zobrist value for active color.
-    maps[act_color] ^= BLACK; // Toggle active color.
+void Position::move_white_kingside_castle() {
+
+    // reset the en passant square.
+    maps[passant_sq] = 0x0000000000000000;
+
+    maps[w_king] ^= 0x0000000000000050;
+    maps[w_rook] ^= 0x00000000000000A0;
+    maps[w_pieces] ^= 0x00000000000000F0;
+
+    string rights = castle_index_to_string.at(maps[castle_rights]);
+    string new_rights = "";
+
+    for (int i = 0; i < rights.length(); i++) {
+        if (rights[i] != 'K' && rights[i] != 'Q') {
+            new_rights += rights[i];
+        }
+    }
+    new_rights = new_rights.empty() ? "-" : new_rights;
+    maps[castle_rights] = castle_string_to_index.at(new_rights);
+
+    maps[full_num] += maps[hlf_clock]; // Increment move number.
+    maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
+    maps[act_color] ^= BLACK;          // Toggle active color.
+
+    return;
+}
+
+void Position::move_white_queenside_castle() {
+
+    // reset the en passant square.
+    maps[passant_sq] = 0x0000000000000000;
+
+    maps[w_king] ^= 0x0000000000000014;
+    maps[w_rook] ^= 0x0000000000000009;
+    maps[w_pieces] ^= 0x000000000000001D;
+
+    string rights = castle_index_to_string.at(maps[castle_rights]);
+    string new_rights = "";
+
+    for (int i = 0; i < rights.length(); i++) {
+        if (rights[i] != 'K' && rights[i] != 'Q') {
+            new_rights += rights[i];
+        }
+    }
+    new_rights = new_rights.empty() ? "-" : new_rights;
+    maps[castle_rights] = castle_string_to_index.at(new_rights);
+
+    maps[full_num] += maps[hlf_clock]; // Increment move number.
+    maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
+    maps[act_color] ^= BLACK;          // Toggle active color.
+
+    return;
+}
+
+void Position::move_black_kingside_castle() {
+
+    // reset the en passant square.
+    maps[passant_sq] = 0x0000000000000000;
+
+    maps[b_king] ^= 0x5000000000000000;
+    maps[b_rook] ^= 0xA000000000000000;
+    maps[w_pieces] ^= 0xF000000000000000;
+
+    string rights = castle_index_to_string.at(maps[castle_rights]);
+    string new_rights = "";
+
+    for (int i = 0; i < rights.length(); i++) {
+        if (rights[i] != 'k' && rights[i] != 'q') {
+            new_rights += rights[i];
+        }
+    }
+    new_rights = new_rights.empty() ? "-" : new_rights;
+    maps[castle_rights] = castle_string_to_index.at(new_rights);
+
+    maps[full_num] += maps[hlf_clock]; // Increment move number.
+    maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
+    maps[act_color] ^= BLACK;          // Toggle active color.
+
+    return;
+}
+
+void Position::move_black_queenside_castle() {
+
+    // reset the en passant square.
+    maps[passant_sq] = 0x0000000000000000;
+
+    maps[b_king] ^= 0x1400000000000000;
+    maps[b_rook] ^= 0x0900000000000000;
+    maps[w_pieces] ^= 0x1D00000000000000;
+
+    string rights = castle_index_to_string.at(maps[castle_rights]);
+    string new_rights = "";
+
+    for (int i = 0; i < rights.length(); i++) {
+        if (rights[i] != 'k' && rights[i] != 'q') {
+            new_rights += rights[i];
+        }
+    }
+    new_rights = new_rights.empty() ? "-" : new_rights;
+    maps[castle_rights] = castle_string_to_index.at(new_rights);
+
+    maps[full_num] += maps[hlf_clock]; // Increment move number.
+    maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
+    maps[act_color] ^= BLACK;          // Toggle active color.
 
     return;
 }
@@ -368,7 +509,7 @@ void Position::zero_at(int square, int piece) {
 int Position::get_moving_piece(int square) {
     bitboard square_bit = squares[square];
 
-    for (unsigned int i = 0; i < 14; i++) {
+    for (int i = 0; i < 14; i++) {
         if (maps[i] & square_bit) {
             return i;
         }
