@@ -389,7 +389,7 @@ void Position::move_white_kingside_castle() {
     string rights = castle_index_to_string.at(maps[castle_rights]);
     string new_rights = "";
 
-    for (int i = 0; i < rights.length(); i++) {
+    for (unsigned int i = 0; i < rights.length(); i++) {
         if (rights[i] != 'K' && rights[i] != 'Q') {
             new_rights += rights[i];
         }
@@ -416,7 +416,7 @@ void Position::move_white_queenside_castle() {
     string rights = castle_index_to_string.at(maps[castle_rights]);
     string new_rights = "";
 
-    for (int i = 0; i < rights.length(); i++) {
+    for (unsigned int i = 0; i < rights.length(); i++) {
         if (rights[i] != 'K' && rights[i] != 'Q') {
             new_rights += rights[i];
         }
@@ -443,7 +443,7 @@ void Position::move_black_kingside_castle() {
     string rights = castle_index_to_string.at(maps[castle_rights]);
     string new_rights = "";
 
-    for (int i = 0; i < rights.length(); i++) {
+    for (unsigned int i = 0; i < rights.length(); i++) {
         if (rights[i] != 'k' && rights[i] != 'q') {
             new_rights += rights[i];
         }
@@ -470,7 +470,7 @@ void Position::move_black_queenside_castle() {
     string rights = castle_index_to_string.at(maps[castle_rights]);
     string new_rights = "";
 
-    for (int i = 0; i < rights.length(); i++) {
+    for (unsigned int i = 0; i < rights.length(); i++) {
         if (rights[i] != 'k' && rights[i] != 'q') {
             new_rights += rights[i];
         }
