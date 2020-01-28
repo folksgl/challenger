@@ -10,8 +10,7 @@ compiler: gcc
 before_install:
 - pip install --user cpp-coveralls
 script:
-- cmake -H. -Bbuild
-- make -j 8 
+- make
 - make test
 after_success:
 - make coverage
