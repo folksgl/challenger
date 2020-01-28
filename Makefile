@@ -1,5 +1,5 @@
 all: compile
-
+N_PROC := $(shell nproc)
 
 build_dir:
 	@if [ ! -d "./build" ];then     \
@@ -10,7 +10,7 @@ build_dir:
 	fi
 
 compile: build_dir
-	cmake --build ./build -j8 -- --no-print-directory
+	cmake --build ./build -j$(N_PROC) -- --no-print-directory
 
 clean: build_dir
 	@$(RM) analysis gmon.out
@@ -28,13 +28,13 @@ coverage: compile test
 	genhtml --output-directory ./build/html ./build/challenger.info
 
 optimized: build_dir
-	cmake --build ./build --target optimized -j8 -- --no-print-directory
+	cmake --build ./build --target optimized -j$(N_PROC) -- --no-print-directory
 
 windows: build_dir
-	cmake --build ./build --target windows_challenger -j8 -- --no-print-directory
+	cmake --build ./build --target windows_challenger -j$(N_PROC) -- --no-print-directory
 
 benchmark: build_dir
-	cmake --build ./build --target benchmark -j8 -- --no-print-directory
+	cmake --build ./build --target benchmark -j$(N_PROC) -- --no-print-directory
 	./build/benchmark_challenger >> benchmarking_reference
 
 profile: compile
