@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project("Challenger")
+project(Challenger)
 
 ### GOOGLETEST START ###
 # Download and unpack googletest at configure time

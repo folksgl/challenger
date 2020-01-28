@@ -3,14 +3,14 @@ all: compile
 
 build_dir:
 	@if [ ! -d "./build" ];then     \
-			cmake -H. -Bbuild ; \
+			cmake -S . -B ./build -Wdev ; \
 			cd build ; \
 			cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON . ; \
 			mv compile_commands.json ../src/ ; \
 	fi
 
 compile: build_dir
-	@cd build/ && $(MAKE) --no-print-directory -j8 --silent
+	@cd build/ && $(MAKE) 
 
 clean: build_dir
 	@$(RM) analysis gmon.out
@@ -18,9 +18,6 @@ clean: build_dir
 
 really_clean:
 	@$(RM) -rf build/
-
-build:
-	@cmake -H. -Bbuild
 
 test: compile
 	@cd build/ && $(MAKE) test --no-print-directory ARGS=-V
