@@ -10,7 +10,7 @@ build_dir:
 	fi
 
 compile: build_dir
-	@cd build/ && $(MAKE) 
+	cmake --build ./build -j8 -- --no-print-directory
 
 clean: build_dir
 	@$(RM) analysis gmon.out
@@ -20,18 +20,18 @@ really_clean:
 	@$(RM) -rf build/
 
 test: compile
-	@cd build/ && $(MAKE) test --no-print-directory ARGS=-V
+	cmake --build ./build --target test -- --no-print-directory ARGS=-V
 
 coverage: compile test
-	@cd build/ && $(MAKE) --no-print-directory coverage
+	cmake --build ./build --target coverage -- --no-print-directory
 	@rm -rf ./build/html
 	genhtml --output-directory ./build/html ./build/challenger.info
 
 optimized: build_dir
-	@cd build/ && $(MAKE) optimized --no-print-directory -j8 --silent
+	cmake --build ./build --target optimized -j8 -- --no-print-directory
 
 benchmark: build_dir
-	@cd build/ && $(MAKE) benchmark --no-print-directory -j8 --silent
+	cmake --build ./build --target benchmark -j8 -- --no-print-directory
 	./build/benchmark_challenger >> benchmarking_reference
 
 profile: compile
