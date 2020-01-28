@@ -3,12 +3,12 @@ dist: bionic
 addons:
   apt:
     packages:
-    - cmake
     - make
     - lcov
 compiler: gcc
 before_install:
 - pip install --user cpp-coveralls
+- pip install --user cmake
 script:
 - make
 - make test
