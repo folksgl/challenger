@@ -30,6 +30,9 @@ coverage: compile test
 optimized: build_dir
 	cmake --build ./build --target optimized -j8 -- --no-print-directory
 
+windows: build_dir
+	cmake --build ./build --target windows_challenger -j8 -- --no-print-directory
+
 benchmark: build_dir
 	cmake --build ./build --target benchmark -j8 -- --no-print-directory
 	./build/benchmark_challenger >> benchmarking_reference

@@ -105,6 +105,11 @@ add_custom_target(optimized
     BYPRODUCTS optimized_challenger
     )
 
+add_custom_target(windows_challenger
+    COMMAND x86_64-w64-mingw32-g++ -o windows_challenger.exe -O3 ${SRC_FILE_LIST}
+    BYPRODUCTS windows_challenger
+    )
+
 add_custom_target(benchmark
     COMMAND g++ -o benchmark_challenger -O3 -DBENCHMARK ${BENCH_FILE_LIST}
     BYPRODUCTS benchmark_challenger
