@@ -5,10 +5,11 @@ addons:
     packages:
     - make
     - lcov
+    - python3-pip
 compiler: gcc
 before_install:
-- pip install --user cpp-coveralls
-- pip install --user cmake
+- pip3 install --user cpp-coveralls
+- pip3 install --user cmake
 script:
 - make
 - make test
