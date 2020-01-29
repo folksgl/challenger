@@ -11,16 +11,11 @@ before_install:
 - pip3 install setuptools
 - pip3 install wheel
 - pip3 install cpp-coveralls
-- version=3.16
-- build=3
-- mkdir ~/temp
-- cd ~/temp
-- wget https://cmake.org/files/v$version/cmake-$version.$build.tar.gz
-- tar -xzvf cmake-$version.$build.tar.gz
-- cd cmake-$version.$build/
-- ./bootstrap
-- make -j$(nproc)
-- sudo make install
+- sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget
+- wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
+- sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+- sudo apt-get update
+- sudo apt-get install cmake
 - cmake --version
 script:
 - make
