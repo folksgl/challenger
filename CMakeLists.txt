@@ -101,7 +101,7 @@ add_custom_target(coverage
     )
 
 add_custom_target(optimized
-    COMMAND g++ -o optimized_challenger -O3 ${SRC_FILE_LIST}
+    COMMAND g++ -o linux_challenger -O3 ${SRC_FILE_LIST}
     BYPRODUCTS optimized_challenger
     )
 
