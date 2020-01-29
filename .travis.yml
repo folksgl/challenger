@@ -12,6 +12,7 @@ before_install:
 - pip3 install wheel
 - pip3 install cpp-coveralls
 - pip3 install --user cmake
+- cmake --version
 script:
 - make
 - make test
