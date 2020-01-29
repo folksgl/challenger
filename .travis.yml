@@ -11,7 +11,13 @@ before_install:
 - pip3 install setuptools
 - pip3 install wheel
 - pip3 install cpp-coveralls
-- pip3 install --user cmake
+- version=3.16
+- build=3
+- mkdir ~/temp
+- cd ~/temp
+- wget https://cmake.org/files/v$version/cmake-$version.$build-Linux-x86_64.sh 
+- sudo mkdir /opt/cmake
+- sudo sh cmake-$version.$build-Linux-x86_64.sh --prefix=/opt/cmake
 - cmake --version
 script:
 - make
