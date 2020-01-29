@@ -8,8 +8,10 @@ addons:
     - python3-pip
 compiler: gcc
 before_install:
-- pip3 install --user cpp-coveralls
-- pip3 install --user cmake
+- pip3 install setuptools
+- pip3 install wheel
+- pip3 install cpp-coveralls
+- pip3 install cmake
 script:
 - make
 - make test
