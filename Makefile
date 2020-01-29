@@ -48,3 +48,9 @@ profile: compile
 	@./build/challenger < tmp_input_challenger
 	@$(RM) tmp_input_challenger
 	gprof -b ./build/challenger gmon.out > analysis
+
+travis: build_dir
+	cmake --build ./build
+
+travis_test: travis
+	cmake --build ./build --target test -- --no-print-directory ARGS=-V
