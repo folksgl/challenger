@@ -101,7 +101,7 @@ add_custom_target(coverage
     )
 
 add_custom_target(optimized
-    COMMAND g++ -o linux_challenger -O3 ${SRC_FILE_LIST}
+    COMMAND g++-9 -o linux_challenger -O3 ${SRC_FILE_LIST}
     BYPRODUCTS optimized_challenger
     )
 
@@ -111,7 +111,7 @@ add_custom_target(windows_challenger
     )
 
 add_custom_target(benchmark
-    COMMAND g++ -o benchmark_challenger -O3 -DBENCHMARK ${BENCH_FILE_LIST}
+    COMMAND g++-9 -o benchmark_challenger -O3 -DBENCHMARK ${BENCH_FILE_LIST}
     BYPRODUCTS benchmark_challenger
     )
 
