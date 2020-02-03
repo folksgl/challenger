@@ -26,7 +26,7 @@ bitboard Zobrist::get_zobrist_key(Position* pos) {
     bitboard zobrist_hashkey = 0;
 
     for (int i = 0; i < 64; i++) {
-        bitboard square = squares[i];
+        bitboard square = 0x0000000000000001 << i;
 
         // Piece is white
         if (pos->maps[w_pieces] & square) {
