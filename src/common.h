@@ -1,11 +1,9 @@
-#include "bitboard.h"
-#include <string>
-#include <unordered_map>
-
 #ifndef COMMON_H
 #define COMMON_H
 
-#define lsb(x) (__builtin_ffsll((x)) - 1)
+#include "bitboard.h"
+#include <string>
+#include <unordered_map>
 
 const bitboard squares[64] = {
     0x01,               0x02,               0x04,               0x08,               0x10,               0x20,               0x40,               0x80, 

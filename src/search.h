@@ -1,8 +1,8 @@
-#include <string>
-#include "./position.h"
-
 #ifndef SEARCH_H
 #define SEARCH_H
+
+#include <string>
+#include "position.h"
 
 void search(Position* pos, int depth);
 

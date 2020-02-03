@@ -1,10 +1,10 @@
+#ifndef GENMOVE_H
+#define GENMOVE_H
+
 #include "position.h"
 #include "common.h"
 #include "game_variables.h"
 #include <unordered_map>
-
-#ifndef GENMOVE_H
-#define GENMOVE_H
 
 void generate_moves(Position* pos);
 

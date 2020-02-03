@@ -7,3 +7,6 @@
 typedef uint64_t bitboard;
 
 #endif
+
+// Define a way to determine the Least Significant Bit
+#define lsb(x) (__builtin_ffsll((x)) - 1)

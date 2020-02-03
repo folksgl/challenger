@@ -1,8 +1,11 @@
-#include <iostream>
-#include "position.h"
-
 #ifndef UCI_H
 #define UCI_H
+
+#include <iostream>
+#include "position.h"
+#include "game_variables.h"
+#include "common.h"
+#include "search.h"
 
 using namespace std;
 

@@ -1,3 +1,6 @@
+#ifndef POSITION_H
+#define POSITION_H
+
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -6,9 +9,6 @@
 #include <string.h>
 #include <unordered_map>
 #include "bitboard.h"
-
-#ifndef POSITION_H
-#define POSITION_H
 
 using namespace std;
 
@@ -113,10 +113,7 @@ class Position {
         void move(std::string move_string);
         void move_pawn_promotion(string move);
         void move_pawn_double_forward(string move);
-        void move_white_kingside_castle();
-        void move_white_queenside_castle();
-        void move_black_kingside_castle();
-        void move_black_queenside_castle();
+        void castle(Castling_names);
         void zero_at(int square, int piece);
         int get_moving_piece(int square);
         bool is_square_attacked(bitboard square);
