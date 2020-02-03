@@ -31,6 +31,7 @@ Position::Position(string fen) {
 }
 
 void Position::generate_moves() {
+    // moves.reserve(30)
     ::generate_moves(this);
     return;
 }
@@ -377,101 +378,43 @@ void Position::move_pawn_double_forward(string move) {
     return;
 }
 
-void Position::move_white_kingside_castle() {
+void Position::castle(Castling_names type) {
 
     // reset the en passant square.
     maps[passant_sq] = 0x0000000000000000;
+    char king_right = 'K';
+    char queen_right = 'Q';
 
-    maps[w_king] ^= 0x0000000000000050;
-    maps[w_rook] ^= 0x00000000000000A0;
-    maps[w_pieces] ^= 0x00000000000000F0;
-
-    string rights = castle_index_to_string.at(maps[castle_rights]);
-    string new_rights = "";
-
-    for (unsigned int i = 0; i < rights.length(); i++) {
-        if (rights[i] != 'K' && rights[i] != 'Q') {
-            new_rights += rights[i];
-        }
+    if (type == c_w_king) {
+        maps[w_king] ^= 0x0000000000000050;
+        maps[w_rook] ^= 0x00000000000000A0;
+        maps[w_pieces] ^= 0x00000000000000F0;
     }
-    new_rights = new_rights.empty() ? "-" : new_rights;
-    maps[castle_rights] = castle_string_to_index.at(new_rights);
-
-    maps[full_num] += maps[hlf_clock]; // Increment move number.
-    maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
-    maps[act_color] ^= BLACK;          // Toggle active color.
-
-    return;
-}
-
-void Position::move_white_queenside_castle() {
-
-    // reset the en passant square.
-    maps[passant_sq] = 0x0000000000000000;
-
-    maps[w_king] ^= 0x0000000000000014;
-    maps[w_rook] ^= 0x0000000000000009;
-    maps[w_pieces] ^= 0x000000000000001D;
-
-    string rights = castle_index_to_string.at(maps[castle_rights]);
-    string new_rights = "";
-
-    for (unsigned int i = 0; i < rights.length(); i++) {
-        if (rights[i] != 'K' && rights[i] != 'Q') {
-            new_rights += rights[i];
-        }
+    else if (type == c_w_queen) {
+        maps[w_king] ^= 0x0000000000000014;
+        maps[w_rook] ^= 0x0000000000000009;
+        maps[w_pieces] ^= 0x000000000000001D;
     }
-    new_rights = new_rights.empty() ? "-" : new_rights;
-    maps[castle_rights] = castle_string_to_index.at(new_rights);
-
-    maps[full_num] += maps[hlf_clock]; // Increment move number.
-    maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
-    maps[act_color] ^= BLACK;          // Toggle active color.
-
-    return;
-}
-
-void Position::move_black_kingside_castle() {
-
-    // reset the en passant square.
-    maps[passant_sq] = 0x0000000000000000;
-
-    maps[b_king] ^= 0x5000000000000000;
-    maps[b_rook] ^= 0xA000000000000000;
-    maps[w_pieces] ^= 0xF000000000000000;
-
-    string rights = castle_index_to_string.at(maps[castle_rights]);
-    string new_rights = "";
-
-    for (unsigned int i = 0; i < rights.length(); i++) {
-        if (rights[i] != 'k' && rights[i] != 'q') {
-            new_rights += rights[i];
-        }
+    else if (type == c_b_king) {
+        maps[b_king] ^= 0x5000000000000000;
+        maps[b_rook] ^= 0xA000000000000000;
+        maps[w_pieces] ^= 0xF000000000000000;
+        king_right = 'k';
+        queen_right = 'q';
     }
-    new_rights = new_rights.empty() ? "-" : new_rights;
-    maps[castle_rights] = castle_string_to_index.at(new_rights);
-
-    maps[full_num] += maps[hlf_clock]; // Increment move number.
-    maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
-    maps[act_color] ^= BLACK;          // Toggle active color.
-
-    return;
-}
-
-void Position::move_black_queenside_castle() {
-
-    // reset the en passant square.
-    maps[passant_sq] = 0x0000000000000000;
-
-    maps[b_king] ^= 0x1400000000000000;
-    maps[b_rook] ^= 0x0900000000000000;
-    maps[w_pieces] ^= 0x1D00000000000000;
+    else {
+        maps[b_king] ^= 0x1400000000000000;
+        maps[b_rook] ^= 0x0900000000000000;
+        maps[w_pieces] ^= 0x1D00000000000000;
+        king_right = 'k';
+        queen_right = 'q';
+    }
 
     string rights = castle_index_to_string.at(maps[castle_rights]);
     string new_rights = "";
 
     for (unsigned int i = 0; i < rights.length(); i++) {
-        if (rights[i] != 'k' && rights[i] != 'q') {
+        if (rights[i] != king_right && rights[i] != queen_right) {
             new_rights += rights[i];
         }
     }

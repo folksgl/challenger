@@ -111,37 +111,10 @@ void add_move_pawn_double_forward(Position* pos, string& src, string& dest) {
     pos->moves.push_back(copy);
 }
 
-void add_move_w_kingside_castle(Position* pos) {
+void add_move_castle(Position* pos, Castling_names type) {
     // Create a copy of the position and make the move
     Position copy = *pos;
-    copy.move_white_kingside_castle();
-
-    // Add the move to the vector of moves possible from the current position and evaluate.
-    pos->moves.push_back(copy);
-}
-
-void add_move_b_kingside_castle(Position* pos) {
-    // Create a copy of the position and make the move
-    Position copy = *pos;
-    copy.move_black_kingside_castle();
-
-    // Add the move to the vector of moves possible from the current position and evaluate.
-    pos->moves.push_back(copy);
-}
-
-void add_move_w_queenside_castle(Position* pos) {
-    // Create a copy of the position and make the move
-    Position copy = *pos;
-    copy.move_white_queenside_castle();
-
-    // Add the move to the vector of moves possible from the current position and evaluate.
-    pos->moves.push_back(copy);
-}
-
-void add_move_b_queenside_castle(Position* pos) {
-    // Create a copy of the position and make the move
-    Position copy = *pos;
-    copy.move_black_queenside_castle();
+    copy.castle(type);
 
     // Add the move to the vector of moves possible from the current position and evaluate.
     pos->moves.push_back(copy);
@@ -221,7 +194,7 @@ void castling_generator_w(Position* pos) {
                         opposite_turn.is_square_attacked(squares[5]) || 
                         opposite_turn.is_square_attacked(squares[6]));
                 if (!enters_check) {
-                    add_move_w_kingside_castle(pos);
+                    add_move_castle(pos, c_w_king);
                 }
             }
         }
@@ -233,7 +206,7 @@ void castling_generator_w(Position* pos) {
                         opposite_turn.is_square_attacked(squares[3]) || 
                         opposite_turn.is_square_attacked(squares[4]));
                 if (!enters_check) {
-                    add_move_w_queenside_castle(pos);
+                    add_move_castle(pos, c_w_queen);
                 }
             }
         }
@@ -253,7 +226,7 @@ void castling_generator_b(Position* pos) {
                         opposite_turn.is_square_attacked(squares[61]) || 
                         opposite_turn.is_square_attacked(squares[62]));
                 if (!enters_check) {
-                    add_move_b_kingside_castle(pos);
+                    add_move_castle(pos, c_b_king);
                 }
             }
         }
@@ -265,7 +238,7 @@ void castling_generator_b(Position* pos) {
                         opposite_turn.is_square_attacked(squares[59]) || 
                         opposite_turn.is_square_attacked(squares[58]));
                 if (!enters_check) {
-                    add_move_b_queenside_castle(pos);
+                    add_move_castle(pos, c_b_queen);
                 }
             }
         }
