@@ -6,6 +6,7 @@ addons:
     - make
     - lcov
     - python3-pip
+    - gcc-9
 compiler: gcc
 before_install:
 - pip3 install setuptools
