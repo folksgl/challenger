@@ -5,9 +5,6 @@
 #include <iterator>
 #include <regex>
 #include "uci.h"
-#include "game_variables.h"
-#include "search.h"
-#include "common.h"
 
 using namespace std;
 
@@ -155,7 +152,7 @@ void process_go_command(std::string uci_input) {
     char *token = strtok(command, " "); 
     token = strtok(NULL, " "); 
 
-    int depth = 1; // Default to searching to a depth of depth plys ahead
+    int depth = 9; // Default to searching to a depth of depth plys ahead
 
     while (token != NULL) {
         string tok(token);

@@ -1,6 +1,4 @@
 #include "evaluate.h"
-#include "genmove.h"
-#include "common.h"
 
 using namespace std;
 
