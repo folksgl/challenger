@@ -35,6 +35,9 @@ benchmark: build_dir
 	cmake --build ./build --target benchmark -j$(N_PROC) -- --no-print-directory
 	./build/benchmark_challenger >> benchmarking_reference
 
+perft: build_dir
+	cmake --build ./build --target perft -j$(N_PROC) -- --no-print-directory
+
 profile: compile
 	@if [ -f "./gmon.out" ]; then \
 			$(RM) "./gmon.out"; \
