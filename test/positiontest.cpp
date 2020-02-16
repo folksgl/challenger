@@ -397,6 +397,18 @@ TEST(castling_rights, bq_castling_allowed) {
     EXPECT_FALSE (actualpos.b_queenside_castle());
 }
 
+TEST(castling_rights, w_castle_revoked) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R w KQkq - 0 1";
+    Position actualpos(test);
+    actualpos.move("e1f1");
+
+    EXPECT_FALSE (actualpos.w_kingside_castle());
+    EXPECT_FALSE (actualpos.w_queenside_castle());
+
+    EXPECT_TRUE(actualpos.b_kingside_castle());
+    EXPECT_TRUE(actualpos.b_queenside_castle());
+}
+
 //
 // START ACTIVE COLOR TEST /////////////////////////////////////////////////////
 //
@@ -1065,3 +1077,21 @@ TEST(active_color, switch_with_not_operator_2) {
     EXPECT_EQ(actualpos.maps[act_color], WHITE);
 }
 
+//
+// START IS_SQUARE_ATTACKED TESTS /////////////////////////////////////////
+//
+
+TEST(is_square_attacked, rook_attacks_b_king_post_passant) {
+    string test = "8/2p5/3p4/KP5r/1R5k/6p1/4P3/8 w - - 0 1";
+    Position actualpos(test);
+
+    EXPECT_EQ(actualpos.is_square_attacked(actualpos.maps[b_king]), true);
+}
+
+TEST(is_square_attacked, rook_attacks_b_king_post_passant_2) {
+    string test = "8/2p5/3p4/KP5r/1R2Pp1k/8/6P1/8 b - e3 0 1";
+    Position actualpos(test);
+    actualpos.move("f4e3");
+
+    EXPECT_EQ(actualpos.is_square_attacked(actualpos.maps[b_king]), true);
+}

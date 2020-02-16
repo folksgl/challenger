@@ -164,6 +164,64 @@ TEST(capture_passant, white) {
 
 }
 
+TEST(no_blank_capture, white) {
+    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position startpos(test);
+    startpos.move("a2a4");
+    startpos.move("a7a6");
+
+    generate_moves(&startpos);
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    ASSERT_EQ(startpos.w_kingside_castle(),  true);
+    ASSERT_EQ(startpos.w_queenside_castle(), true);
+    ASSERT_EQ(startpos.b_kingside_castle(),  true);
+    ASSERT_EQ(startpos.b_queenside_castle(), true);
+
+    ASSERT_EQ(startpos.maps[w_pawn], 0x000000000100FE00);
+    ASSERT_EQ(startpos.maps[b_pawn], 0x00FE010000000000);
+
+    EXPECT_EQ (startpos.maps[w_rook],   0x0000000000000081); // w_rook]
+    EXPECT_EQ (startpos.maps[w_knight], 0x0000000000000042); // w_knight]
+    EXPECT_EQ (startpos.maps[w_bishop], 0x0000000000000024); // w_bishop]
+    EXPECT_EQ (startpos.maps[w_queen],  0x0000000000000008); // w_queen]
+    EXPECT_EQ (startpos.maps[w_king],   0x0000000000000010); // w_king]
+
+    EXPECT_EQ (startpos.maps[b_rook],   0x8100000000000000); // b_rook]
+    EXPECT_EQ (startpos.maps[b_knight], 0x4200000000000000); // b_knight]
+    EXPECT_EQ (startpos.maps[b_bishop], 0x2400000000000000); // b_bishop]
+    EXPECT_EQ (startpos.maps[b_queen],  0x0800000000000000); // b_queen]
+    EXPECT_EQ (startpos.maps[b_king],   0x1000000000000000); // b_king]
+
+    EXPECT_EQ (bit_to_square.at(startpos.maps[passant_sq]), "-");
+
+    ASSERT_EQ(startpos.moves.size(), 21);
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[0]),   "a1a2");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[1]),   "a1a3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[2]),   "a4a5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[3]),   "b1a3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[4]),   "b1c3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[5]),   "b2b3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[6]),   "b2b4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[7]),   "c2c3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[8]),   "c2c4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[9]),   "d2d3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[10]),  "d2d4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[11]),  "e2e3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[12]),  "e2e4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[13]),  "f2f3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[14]),  "f2f4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[15]),  "g1f3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[16]),  "g1h3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[17]),  "g2g3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[18]),  "g2g4");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[19]),  "h2h3");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[20]),  "h2h4");
+
+}
+
 //
 // START BLACK PAWN GENERATION TESTS ///////////////////////////////////////////
 //
@@ -1779,5 +1837,333 @@ TEST(correct_moves_generated, white_bitboard_correct_after_w_queenside) {
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     EXPECT_EQ (startpos.moves[10].maps[w_pieces], squares[2] | squares[3]);
+}
+
+//
+// START CHESS960 TESTS ////////////////////////////////////////////////////////
+//
+
+TEST(correct_number_moves_generated, 960_position_001_depth_1) {
+    std::string test = "bqnb1rkr/pp3ppp/3ppn2/2p5/5P2/P2P4/NPP1P1PP/BQ1BNRKR w - - 2 9";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 21);
+}
+
+TEST(correct_number_moves_generated, 960_position_002_depth_1) {
+    std::string test = "2nnrbkr/p1qppppp/8/1ppb4/6PP/3PP3/PPP2P2/BQNNRBKR w - - 1 9";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 21);
+}
+
+TEST(correct_number_moves_generated, 960_position_004_depth_1) {
+    std::string test = "qbbnnrkr/2pp2pp/p7/1p2pp2/8/P3PP2/1PPP1KPP/QBBNNR1R w - - 0 9";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 22);
+}
+
+TEST(correct_number_moves_generated, 960_position_005_depth_1) {
+    std::string test = "1nbbnrkr/p1p1ppp1/3p4/1p3P1p/3Pq2P/8/PPP1P1P1/QNBBNRKR w - - 0 9";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 28);
+}
+
+TEST(correct_number_moves_generated, 960_position_007_depth_1) {
+    std::string test = "q1bnrkr1/ppppp2p/2n2p2/4b1p1/2NP4/8/PPP1PPPP/QNB1RRKB w - - 1 9";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 30);
+}
+
+TEST(correct_number_moves_generated, 960_position_008_depth_1) {
+    std::string test = "qbn1brkr/ppp1p1p1/2n4p/3p1p2/P7/6PP/QPPPPP2/1BNNBRKR w - - 0 9";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 25);
+}
+
+TEST(correct_number_moves_generated, 960_position_009_depth_1) {
+    std::string test = "qnnbbrkr/1p2ppp1/2pp3p/p7/1P5P/2NP4/P1P1PPP1/Q1NBBRKR w - - 0 9";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 24);
+}
+
+TEST(correct_number_moves_generated, 960_position_010_depth_1) {
+    std::string test = "qn1rbbkr/ppp2p1p/1n1pp1p1/8/3P4/P6P/1PP1PPPK/QNNRBB1R w - - 2 9";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 28);
+}
+
+//
+// KING_IN_CHECK
+//
+TEST(correct_number_moves_generated, king_in_check) {
+    std::string test = "qn1rkrbb/pp1p1ppp/2p1p3/3n4/4P2P/2NP4/PPP2PP1/Q1NRKRBB w - - 1 9";
+    Position startpos(test);
+
+    startpos.move_pawn_double_forward("a2a4");
+    startpos.move_pawn_double_forward("a7a5");
+    startpos.move_pawn_double_forward("b2b4");
+    startpos.move("e8e7");
+    startpos.move("c3d5");
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 4);
+
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[0]),    "c6d5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[1]),    "e6d5");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[2]),    "e7d6");
+    EXPECT_EQ(find_move_taken(&startpos, &startpos.moves[3]),    "e7e8");
+
+}
+
+TEST(correct_number_moves_generated, king_in_check_a2a4) {
+    std::string test = "qn1rkrbb/pp1p1ppp/2p1p3/3n4/4P2P/2NP4/PPP2PP1/Q1NRKRBB w - - 1 9";
+    Position startpos(test);
+
+    startpos.move_pawn_double_forward("a2a4");
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 24);
+
+}
+
+TEST(correct_number_moves_generated, king_in_check_a7a5) {
+    std::string test = "qn1rkrbb/pp1p1ppp/2p1p3/3n4/P3P2P/2NP4/1PP2PP1/Q1NRKRBB b - a3 0 10";
+    Position startpos(test);
+
+    startpos.move_pawn_double_forward("a7a5");
+    // qn1rkrbb/1p1p1ppp/2p1p3/p2n4/P3P2P/2NP4/1PP2PP1/Q1NRKRBB w - a6 1 10
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 25);
+
+}
+
+TEST(correct_number_moves_generated, king_in_check_b2b4) {
+    std::string test = "qn1rkrbb/1p1p1ppp/2p1p3/p2n4/P3P2P/2NP4/1PP2PP1/Q1NRKRBB w - a6 1 10";
+    Position startpos(test);
+
+    startpos.move_pawn_double_forward("b2b4");
+    // qn1rkrbb/1p1p1ppp/2p1p3/p2n4/PP2P2P/2NP4/2P2PP1/Q1NRKRBB b - a3 0 11
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 25);
+
+}
+
+TEST(correct_number_moves_generated, king_in_check_e8e7) {
+    std::string test = "qn1rkrbb/1p1p1ppp/2p1p3/p2n4/PP2P2P/2NP4/2P2PP1/Q1NRKRBB b - a3 0 11";
+    Position startpos(test);
+
+    startpos.move("e8e7");
+    // qn1r1rbb/1p1pkppp/2p1p3/p2n4/PP2P2P/2NP4/2P2PP1/Q1NRKRBB w - - 1 11
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 26);
+
+}
+
+TEST(correct_number_moves_generated, random_pos_001) {
+    std::string test = "r4r2/2p1qppk/p1np1n2/1pb1p1Bp/1PB1P1bP/P1NP1N2/2P1QPP1/R4RK1 b - - 1 12";
+    Position startpos(test);
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.moves.size(), 45);
+}
+
+TEST(correct_number_moves_generated, random_pos_002) {
+    std::string test = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
+    Position startpos(test);
+
+    startpos.move("a2a4");
+    EXPECT_EQ (startpos.maps[passant_sq], 0x0000000000010000);
+    startpos.move("c7c5");
+    EXPECT_EQ (startpos.maps[passant_sq], 0x0000040000000000);
+    startpos.move("e1d1");
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.is_black_move(), true);
+
+    EXPECT_EQ (startpos.w_kingside_castle(),  false);
+    EXPECT_EQ (startpos.w_queenside_castle(), false);
+    EXPECT_EQ (startpos.b_kingside_castle(),  true);
+    EXPECT_EQ (startpos.b_queenside_castle(), true);
+
+    EXPECT_EQ (startpos.maps[passant_sq], 0);
+
+    //EXPECT_EQ (,true);
+
+    EXPECT_EQ (startpos.moves.size(), 41);
+}
+
+TEST(correct_number_moves_generated, random_pos_003) {
+    std::string test = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
+    Position startpos(test);
+
+    startpos.move("e2d1");
+    startpos.move("a6f1");
+    startpos.move("e5f7");
+    startpos.move("a8b8");
+    startpos.move("h1g1");
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.w_kingside_castle(),  false);
+    EXPECT_EQ (startpos.w_queenside_castle(), true);
+    EXPECT_EQ (startpos.b_kingside_castle(),  true);
+    EXPECT_EQ (startpos.b_queenside_castle(), false);
+
+    EXPECT_EQ (startpos.moves.size(), 48);
+}
+
+TEST(correct_number_moves_generated, random_pos_004) {
+    std::string test = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
+    Position startpos(test);
+
+    startpos.move("e2d1");
+    cout << "after 1 " <<  startpos.maps[w_pieces] << endl;
+    cout << "        " << (startpos.maps[w_pawn] | startpos.maps[w_rook] | startpos.maps[w_knight] | startpos.maps[w_bishop] | startpos.maps[w_queen] | startpos.maps[w_king]) << endl;
+    cout << "after 1b " << startpos.maps[b_pieces] << endl;
+    cout << "         " << (startpos.maps[b_pawn] | startpos.maps[b_rook] | startpos.maps[b_knight] | startpos.maps[b_bishop] | startpos.maps[b_queen] | startpos.maps[b_king]) << endl;
+    startpos.move("a6f1");
+    cout << "after 2 " <<  startpos.maps[w_pieces] << endl;
+    cout << "        " << (startpos.maps[w_pawn] | startpos.maps[w_rook] | startpos.maps[w_knight] | startpos.maps[w_bishop] | startpos.maps[w_queen] | startpos.maps[w_king]) << endl;
+    cout << "after 2b " << startpos.maps[b_pieces] << endl;
+    cout << "         " << (startpos.maps[b_pawn] | startpos.maps[b_rook] | startpos.maps[b_knight] | startpos.maps[b_bishop] | startpos.maps[b_queen] | startpos.maps[b_king]) << endl;
+    startpos.move("e5f7");
+    cout << "after 3 " <<  startpos.maps[w_pieces] << endl;
+    cout << "        " << (startpos.maps[w_pawn] | startpos.maps[w_rook] | startpos.maps[w_knight] | startpos.maps[w_bishop] | startpos.maps[w_queen] | startpos.maps[w_king]) << endl;
+    cout << "after 3b " << startpos.maps[b_pieces] << endl;
+    cout << "         " << (startpos.maps[b_pawn] | startpos.maps[b_rook] | startpos.maps[b_knight] | startpos.maps[b_bishop] | startpos.maps[b_queen] | startpos.maps[b_king]) << endl;
+    startpos.move("a8b8");
+    cout << "after 4 " <<  startpos.maps[w_pieces] << endl;
+    cout << "        " << (startpos.maps[w_pawn] | startpos.maps[w_rook] | startpos.maps[w_knight] | startpos.maps[w_bishop] | startpos.maps[w_queen] | startpos.maps[w_king]) << endl;
+    cout << "after 4b " << startpos.maps[b_pieces] << endl;
+    cout << "         " << (startpos.maps[b_pawn] | startpos.maps[b_rook] | startpos.maps[b_knight] | startpos.maps[b_bishop] | startpos.maps[b_queen] | startpos.maps[b_king]) << endl;
+    startpos.move("h1g1");
+    cout << "after 5 " <<  startpos.maps[w_pieces] << endl;
+    cout << "        " << (startpos.maps[w_pawn] | startpos.maps[w_rook] | startpos.maps[w_knight] | startpos.maps[w_bishop] | startpos.maps[w_queen] | startpos.maps[w_king]) << endl;
+    cout << "after 5b " << startpos.maps[b_pieces] << endl;
+    cout << "         " << (startpos.maps[b_pawn] | startpos.maps[b_rook] | startpos.maps[b_knight] | startpos.maps[b_bishop] | startpos.maps[b_queen] | startpos.maps[b_king]) << endl;
+    startpos.castle(c_b_king);
+    cout << "after 6 " <<  startpos.maps[w_pieces] << endl;
+    cout << "        " << (startpos.maps[w_pawn] | startpos.maps[w_rook] | startpos.maps[w_knight] | startpos.maps[w_bishop] | startpos.maps[w_queen] | startpos.maps[w_king]) << endl;
+    cout << "after 6b " << startpos.maps[b_pieces] << endl;
+    cout << "         " << (startpos.maps[b_pawn] | startpos.maps[b_rook] | startpos.maps[b_knight] | startpos.maps[b_bishop] | startpos.maps[b_queen] | startpos.maps[b_king]) << endl;
+    startpos.move("f7h6");
+    cout << "DONE SETTING UP" << endl;
+
+    // 1r3rk1/p1ppq1b1/1n2pnpN/3P4/1p2P3/2N2Q1p/PPPB1PPP/R2BKbR1 b Q - 0 1
+
+    generate_moves(&startpos);
+
+    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+            [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
+
+    EXPECT_EQ (startpos.is_black_move(),  true);
+
+    EXPECT_EQ (startpos.w_kingside_castle(),  false);
+    EXPECT_EQ (startpos.w_queenside_castle(), true);
+    EXPECT_EQ (startpos.b_kingside_castle(),  false);
+    EXPECT_EQ (startpos.b_queenside_castle(), false);
+
+    EXPECT_EQ (startpos.maps[passant_sq], 0);
+
+    EXPECT_EQ (startpos.maps[w_pieces],   0x000080081024EF59);
+    EXPECT_EQ (startpos.maps[b_pieces],   0x625D720002800020);
+
+    EXPECT_EQ (startpos.maps[w_pawn],   0x000000081000E700);
+    EXPECT_EQ (startpos.maps[b_pawn],   0x000D500002800000);
+    EXPECT_EQ (startpos.maps[w_rook],   0x0000000000000041);
+    EXPECT_EQ (startpos.maps[b_rook],   0x2200000000000000);
+    EXPECT_EQ (startpos.maps[w_knight], 0x0000800000040000);
+    EXPECT_EQ (startpos.maps[b_knight], 0x0000220000000000);
+    EXPECT_EQ (startpos.maps[w_bishop], 0x0000000000000808);
+    EXPECT_EQ (startpos.maps[b_bishop], 0x0040000000000020);
+    EXPECT_EQ (startpos.maps[w_king],   0x0000000000000010);
+    EXPECT_EQ (startpos.maps[b_king],   0x4000000000000000);
+    EXPECT_EQ (startpos.maps[w_queen],  0x0000000000200000);
+    EXPECT_EQ (startpos.maps[b_queen],  0x0010000000000000);
+
+    EXPECT_EQ (startpos.is_square_attacked(startpos.maps[b_king]), true);
+
+    EXPECT_EQ (startpos.moves.size(), 3);
 }
 
