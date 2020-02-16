@@ -20,7 +20,8 @@ const std::unordered_map<string, int> castle_string_to_index({
         {"KQkq", 1},  {"KQk" , 2},  {"KQq" , 3},  {"KQ"  , 4}, 
         {"Kkq" , 5},  {"Kk"  , 6},  {"Kq"  , 7},  {"K"   , 8},
         {"Qkq" , 9},  {"Qk"  , 10}, {"Qq"  , 11}, {"Q"   , 12},
-        {"kq"  , 13}, {"k"   , 14}, {"q"   , 15}, {"-"   , 0},
+        {"kq"  , 13}, {"k"   , 14}, {"q"   , 15}, {"-"   , 0}, 
+        {""    , 0},
 });
 
 const std::unordered_map<int, string> castle_index_to_string({

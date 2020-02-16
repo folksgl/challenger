@@ -186,10 +186,11 @@ void castling_generator_w(Position* pos) {
     string dest;
     Position opposite_turn = *pos;
     opposite_turn.maps[act_color] ^= BLACK; // Toggle active color.
+    bitboard whole_board = pos->maps[w_pieces] | pos->maps[b_pieces];
 
     if (pos->w_kingside_castle()) { // Check castling availability
-        if (pos->maps[w_king] && pos->maps[w_rook] & h_file & rank_1) { // Ensure king and rook are on the board
-            if (!(pos->maps[w_pieces] & w_kingside_castle_empty)) {     // Ensure the squares in-between are empty
+        if (pos->maps[w_king] && pos->maps[w_rook] & squares[7]) { // Ensure king and rook are on the board
+            if (!(whole_board & w_kingside_castle_empty)) {     // Ensure the squares in-between are empty
                 bool enters_check = (opposite_turn.is_square_attacked(squares[4]) || 
                         opposite_turn.is_square_attacked(squares[5]) || 
                         opposite_turn.is_square_attacked(squares[6]));
@@ -200,8 +201,8 @@ void castling_generator_w(Position* pos) {
         }
     }
     if (pos->w_queenside_castle()) {
-        if (pos->maps[w_king] && (pos->maps[w_rook] & a_file & rank_1)) { 
-            if (!(pos->maps[w_pieces] & w_queenside_castle_empty)) {
+        if (pos->maps[w_king] && (pos->maps[w_rook] & squares[0])) { 
+            if (!(whole_board & w_queenside_castle_empty)) {
                 bool enters_check = (opposite_turn.is_square_attacked(squares[2]) || 
                         opposite_turn.is_square_attacked(squares[3]) || 
                         opposite_turn.is_square_attacked(squares[4]));
@@ -218,10 +219,11 @@ void castling_generator_b(Position* pos) {
     string dest;
     Position opposite_turn = *pos;
     opposite_turn.maps[act_color] ^= BLACK; // Toggle active color.
+    bitboard whole_board = pos->maps[w_pieces] | pos->maps[b_pieces];
 
     if (pos->b_kingside_castle()) {
-        if (pos->maps[b_king] && (pos->maps[b_rook] & h_file & rank_8)) {
-            if (!(pos->maps[b_pieces] & b_kingside_castle_empty)) {
+        if (pos->maps[b_king] && (pos->maps[b_rook] & squares[63])) {
+            if (!(whole_board & b_kingside_castle_empty)) {
                 bool enters_check = (opposite_turn.is_square_attacked(squares[60]) || 
                         opposite_turn.is_square_attacked(squares[61]) || 
                         opposite_turn.is_square_attacked(squares[62]));
@@ -232,8 +234,8 @@ void castling_generator_b(Position* pos) {
         }
     }
     if (pos->b_queenside_castle()) {
-        if (pos->maps[b_king] && (pos->maps[b_rook] & a_file & rank_8)) {
-            if (!(pos->maps[b_pieces] & b_queenside_castle_empty)) {
+        if (pos->maps[b_king] && (pos->maps[b_rook] & squares[56])) {
+            if (!(whole_board & b_queenside_castle_empty)) {
                 bool enters_check = (opposite_turn.is_square_attacked(squares[60]) || 
                         opposite_turn.is_square_attacked(squares[59]) || 
                         opposite_turn.is_square_attacked(squares[58]));

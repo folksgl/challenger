@@ -223,6 +223,7 @@ void Position::move(string move) {
     int piece = get_moving_piece(start_square);
 
     if (piece == w_pawn) {
+
         // If moving a pawn 2 spaces forward, set the en passant square.
         if (dest_square == (start_square + 16)) {
             maps[passant_sq] = squares[start_square + 8];
@@ -232,8 +233,12 @@ void Position::move(string move) {
             zero_at(dest_square - 8, b_pawn);
             maps[passant_sq] = 0x0000000000000000;
         }
+        else {
+            maps[passant_sq] = 0x0000000000000000;
+        }
     }
     else if (piece == b_pawn) {
+
         if (dest_square == (start_square - 16)) {
             maps[passant_sq] = squares[start_square - 8];
         }
@@ -242,6 +247,55 @@ void Position::move(string move) {
             zero_at(dest_square + 8, w_pawn);
             maps[passant_sq] = 0x0000000000000000;
         }
+        else {
+            maps[passant_sq] = 0x0000000000000000;
+        }
+    }
+    else if (piece == w_king) {
+        string removechars = "KQ";
+        string rights = castle_index_to_string.at(maps[castle_rights]);
+        maps[passant_sq] = 0x0000000000000000;
+
+        for (char c: removechars) {
+            rights.erase(remove(rights.begin(), rights.end(), c), rights.end());
+        }
+
+        maps[castle_rights] = castle_string_to_index.at(rights);
+    }
+    else if (piece == b_king) {
+        string removechars = "kq";
+        string rights = castle_index_to_string.at(maps[castle_rights]);
+        maps[passant_sq] = 0x0000000000000000;
+
+        for (char c: removechars) {
+            rights.erase(remove(rights.begin(), rights.end(), c), rights.end());
+        }
+
+        maps[castle_rights] = castle_string_to_index.at(rights);
+    }
+    else if (piece == w_rook || piece == b_rook) {
+        string removechars = "";
+        if (start_square == 0) {
+            removechars = "Q";
+        }
+        if (start_square == 7) {
+            removechars = "K";
+        }
+        if (start_square == 56) {
+            removechars = "q";
+        }
+        if (start_square == 63) {
+            removechars = "k";
+        }
+
+        string rights = castle_index_to_string.at(maps[castle_rights]);
+        maps[passant_sq] = 0x0000000000000000;
+
+        for (char c: removechars) {
+            rights.erase(remove(rights.begin(), rights.end(), c), rights.end());
+        }
+
+        maps[castle_rights] = castle_string_to_index.at(rights);
     }
     else {
         maps[passant_sq] = 0x0000000000000000;
@@ -382,8 +436,7 @@ void Position::castle(Castling_names type) {
 
     // reset the en passant square.
     maps[passant_sq] = 0x0000000000000000;
-    char king_right = 'K';
-    char queen_right = 'Q';
+    string removechars = "KQ";
 
     if (type == c_w_king) {
         maps[w_king] ^= 0x0000000000000050;
@@ -398,28 +451,23 @@ void Position::castle(Castling_names type) {
     else if (type == c_b_king) {
         maps[b_king] ^= 0x5000000000000000;
         maps[b_rook] ^= 0xA000000000000000;
-        maps[w_pieces] ^= 0xF000000000000000;
-        king_right = 'k';
-        queen_right = 'q';
+        maps[b_pieces] ^= 0xF000000000000000;
+        removechars = "kq";
     }
     else {
         maps[b_king] ^= 0x1400000000000000;
         maps[b_rook] ^= 0x0900000000000000;
-        maps[w_pieces] ^= 0x1D00000000000000;
-        king_right = 'k';
-        queen_right = 'q';
+        maps[b_pieces] ^= 0x1D00000000000000;
+        removechars = "kq";
     }
 
     string rights = castle_index_to_string.at(maps[castle_rights]);
-    string new_rights = "";
 
-    for (unsigned int i = 0; i < rights.length(); i++) {
-        if (rights[i] != king_right && rights[i] != queen_right) {
-            new_rights += rights[i];
-        }
+    for (char c: removechars) {
+        rights.erase(remove(rights.begin(), rights.end(), c), rights.end());
     }
-    new_rights = new_rights.empty() ? "-" : new_rights;
-    maps[castle_rights] = castle_string_to_index.at(new_rights);
+
+    maps[castle_rights] = castle_string_to_index.at(rights);
 
     maps[full_num] += maps[hlf_clock]; // Increment move number.
     maps[hlf_clock] ^= ONE;            // Toggle halfmove clock.
