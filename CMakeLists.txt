@@ -44,6 +44,7 @@ set(CMAKE_CXX_FLAGS "-Wall -ggdb -Og -pg --coverage")
 set(SRC_DIR src)
 set(TEST_DIR "test")
 set(BENCH_DIR "benchmarks")
+set(PERFT_DIR "perft")
 
 # list contains all .cpp files in the source directory
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
@@ -66,6 +67,17 @@ list(APPEND BENCH_FILES ${BENCH_FILES2})
 set(BENCH_FILE_LIST ${BENCH_FILES})
 
 list(REMOVE_ITEM BENCH_FILE_LIST ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+
+# PERFT Start
+file(GLOB_RECURSE PERFT_FILES ${PERFT_DIR}/*.cpp)
+file(GLOB_RECURSE PERFT_FILES2 ${SRC_DIR}/*.cpp)
+list(APPEND PERFT_FILES ${PERFT_FILES2})
+
+set(PERFT_FILE_LIST ${PERFT_FILES})
+
+list(REMOVE_ITEM PERFT_FILE_LIST ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+
+
 # Show all source files (in case a problem arises, makes debugging easier)
 #message("Bench files:")
 #foreach(SOURCE_FILE ${BENCH_FILE_LIST})
@@ -113,5 +125,10 @@ add_custom_target(windows_challenger
 add_custom_target(benchmark
     COMMAND g++-9 -o benchmark_challenger -O3 -DBENCHMARK ${BENCH_FILE_LIST}
     BYPRODUCTS benchmark_challenger
+    )
+
+add_custom_target(perft
+    COMMAND g++-9 -o perft_challenger -O3 -DPERFT ${PERFT_FILE_LIST}
+    BYPRODUCTS perft_challenger
     )
 
