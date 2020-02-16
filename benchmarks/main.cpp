@@ -26,18 +26,18 @@ int main()
     move_generation_perft(3);
     move_generation_perft(4);
     move_generation_perft(5);
-    //move_generation_perft(6);
-    //move_generation_perft(7); Takes too long to execute
-
+    //move_generation_perft(6); // Last run was 46.6 seconds
+    //move_generation_perft(7); // Last run was 512 seconds (8min 30sec) 
+    
     cout << endl;
 
-    search_perft(1);
-    search_perft(2);
-    search_perft(3);
-    search_perft(4);
-    search_perft(5);
-    search_perft(6);
-    search_perft(7);
+    //search_perft(1);
+    //search_perft(2);
+    //search_perft(3);
+    //search_perft(4);
+    //search_perft(5);
+    //search_perft(6);
+    //search_perft(7);
 
     cout << endl;
 
@@ -45,30 +45,40 @@ int main()
     move_generation_perft_from_position_2(1);
     move_generation_perft_from_position_2(2);
     move_generation_perft_from_position_2(3);
+    move_generation_perft_from_position_2(4);
+    //move_generation_perft_from_position_2(5);
     cout << endl;
 
     cout << "Position 3" << endl;
     move_generation_perft_from_position_3(1);
     move_generation_perft_from_position_3(2);
     move_generation_perft_from_position_3(3);
+    move_generation_perft_from_position_3(4);
+    //move_generation_perft_from_position_3(5);
     cout << endl;
 
     cout << "Position 4" << endl;
     move_generation_perft_from_position_4(1);
     move_generation_perft_from_position_4(2);
     move_generation_perft_from_position_4(3);
+    move_generation_perft_from_position_4(4);
+    //move_generation_perft_from_position_4(5);
     cout << endl;
 
     cout << "Position 5" << endl;
     move_generation_perft_from_position_5(1);
     move_generation_perft_from_position_5(2);
     move_generation_perft_from_position_5(3);
+    move_generation_perft_from_position_5(4);
+    //move_generation_perft_from_position_5(5);
     cout << endl;
 
     cout << "Position 6" << endl;
     move_generation_perft_from_position_6(1);
     move_generation_perft_from_position_6(2);
     move_generation_perft_from_position_6(3);
+    move_generation_perft_from_position_6(4);
+    //move_generation_perft_from_position_6(5);
     cout << endl;
 
     return 0;

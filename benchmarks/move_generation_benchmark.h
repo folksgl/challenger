@@ -82,6 +82,8 @@ void generate_moves_to_depth(Position* pos, int depth);
 
 void move_generation_perft(int depth);
 
+void move_generation_perft_from_position_debug(string fen);
+
 void move_generation_perft_from_position_2(int depth);
 
 void move_generation_perft_from_position_3(int depth);
@@ -91,5 +93,7 @@ void move_generation_perft_from_position_4(int depth);
 void move_generation_perft_from_position_5(int depth);
 
 void move_generation_perft_from_position_6(int depth);
+
+string fmt(Position* initial, Position* next);
 
 #endif
