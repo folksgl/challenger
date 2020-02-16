@@ -94,6 +94,4 @@ void move_generation_perft_from_position_5(int depth);
 
 void move_generation_perft_from_position_6(int depth);
 
-string fmt(Position* initial, Position* next);
-
 #endif
