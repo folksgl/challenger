@@ -14,14 +14,6 @@ void move_generation_perft_from_position_debug(string fen) {
     // Reset position to default starting position
     G_game_position = new Position(fen);
 
-    G_game_position->move("e2d1");
-    G_game_position->move("a6f1");
-    G_game_position->move("e5f7");
-    G_game_position->move("a8b8");
-    G_game_position->move("h1g1");
-    G_game_position->castle(c_b_king);
-    G_game_position->move("f7h6");
-
     G_game_position->generate_moves(); // Initial moves from position
 
     int total = 0;
