@@ -876,17 +876,16 @@ TEST(game_move, promote_b_queen_a2a8q) {
 TEST(copy_constructor, deep_maps) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    Position copypos = actualpos;
+    Position copypos = Position(actualpos);
 
-    copypos.maps[w_pawn] = 0x0;
     EXPECT_EQ (actualpos.maps[w_pawn], 0x000000000000FF00);
-    EXPECT_EQ (copypos.maps[w_pawn],   0x0);
+    EXPECT_EQ (copypos.maps[w_pawn], 0x000000000000FF00);
 }
 
 TEST(copy_constructor, deep_color) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    Position copypos = actualpos;
+    Position copypos = Position(actualpos);
 
     EXPECT_EQ (actualpos.maps[act_color], WHITE);
     EXPECT_EQ (copypos.maps[act_color],   WHITE);
@@ -895,15 +894,24 @@ TEST(copy_constructor, deep_color) {
 TEST(copy_constructor, deep_moves) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    Position copypos = actualpos;
+    actualpos.generate_moves();
+    Position copypos = Position(actualpos);
 
-    std::vector<Position> newvec;
-    Position start;
-    newvec.push_back(start);
+    EXPECT_EQ (actualpos.moves.size(), 20);
+    EXPECT_EQ (copypos.moves.size(), 0);
+}
 
-    copypos.moves = newvec;
-    EXPECT_EQ (actualpos.moves.size(), 0);
-    EXPECT_EQ (copypos.moves.size(),   1);
+//
+// START OBJECT SIZE TESTS ////////////////////////////////////////////////
+//
+// The size of a position should not change due to generating moves for that position
+TEST(objectsize, position_generation) {
+    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    Position pos_one(test);
+    Position pos_two(test);
+    pos_one.generate_moves();
+
+    EXPECT_EQ (sizeof(pos_one), sizeof(pos_two));
 }
 
 //
