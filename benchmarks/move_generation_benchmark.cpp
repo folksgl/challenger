@@ -54,6 +54,9 @@ void move_generation_perft(int depth) {
     auto end = steady_clock::now();   // End timing.
     auto diff = end - start;          // Duration of execution
     
+    typedef std::chrono::duration<float> float_seconds;
+    auto secs = std::chrono::duration_cast<float_seconds>(diff);
+
     count = duration <double, micro> (diff).count(); // Running sum of all 10 execution times.
     
     string label = "";
@@ -61,7 +64,7 @@ void move_generation_perft(int depth) {
         label = " FAILED perft(" + to_string(depth) + ") = " + to_string(correct_perft[depth]);
     }
 
-    cout << "Depth_to_" << setw(2) << left << depth << " average: " << setw(10) << right << count << " µs. Positions generated: " << setw(15) << left << positions_generated << label << endl;
+    cout << "Depth_to_" << setw(2) << left << depth << " average: " << setw(10) << right << count << " µs. (" << setw(10) << secs.count() << ") seconds. Positions generated: " << setw(15) << left << positions_generated << label << endl;
     positions_generated = 0;
 }
 

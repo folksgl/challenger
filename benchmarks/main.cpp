@@ -26,7 +26,7 @@ int main()
     move_generation_perft(3);
     move_generation_perft(4);
     move_generation_perft(5);
-    //move_generation_perft(6); // Last run was 46.6 seconds
+    move_generation_perft(6); // Last run was 46.6 seconds
     //move_generation_perft(7); // Last run was 512 seconds (8min 30sec) 
     
     cout << endl;
