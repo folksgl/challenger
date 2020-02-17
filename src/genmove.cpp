@@ -41,7 +41,7 @@ void generate_moves(Position* pos) {
 
 void add_move(Position* pos, string& src, string& dest) {
     // Create a copy of the position and make the move
-    Position copy = *pos;
+    Position copy = Position(*pos);
     copy.move(src + dest);
 
     // If the move introduces check for the player making the move, it is illegal and will not be considered.
@@ -56,7 +56,7 @@ void add_move(Position* pos, string& src, string& dest) {
 
 void add_move_pawn_promotion(Position* pos, string& src, string& dest) {
     // Create a copy of the position and make the move
-    Position copy_queen = *pos;
+    Position copy_queen = Position(*pos);
     string queen_string, rook_string, knight_string, bishop_string;
 
     if (copy_queen.is_white_move()) {
@@ -80,9 +80,9 @@ void add_move_pawn_promotion(Position* pos, string& src, string& dest) {
     }
 
     // Create copies of the position for all possible promotions
-    Position copy_rook = *pos;
-    Position copy_knight = *pos;
-    Position copy_bishop = *pos;
+    Position copy_rook = Position(*pos);
+    Position copy_knight = Position(*pos);
+    Position copy_bishop = Position(*pos);
 
     // Perform the moves
     copy_rook.move_pawn_promotion(src + dest + rook_string);
@@ -98,7 +98,7 @@ void add_move_pawn_promotion(Position* pos, string& src, string& dest) {
 
 void add_move_pawn_double_forward(Position* pos, string& src, string& dest) {
     // Create a copy of the position and make the move
-    Position copy = *pos;
+    Position copy = Position(*pos);
     copy.move_pawn_double_forward(src + dest);
 
     // If the move introduces check for the player making the move, it is illegal and will not be considered.
@@ -113,7 +113,7 @@ void add_move_pawn_double_forward(Position* pos, string& src, string& dest) {
 
 void add_move_castle(Position* pos, Castling_names type) {
     // Create a copy of the position and make the move
-    Position copy = *pos;
+    Position copy = Position(*pos);
     copy.castle(type);
 
     // Add the move to the vector of moves possible from the current position and evaluate.
@@ -184,7 +184,7 @@ void slide_generator(Position* pos, bitboard slider, bitboard not_own_pieces, bi
 void castling_generator_w(Position* pos) {
     string src = "e1";
     string dest;
-    Position opposite_turn = *pos;
+    Position opposite_turn = Position(*pos);
     opposite_turn.maps[act_color] ^= BLACK; // Toggle active color.
     bitboard whole_board = pos->maps[w_pieces] | pos->maps[b_pieces];
 
@@ -217,7 +217,7 @@ void castling_generator_w(Position* pos) {
 void castling_generator_b(Position* pos) {
     string src = "e8";
     string dest;
-    Position opposite_turn = *pos;
+    Position opposite_turn = Position(*pos);
     opposite_turn.maps[act_color] ^= BLACK; // Toggle active color.
     bitboard whole_board = pos->maps[w_pieces] | pos->maps[b_pieces];
 
