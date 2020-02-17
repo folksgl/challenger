@@ -31,7 +31,7 @@ Position::Position(string fen) {
 }
 
 void Position::generate_moves() {
-    // moves.reserve(30)
+    moves.reserve(32);
     ::generate_moves(this);
     return;
 }
