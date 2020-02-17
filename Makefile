@@ -45,10 +45,17 @@ profile: compile
 	@if [ -f "./analysis" ]; then \
 			$(RM) "./analysis"; \
 	fi
-	@echo "position startpos\ngo depth 7\nquit" > tmp_input_challenger
+	@echo "position startpos\ngo depth 10\nquit" > tmp_input_challenger
 	@./build/challenger < tmp_input_challenger
 	@$(RM) tmp_input_challenger
-	gprof -b ./build/challenger gmon.out > analysis
+	gprof -b ./build/challenger gmon.out > tmp_analysis
+	@echo " " >> analysis
+	@echo " " >> analysis
+	@echo " " >> analysis
+	@echo " " >> analysis
+	@echo " " >> analysis
+	head -n 30 tmp_analysis >> analysis
+	@$(RM) tmp_analysis
 
 travis: build_dir
 	cmake --build ./build
