@@ -24,3 +24,6 @@ compile_commands.json
 # Cmake files
 CMakeCache.txt
 CMakeFiles
+
+# clang index files
+src/.clangd
