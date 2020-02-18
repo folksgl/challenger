@@ -224,37 +224,20 @@ void Position::move(string move) {
 
     if (piece == w_pawn) {
 
-        // If moving a pawn 2 spaces forward, set the en passant square.
-        if (dest_square == (start_square + 16)) {
-            maps[passant_sq] = squares[start_square + 8];
-        }
         // If capturing en passant, remove the captured pawn
-        else if (squares[dest_square] & maps[passant_sq]) {
+        if (squares[dest_square] & maps[passant_sq]) {
             zero_at(dest_square - 8, b_pawn);
-            maps[passant_sq] = 0x0000000000000000;
-        }
-        else {
-            maps[passant_sq] = 0x0000000000000000;
         }
     }
     else if (piece == b_pawn) {
 
-        if (dest_square == (start_square - 16)) {
-            maps[passant_sq] = squares[start_square - 8];
-        }
-        // If capturing en passant, remove the captured pawn
-        else if (squares[dest_square] & maps[passant_sq]) {
+        if (squares[dest_square] & maps[passant_sq]) {
             zero_at(dest_square + 8, w_pawn);
-            maps[passant_sq] = 0x0000000000000000;
-        }
-        else {
-            maps[passant_sq] = 0x0000000000000000;
         }
     }
     else if (piece == w_king) {
         string removechars = "KQ";
         string rights = castle_index_to_string.at(maps[castle_rights]);
-        maps[passant_sq] = 0x0000000000000000;
 
         for (char c: removechars) {
             rights.erase(remove(rights.begin(), rights.end(), c), rights.end());
@@ -265,7 +248,6 @@ void Position::move(string move) {
     else if (piece == b_king) {
         string removechars = "kq";
         string rights = castle_index_to_string.at(maps[castle_rights]);
-        maps[passant_sq] = 0x0000000000000000;
 
         for (char c: removechars) {
             rights.erase(remove(rights.begin(), rights.end(), c), rights.end());
@@ -289,7 +271,6 @@ void Position::move(string move) {
         }
 
         string rights = castle_index_to_string.at(maps[castle_rights]);
-        maps[passant_sq] = 0x0000000000000000;
 
         for (char c: removechars) {
             rights.erase(remove(rights.begin(), rights.end(), c), rights.end());
@@ -297,9 +278,9 @@ void Position::move(string move) {
 
         maps[castle_rights] = castle_string_to_index.at(rights);
     }
-    else {
-        maps[passant_sq] = 0x0000000000000000;
-    }
+
+    maps[passant_sq] = 0x0000000000000000;
+
     //z_piece = (piece > 6) ? piece : piece - 1;
 
     zero_at(start_square, piece);
@@ -500,7 +481,9 @@ void Position::zero_at(int square, int piece) {
 int Position::get_moving_piece(int square) {
     bitboard square_bit = squares[square];
 
-    for (int i = 0; i < 14; i++) {
+    int i = square_bit & maps[w_pieces] ? 0 : 7;
+
+    for (; i < 14; i++) {
         if (maps[i] & square_bit) {
             return i;
         }
@@ -512,9 +495,7 @@ int Position::get_moving_piece(int square) {
 bool Position::is_square_attacked(bitboard square) {
     bitboard attacked_squares = 0x0;
 
-    bitboard white = maps[w_pieces];
-    bitboard black = maps[b_pieces];
-    bitboard whole_board = white | black;
+    bitboard whole_board = maps[w_pieces] | maps[b_pieces];
     bitboard pawns, bishops, knights, rooks, queen, king = 0x0;
 
     bool is_white_move = this->is_white_move();
@@ -545,46 +526,46 @@ bool Position::is_square_attacked(bitboard square) {
     }
 
     // Add the Bishop slider attacks
-    int index1 = lsb(bishops);
-    while (index1 != -1) {
-        attacked_squares |= slider_attacks.BishopAttacks(whole_board, index1);
+    int index = lsb(bishops);
+    while (index != -1) {
+        attacked_squares |= slider_attacks.BishopAttacks(whole_board, index);
 
-        // "Increment" loop index1.
-        bishops &= ~squares[index1];
-        index1 = lsb(bishops);
+        // "Increment" loop index.
+        bishops &= ~squares[index];
+        index = lsb(bishops);
     }
 
     // Add the Rook slider attacks
-    int index2 = lsb(rooks);
-    while (index2 != -1) {
-        attacked_squares |= slider_attacks.RookAttacks(whole_board, index2);
+    index = lsb(rooks);
+    while (index != -1) {
+        attacked_squares |= slider_attacks.RookAttacks(whole_board, index);
 
-        // "Increment" loop index2.
-        rooks &= ~squares[index2];
-        index2 = lsb(rooks);
+        // "Increment" loop index.
+        rooks &= ~squares[index];
+        index = lsb(rooks);
     }
 
     // Add the Queen slider attacks
-    int index3 = lsb(queen);
-    while (index3 != -1) {
-        attacked_squares |= slider_attacks.QueenAttacks(whole_board, index3);
+    index = lsb(queen);
+    while (index != -1) {
+        attacked_squares |= slider_attacks.QueenAttacks(whole_board, index);
 
-        // "Increment" loop index3.
-        queen &= ~squares[index3];
-        index3 = lsb(queen);
+        // "Increment" loop index.
+        queen &= ~squares[index];
+        index = lsb(queen);
     }
 
-    int index4 = lsb(knights);
-    while (index4 != -1) {
-        attacked_squares |= knight_moves[index4];
+    index = lsb(knights);
+    while (index != -1) {
+        attacked_squares |= knight_moves[index];
 
-        // "Increment" loop index4.
-        knights &= ~squares[index4];
-        index4 = lsb(knights);
+        // "Increment" loop index.
+        knights &= ~squares[index];
+        index = lsb(knights);
     }
 
-    int index5 = lsb(king);
-    attacked_squares |= king_moves[index5];
+    index = lsb(king);
+    attacked_squares |= king_moves[index];
 
     if (square & attacked_squares) {
         return true;
