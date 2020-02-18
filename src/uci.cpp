@@ -130,8 +130,53 @@ void process_position_command(std::string uci_input) {
     }
     // Clear "moves" token and process remaining moves
     tokens.erase(tokens.begin());
+    int moving_piece = 0;
+    int start_square = 0;
+    int dest_square = 0;
     for (auto tok : tokens) {
-        G_game_position->move(tok);
+        if (tok.length() == 5) {
+            G_game_position->move_pawn_promotion(tok);
+        }
+        else {
+            start_square = get_square_num(tok.substr(0,2));
+            dest_square = get_square_num(tok.substr(2,2));
+            moving_piece = G_game_position->get_moving_piece(start_square);
+            if (moving_piece == w_pawn) {
+                if (start_square + 16 == dest_square) {
+                    G_game_position->move_pawn_double_forward(tok);
+                }
+                else {
+                    G_game_position->move(tok);
+                }
+            }
+            else if (moving_piece == b_pawn) {
+                if (start_square - 16 == dest_square) {
+                    G_game_position->move_pawn_double_forward(tok);
+                }
+                else {
+                    G_game_position->move(tok);
+                }
+            }
+            else if (moving_piece == w_king) {
+                if (start_square == 4 && dest_square == 6) {
+                    G_game_position->castle(c_w_king);
+                }
+                else if (start_square == 4 && dest_square == 2) {
+                    G_game_position->castle(c_w_king);
+                }
+            }
+            else if (moving_piece == b_king) {
+                if (start_square == 60 && dest_square == 62) {
+                    G_game_position->castle(c_w_king);
+                }
+                else if (start_square == 60 && dest_square == 58) {
+                    G_game_position->castle(c_w_king);
+                }
+            }
+            else {
+                G_game_position->move(tok);
+            }
+        }
     }
     return;
 }
