@@ -9,7 +9,8 @@ using namespace std;
 #define QUEEN  1000
 #define KING   10000
 
-#define P_DEFEND 25
+#define PAWN_DEFEND 20
+#define KNIGNT_CENTER 20
 
 /*
  *  evaluate_position takes in a single position and returns a single number representing its evaluation
@@ -21,9 +22,11 @@ bitboard evaluate_position(Position* pos) {
 
     int white_eval = get_white_material_value(pos);
     white_eval += white_defending_pawns_bonus(pos);
+    white_eval += white_knight_center_bonus(pos);
 
     int black_eval = get_black_material_value(pos);
     black_eval += black_defending_pawns_bonus(pos);
+    black_eval += black_knight_center_bonus(pos);
 
     bitboard evaluation = (zero + white_eval) + black_eval;
 
@@ -73,7 +76,7 @@ int get_black_material_value(Position* pos) {
 int white_defending_pawns_bonus(Position* pos) {
     int bonus = 0;
 
-    int defending_bonus = P_DEFEND;
+    int defending_bonus = PAWN_DEFEND;
 
     bitboard pawns = pos->maps[w_pawn];
     bitboard white = pos->maps[w_pieces];
@@ -89,7 +92,7 @@ int white_defending_pawns_bonus(Position* pos) {
 int black_defending_pawns_bonus(Position* pos) {
     int bonus = 0;
 
-    int defending_bonus = -P_DEFEND;
+    int defending_bonus = -PAWN_DEFEND;
 
     bitboard pawns = pos->maps[b_pawn];
     bitboard black = pos->maps[b_pieces];
@@ -101,3 +104,44 @@ int black_defending_pawns_bonus(Position* pos) {
 
     return bonus;
 }
+
+int white_knight_center_bonus(Position* pos) {
+    bitboard knights = pos->maps[w_knight];
+    int bonus = 0;
+    int index = lsb(knights);
+    bitboard square = 0x0;
+
+    while (index != -1) {
+        square = squares[index];
+        if (square & middle_board) {
+            bonus += KNIGNT_CENTER;
+        }
+
+        // "Increment" loop index.
+        knights &= ~squares[index];
+        index = lsb(knights);
+    }
+
+    return bonus;
+}
+
+int black_knight_center_bonus(Position* pos) {
+    bitboard knights = pos->maps[b_knight];
+    int bonus = 0;
+    int index = lsb(knights);
+    bitboard square = 0x0;
+
+    while (index != -1) {
+        square = squares[index];
+        if (square & middle_board) {
+            bonus -= KNIGNT_CENTER;
+        }
+
+        // "Increment" loop index.
+        knights &= ~squares[index];
+        index = lsb(knights);
+    }
+
+    return bonus;
+}
+

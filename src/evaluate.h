@@ -16,6 +16,10 @@ const bitboard center_attack_bonus[64] = {
     10, 10, 10, 10, 10, 10, 10, 10  // 8th Rank
 };
 
+const bitboard middle_board = (rank_3 | rank_4 | rank_5 | rank_6) & (c_file | d_file | e_file | f_file);
+
+const bitboard center_board = (rank_4 | rank_5) & (d_file | e_file);
+
 bitboard evaluate_position(Position* pos);
 
 int get_white_material_value(Position* pos);
@@ -25,5 +29,9 @@ int get_black_material_value(Position* pos);
 int white_defending_pawns_bonus(Position* pos);
 
 int black_defending_pawns_bonus(Position* pos);
+
+int white_knight_center_bonus(Position* pos);
+
+int black_knight_center_bonus(Position* pos);
 
 #endif
