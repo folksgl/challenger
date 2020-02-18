@@ -14,7 +14,9 @@ void generate_w_pawn_moves(Position* pos);
 
 void generate_b_pawn_moves(Position* pos);
 
-void leap_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, const bitboard move_database[64]);
+void king_generator(Position* pos, bitboard leaper, bitboard not_own_pieces);
+
+void knight_generator(Position* pos, bitboard leaper, bitboard not_own_pieces);
 
 void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int));
 

@@ -12,11 +12,11 @@ void generate_moves(Position* pos) {
 
         generate_w_pawn_moves(pos);
 
-        leap_generator (pos, pos->maps[w_knight], not_own, knight_moves);        // knight moves
+        knight_generator (pos, pos->maps[w_knight], not_own);                    // knight moves
+        king_generator (pos, pos->maps[w_king],   not_own);                      // king moves
         slide_generator(pos, pos->maps[w_bishop], not_own, &get_bishop_attacks); // bishop moves
         slide_generator(pos, pos->maps[w_rook],   not_own, &get_rook_attacks);   // rook moves
         slide_generator(pos, pos->maps[w_queen],  not_own, &get_queen_attacks);  // queen moves
-        leap_generator (pos, pos->maps[w_king],   not_own, king_moves);          // king moves
 
         castling_generator_w(pos);
     }
@@ -25,11 +25,11 @@ void generate_moves(Position* pos) {
 
         generate_b_pawn_moves(pos);
 
-        leap_generator (pos, pos->maps[b_knight], not_own, knight_moves);        // knight moves
+        knight_generator (pos, pos->maps[b_knight], not_own);                    // knight moves
+        king_generator (pos, pos->maps[b_king],   not_own);                      // king moves
         slide_generator(pos, pos->maps[b_bishop], not_own, &get_bishop_attacks); // bishop moves
         slide_generator(pos, pos->maps[b_rook],   not_own, &get_rook_attacks);   // rook moves
         slide_generator(pos, pos->maps[b_queen],  not_own, &get_queen_attacks);  // queen moves
-        leap_generator (pos, pos->maps[b_king],   not_own, king_moves);          // king moves
 
         castling_generator_b(pos);
     }
@@ -132,11 +132,35 @@ inline bitboard get_queen_attacks(bitboard board, int index) {
     return slider_attacks.QueenAttacks(board, index);
 }
 
-void leap_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, const bitboard move_database[64]) {
+void king_generator(Position* pos, bitboard leaper, bitboard not_own_pieces) {
     // Loop over the leaper on the board
     int index = lsb(leaper);
     while (index != -1) {
-        bitboard attacks = move_database[index] & not_own_pieces;
+        bitboard attacks = king_moves[index] & not_own_pieces;
+
+        string src =  bit_to_square_arr[index];
+
+        // Loop over the current leaper pieces attacks and add positions
+        int inner_index = lsb(attacks);
+        while (inner_index != -1) {
+            string dest = bit_to_square_arr[inner_index];
+            add_move(pos, src, dest);
+
+            // "Increment" loop index.
+            attacks &= ~squares[inner_index];
+            inner_index = lsb(attacks);
+        }
+        // "Increment" loop index.
+        leaper &= ~squares[index];
+        index = lsb(leaper);
+    }
+}
+
+void knight_generator(Position* pos, bitboard leaper, bitboard not_own_pieces) {
+    // Loop over the leaper on the board
+    int index = lsb(leaper);
+    while (index != -1) {
+        bitboard attacks = knight_moves[index] & not_own_pieces;
 
         string src =  bit_to_square_arr[index];
 
