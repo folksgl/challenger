@@ -42,9 +42,6 @@ profile: compile
 	@if [ -f "./gmon.out" ]; then \
 			$(RM) "./gmon.out"; \
 	fi
-	@if [ -f "./analysis" ]; then \
-			$(RM) "./analysis"; \
-	fi
 	@echo "position startpos\ngo depth 10\nquit" > tmp_input_challenger
 	@./build/challenger < tmp_input_challenger
 	@$(RM) tmp_input_challenger
