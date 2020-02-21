@@ -201,11 +201,6 @@ void Position::set_fullmove_number(char* fen_tok) {
  */
 void Position::move(string move) {
 
-    if (move.length() != 4) {
-        // Malformed move string, ignore move and don't change the position.
-        return;
-    }
-
     // Extract start and destination squares from the move
     int start_square = get_square_num(move.substr(0,2));
     int dest_square = get_square_num(move.substr(2,2));
@@ -496,16 +491,15 @@ bool Position::is_square_attacked(bitboard square) {
     bitboard attacked_squares = 0x0;
 
     bitboard whole_board = maps[w_pieces] | maps[b_pieces];
-    bitboard pawns, bishops, knights, rooks, queen, king = 0x0;
+    bitboard pawns, bishops, knights, rooks, king = 0x0;
 
     bool is_white_move = this->is_white_move();
 
     if (is_white_move) {
         pawns = maps[w_pawn];
-        bishops = maps[w_bishop];
+        bishops = maps[w_bishop] | maps[w_queen];
+        rooks = maps[w_rook] | maps[w_queen];
         knights = maps[w_knight];
-        rooks = maps[w_rook];
-        queen = maps[w_queen];
         king = maps[w_king];
 
         // Add pawn attacks
@@ -514,15 +508,19 @@ bool Position::is_square_attacked(bitboard square) {
     }
     else {
         pawns = maps[b_pawn];
-        bishops = maps[b_bishop];
+        bishops = maps[b_bishop] | maps[b_queen];
+        rooks = maps[b_rook] | maps[b_queen];
         knights = maps[b_knight];
-        rooks = maps[b_rook];
-        queen = maps[b_queen];
         king = maps[b_king];
 
         // Add pawn attacks
         attacked_squares |= (pawns & (~h_file)) >> 7;
         attacked_squares |= (pawns & (~a_file)) >> 9;
+    }
+
+    // Attempt to shortcircuit the rest of the method.
+    if (square & attacked_squares) {
+        return true;
     }
 
     // Add the Bishop slider attacks
@@ -531,8 +529,13 @@ bool Position::is_square_attacked(bitboard square) {
         attacked_squares |= slider_attacks.BishopAttacks(whole_board, index);
 
         // "Increment" loop index.
-        bishops &= ~squares[index];
+        bishops ^= squares[index];
         index = lsb(bishops);
+    }
+
+    // Attempt to shortcircuit the rest of the method.
+    if (square & attacked_squares) {
+        return true;
     }
 
     // Add the Rook slider attacks
@@ -541,18 +544,13 @@ bool Position::is_square_attacked(bitboard square) {
         attacked_squares |= slider_attacks.RookAttacks(whole_board, index);
 
         // "Increment" loop index.
-        rooks &= ~squares[index];
+        rooks ^= squares[index];
         index = lsb(rooks);
     }
 
-    // Add the Queen slider attacks
-    index = lsb(queen);
-    while (index != -1) {
-        attacked_squares |= slider_attacks.QueenAttacks(whole_board, index);
-
-        // "Increment" loop index.
-        queen &= ~squares[index];
-        index = lsb(queen);
+    // Attempt to shortcircuit the rest of the method.
+    if (square & attacked_squares) {
+        return true;
     }
 
     index = lsb(knights);
@@ -560,7 +558,7 @@ bool Position::is_square_attacked(bitboard square) {
         attacked_squares |= knight_moves[index];
 
         // "Increment" loop index.
-        knights &= ~squares[index];
+        knights ^= squares[index];
         index = lsb(knights);
     }
 

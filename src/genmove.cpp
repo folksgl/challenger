@@ -33,10 +33,6 @@ void generate_moves(Position* pos) {
 
         castling_generator_b(pos);
     }
-
-    for (auto move: pos->moves) {
-        move.evaluate();
-    }
 }
 
 void add_move(Position* pos, string& src, string& dest) {
@@ -50,7 +46,7 @@ void add_move(Position* pos, string& src, string& dest) {
         return; 
     }
 
-    // Add the move to the vector of moves possible from the current position and evaluate.
+    // Add the move to the vector of moves possible from the current position.
     pos->moves.push_back(copy);
 }
 
@@ -107,7 +103,7 @@ void add_move_pawn_double_forward(Position* pos, string& src, string& dest) {
         return; 
     }
 
-    // Add the move to the vector of moves possible from the current position and evaluate.
+    // Add the move to the vector of moves possible from the current position.
     pos->moves.push_back(copy);
 }
 
@@ -116,7 +112,7 @@ void add_move_castle(Position* pos, Castling_names type) {
     Position copy = Position(*pos);
     copy.castle(type);
 
-    // Add the move to the vector of moves possible from the current position and evaluate.
+    // Add the move to the vector of moves possible from the current position.
     pos->moves.push_back(copy);
 }
 
@@ -135,23 +131,25 @@ inline bitboard get_queen_attacks(bitboard board, int index) {
 void king_generator(Position* pos, bitboard leaper, bitboard not_own_pieces) {
     // Loop over the leaper on the board
     int index = lsb(leaper);
+    int inner_index;
+    bitboard attacks;
     while (index != -1) {
-        bitboard attacks = king_moves[index] & not_own_pieces;
+        attacks = king_moves[index] & not_own_pieces;
 
         string src =  bit_to_square_arr[index];
 
         // Loop over the current leaper pieces attacks and add positions
-        int inner_index = lsb(attacks);
+        inner_index = lsb(attacks);
         while (inner_index != -1) {
             string dest = bit_to_square_arr[inner_index];
             add_move(pos, src, dest);
 
             // "Increment" loop index.
-            attacks &= ~squares[inner_index];
+            attacks ^= squares[inner_index];
             inner_index = lsb(attacks);
         }
         // "Increment" loop index.
-        leaper &= ~squares[index];
+        leaper ^= squares[index];
         index = lsb(leaper);
     }
 }
@@ -159,23 +157,25 @@ void king_generator(Position* pos, bitboard leaper, bitboard not_own_pieces) {
 void knight_generator(Position* pos, bitboard leaper, bitboard not_own_pieces) {
     // Loop over the leaper on the board
     int index = lsb(leaper);
+    int inner_index;
+    bitboard attacks;
     while (index != -1) {
-        bitboard attacks = knight_moves[index] & not_own_pieces;
+        attacks = knight_moves[index] & not_own_pieces;
 
         string src =  bit_to_square_arr[index];
 
         // Loop over the current leaper pieces attacks and add positions
-        int inner_index = lsb(attacks);
+        inner_index = lsb(attacks);
         while (inner_index != -1) {
             string dest = bit_to_square_arr[inner_index];
             add_move(pos, src, dest);
 
             // "Increment" loop index.
-            attacks &= ~squares[inner_index];
+            attacks ^= squares[inner_index];
             inner_index = lsb(attacks);
         }
         // "Increment" loop index.
-        leaper &= ~squares[index];
+        leaper ^= squares[index];
         index = lsb(leaper);
     }
 }
@@ -184,21 +184,23 @@ void slide_generator(Position* pos, bitboard slider, bitboard not_own_pieces, bi
     bitboard whole_board = pos->maps[w_pieces] | pos->maps[b_pieces];
 
     int index = lsb(slider);
+    int inner_index;
+    bitboard attacks;
     while (index != -1) {
         string src =  bit_to_square_arr[index];
-        bitboard attacks = (*attack_function)(whole_board, index);
+        attacks = (*attack_function)(whole_board, index);
         attacks &= not_own_pieces;
 
         // Loop over the current bishop attacks and add positions
-        int inner_index = lsb(attacks);
+        inner_index = lsb(attacks);
         while (inner_index != -1) {
             string dest = bit_to_square_arr[inner_index];
             add_move(pos, src, dest);
 
-            attacks &= ~squares[inner_index];
+            attacks ^= squares[inner_index];
             inner_index = lsb(attacks);
         }
-        slider &= ~squares[index];
+        slider ^= squares[index];
         index = lsb(slider);
     }
 
@@ -326,7 +328,7 @@ void generate_w_pawn_moves(Position* pos) {
             }
         }
 
-        pawns &= ~squarei;
+        pawns ^= squarei;
         index = lsb(pawns);
     }
     return;
@@ -387,7 +389,7 @@ void generate_b_pawn_moves(Position* pos) {
             }
         }
 
-        pawns &= ~squarei;
+        pawns ^= squarei;
         index = lsb(pawns);
     }
     return;

@@ -137,7 +137,7 @@ void process_position_command(std::string uci_input) {
         if (tok.length() == 5) {
             G_game_position->move_pawn_promotion(tok);
         }
-        else {
+        else if (tok.length() == 4) {
             start_square = get_square_num(tok.substr(0,2));
             dest_square = get_square_num(tok.substr(2,2));
             moving_piece = G_game_position->get_moving_piece(start_square);
@@ -177,6 +177,7 @@ void process_position_command(std::string uci_input) {
                 G_game_position->move(tok);
             }
         }
+        // If the token wasnt 4 or 5 characters in length, then it is invalid and the position is not modified for that token.
     }
     return;
 }
