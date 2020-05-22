@@ -7,8 +7,11 @@ build_dir:
 			mv ./build/compile_commands.json ./src/ ; \
 	fi
 
+check:
+	cppcheck --enable=all ./src
+
 compile: build_dir
-	cmake --build ./build -j$(N_PROC) -- --no-print-directory
+	cmake --build ./build --parallel $(N_PROC) -- --no-print-directory
 
 clean: build_dir
 	@$(RM) analysis gmon.out
@@ -18,25 +21,25 @@ really_clean:
 	@$(RM) -rf build/
 
 test: compile
-	cmake --build ./build --target test -- --no-print-directory ARGS=-V
+	cmake --build ./build --target test --parallel $(N_PROC) -- --no-print-directory ARGS=-V
 
 coverage: compile test
-	cmake --build ./build --target coverage -- --no-print-directory
+	cmake --build ./build --target coverage --parallel $(N_PROC) -- --no-print-directory
 	@rm -rf ./build/html
 	genhtml --output-directory ./build/html ./build/challenger.info
 
 optimized: build_dir
-	cmake --build ./build --target optimized -j$(N_PROC) -- --no-print-directory
+	cmake --build ./build --target optimized --parallel $(N_PROC) -- --no-print-directory
 
 windows: build_dir
-	cmake --build ./build --target windows_challenger -j$(N_PROC) -- --no-print-directory
+	cmake --build ./build --target windows_challenger --parallel $(N_PROC) -- --no-print-directory
 
 benchmark: build_dir
-	cmake --build ./build --target benchmark -j$(N_PROC) -- --no-print-directory
+	cmake --build ./build --target benchmark --parallel $(N_PROC) -- --no-print-directory
 	./build/benchmark_challenger >> benchmarking_reference
 
 perft: build_dir
-	cmake --build ./build --target perft -j$(N_PROC) -- --no-print-directory
+	cmake --build ./build --target perft --parallel $(N_PROC) -- --no-print-directory
 
 profile: compile
 	@if [ -f "./gmon.out" ]; then \
@@ -55,7 +58,7 @@ profile: compile
 	@$(RM) tmp_analysis
 
 travis: build_dir
-	cmake --build ./build
+	cmake --build ./build --parallel $(N_PROC)
 
 travis_test: travis
-	cmake --build ./build --target test -- --no-print-directory ARGS=-V
+	cmake --build ./build --target test --parallel $(N_PROC) -- --no-print-directory ARGS=-V
