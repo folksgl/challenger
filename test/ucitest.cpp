@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-#include "gmock/gmock.h"
 #include "../src/uci.hpp"
 #include "../src/game_variables.hpp"
 
