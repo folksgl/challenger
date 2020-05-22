@@ -27,3 +27,6 @@ CMakeFiles
 
 # clang index files
 src/.clangd
+
+# Shell files
+*.sh
