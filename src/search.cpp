@@ -1,8 +1,6 @@
-#include <string.h>
-#include <limits>
-#include "search.h"
-#include "evaluate.h"
-#include "game_variables.h"
+#include "search.hpp"
+#include "evaluate.hpp"
+#include "game_variables.hpp"
 
 using namespace std;
 
@@ -37,6 +35,7 @@ int alphaBetaMax(Position* pos, bitboard alpha, bitboard beta, int depth) {
         #ifdef BENCHMARK
         positions_searched++;
         #endif
+        pos->evaluate();
         return pos->maps[eval_score];
     }
 

@@ -1,6 +1,6 @@
-#include "../src/game_variables.h"
-#include "move_generation_benchmark.h"
-#include "search_benchmark.h"
+#include "../src/game_variables.hpp"
+#include "move_generation_benchmark.hpp"
+#include "search_benchmark.hpp"
 
 using namespace std;
 
@@ -8,6 +8,7 @@ bool G_debug;
 Position* G_game_position;
 SliderAttacks slider_attacks;
 Zobrist zobrist;
+UCICommandQueue command_queue;                                         //
 
 unsigned long long positions_generated;
 unsigned long long positions_searched;
@@ -16,7 +17,6 @@ int main()
 {
     G_debug = false;
     positions_generated = 0;
-    slider_attacks.Initialize();
 
     cout << endl << endl << endl;
     cout << "Starting position" << endl;

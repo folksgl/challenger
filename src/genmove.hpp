@@ -1,10 +1,9 @@
 #ifndef GENMOVE_H
 #define GENMOVE_H
 
-#include "position.h"
-#include "common.h"
-#include "game_variables.h"
-#include <unordered_map>
+#include "position.hpp"
+#include "common.hpp"
+#include "game_variables.hpp"
 
 void generate_moves(Position* pos);
 
@@ -14,9 +13,7 @@ void generate_w_pawn_moves(Position* pos);
 
 void generate_b_pawn_moves(Position* pos);
 
-void king_generator(Position* pos, bitboard leaper, bitboard not_own_pieces);
-
-void knight_generator(Position* pos, bitboard leaper, bitboard not_own_pieces);
+void leaper_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, const bitboard attack_table[]);
 
 void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int));
 

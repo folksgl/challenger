@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
-#include "../src/genmove.h"
-#include "../src/uci.h"
-#include "../src/common.h"
+#include "../src/genmove.hpp"
+#include "../src/uci.hpp"
+#include "../src/common.hpp"
 #include <string>
 
 using namespace std;

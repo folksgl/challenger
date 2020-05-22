@@ -1,8 +1,8 @@
 #ifndef EVALUATE_H
 #define EVALUATE_H
 
-#include "position.h"
-#include "common.h"
+#include "position.hpp"
+#include "common.hpp"
 
 // Pre-initialized lookup table for possible knight moves on a given square
 const bitboard center_attack_bonus[64] = {

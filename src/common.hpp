@@ -1,8 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include "bitboard.h"
-#include <string>
+#include "bitboard.hpp"
 #include <unordered_map>
 
 const bitboard squares[64] = {
@@ -110,9 +109,7 @@ const bitboard king_moves[64] = {
     0x0203000000000000, 0x0507000000000000, 0x0A0E000000000000, 0x141C000000000000, 0x2838000000000000, 0x5070000000000000, 0xA0E0000000000000, 0x40C0000000000000, // 8th Rank
 };
 
-int num_set_bits(bitboard map);
-int get_square_num(std::string square_string);
-int file_to_num(char file);
+int get_square_num(char file, char rank);
 
 #endif
 

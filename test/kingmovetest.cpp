@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
-#include "../src/genmove.h"
-#include "../src/uci.h"
-#include "../src/common.h"
+#include "../src/genmove.hpp"
+#include "../src/uci.hpp"
+#include "../src/common.hpp"
 #include <string>
 
 using namespace std;
@@ -216,6 +216,9 @@ TEST(correct_king_moves_generated, white_king_h1) {
 TEST(correct_king_moves_generated, white_king_a2) {
     std::string test = "8/8/8/8/8/8/K7/8 w KQkq - 0 1";
     Position startpos(test);
+
+    string actualstring = startpos.to_fen_string();
+    EXPECT_EQ (actualstring, test);
 
     generate_moves(&startpos);
 

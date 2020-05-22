@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../src/evaluate.h"
-#include "../src/common.h"
+#include "../src/evaluate.hpp"
+#include "../src/common.hpp"
 #include <string>
 
 namespace {
@@ -92,122 +92,122 @@ namespace {
 //
 
 TEST(get_sq_num, a1) {
-    int square = get_square_num("a1");
+    int square = get_square_num('a', '1');
     EXPECT_EQ (square, 0);
 }
 
 TEST(get_sq_num, a2) {
-    int square = get_square_num("a2");
+    int square = get_square_num('a', '2');
     EXPECT_EQ (square, 8);
 }
 
 TEST(get_sq_num, a3) {
-    int square = get_square_num("a3");
+    int square = get_square_num('a', '3');
     EXPECT_EQ (square, 16);
 }
 
 TEST(get_sq_num, b2) {
-    int square = get_square_num("b2");
+    int square = get_square_num('b', '2');
     EXPECT_EQ (square, 9);
 }
 
 TEST(get_sq_num, b3) {
-    int square = get_square_num("b3");
+    int square = get_square_num('b', '3');
     EXPECT_EQ (square, 17);
 }
 
 TEST(get_sq_num, b4) {
-    int square = get_square_num("b4");
+    int square = get_square_num('b', '4');
     EXPECT_EQ (square, 25);
 }
 
 TEST(get_sq_num, c3) {
-    int square = get_square_num("c3");
+    int square = get_square_num('c', '3');
     EXPECT_EQ (square, 18);
 }
 
 TEST(get_sq_num, c4) {
-    int square = get_square_num("c3");
+    int square = get_square_num('c', '3');
     EXPECT_EQ (square, 18);
 }
 
 TEST(get_sq_num, c5) {
-    int square = get_square_num("c3");
+    int square = get_square_num('c', '3');
     EXPECT_EQ (square, 18);
 }
 
 TEST(get_sq_num, d4) {
-    int square = get_square_num("d4");
+    int square = get_square_num('d', '4');
     EXPECT_EQ (square, 27);
 }
 
 TEST(get_sq_num, d5) {
-    int square = get_square_num("d5");
+    int square = get_square_num('d', '5');
     EXPECT_EQ (square, 35);
 }
 
 TEST(get_sq_num, d6) {
-    int square = get_square_num("d6");
+    int square = get_square_num('d', '6');
     EXPECT_EQ (square, 43);
 }
 
 TEST(get_sq_num, e5) {
-    int square = get_square_num("e5");
+    int square = get_square_num('e', '5');
     EXPECT_EQ (square, 36);
 }
 
 TEST(get_sq_num, e6) {
-    int square = get_square_num("e6");
+    int square = get_square_num('e', '6');
     EXPECT_EQ (square, 44);
 }
 
 TEST(get_sq_num, e7) {
-    int square = get_square_num("e7");
+    int square = get_square_num('e', '7');
     EXPECT_EQ (square, 52);
 }
 
 TEST(get_sq_num, f6) {
-    int square = get_square_num("f6");
+    int square = get_square_num('f', '6');
     EXPECT_EQ (square, 45);
 }
 
 TEST(get_sq_num, f7) {
-    int square = get_square_num("f7");
+    int square = get_square_num('f', '7');
     EXPECT_EQ (square, 53);
 }
 
 TEST(get_sq_num, f8) {
-    int square = get_square_num("f8");
+    int square = get_square_num('f', '8');
     EXPECT_EQ (square, 61);
 }
 
 TEST(get_sq_num, g7) {
-    int square = get_square_num("g7");
+    int square = get_square_num('g', '7');
     EXPECT_EQ (square, 54);
 }
 
 TEST(get_sq_num, g8) {
-    int square = get_square_num("g8");
+    int square = get_square_num('g', '8');
     EXPECT_EQ (square, 62);
 }
 
 TEST(get_sq_num, g1) {
-    int square = get_square_num("g1");
+    int square = get_square_num('g', '1');
     EXPECT_EQ (square, 6);
 }
 
 TEST(get_sq_num, h8) {
-    int square = get_square_num("h8");
+    int square = get_square_num('h', '8');
     EXPECT_EQ (square, 63);
 }
 
 TEST(get_sq_num, h1) {
-    int square = get_square_num("h1");
+    int square = get_square_num('h', '1');
     EXPECT_EQ (square, 7);
 }
 
 TEST(get_sq_num, h2) {
-    int square = get_square_num("h2");
+    int square = get_square_num('h', '2');
     EXPECT_EQ (square, 15);
 }
 

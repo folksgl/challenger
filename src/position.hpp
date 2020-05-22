@@ -1,14 +1,11 @@
 #ifndef POSITION_H
 #define POSITION_H
 
-#include <string>
-#include <vector>
 #include <algorithm>
-#include <iostream>
-#include <array>
-#include <string.h>
+#include <vector>
 #include <unordered_map>
-#include "bitboard.h"
+#include "bitboard.hpp"
+#include "common.hpp"
 
 using namespace std;
 
@@ -16,7 +13,7 @@ const bitboard single_bit = (bitboard)1;
 
 enum Castling_names { c_w_king, c_w_queen, c_b_king, c_b_queen};
 
-const std::unordered_map<string, int> castle_string_to_index({
+const std::unordered_map<std::string, int> castle_string_to_index({
         {"KQkq", 1},  {"KQk" , 2},  {"KQq" , 3},  {"KQ"  , 4}, 
         {"Kkq" , 5},  {"Kk"  , 6},  {"Kq"  , 7},  {"K"   , 8},
         {"Qkq" , 9},  {"Qk"  , 10}, {"Qq"  , 11}, {"Q"   , 12},
@@ -24,14 +21,14 @@ const std::unordered_map<string, int> castle_string_to_index({
         {""    , 0},
 });
 
-const std::unordered_map<int, string> castle_index_to_string({
+const std::unordered_map<int, std::string> castle_index_to_string({
         {1, "KQkq"},  {2,  "KQk"},  {3,  "KQq"},  {4,  "KQ"}, 
         {5,  "Kkq"},  {6,   "Kk"},  {7,   "Kq"},  {8,  "K"},
         {9,  "Qkq"},  {10,  "Qk"},  {11,  "Qq"},  {12, "Q"},
         {13,  "kq"},  {14,   "k"},  {15,   "q"},  {0, "-"},
 });
 
-const std::unordered_map<string, bitboard> passant_string_to_bit({
+const std::unordered_map<std::string, bitboard> passant_string_to_bit({
         {"a3", 0x0000000000010000}, {"b3", 0x0000000000020000},
         {"c3", 0x0000000000040000}, {"d3", 0x0000000000080000}, 
         {"e3", 0x0000000000100000}, {"f3", 0x0000000000200000},
@@ -76,14 +73,14 @@ class Position {
 
     public:
         // Class Attributes
-        array<bitboard, 21> maps = {0};
+        std::array<bitboard, 21> maps = {0};
 
         std::vector<Position> moves;
 
         // Constructors
 
         Position(void) : Position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {}
-        Position(std::string fen);
+        explicit Position(std::string fen);
         Position(const Position& other) :
             maps(other.maps) {}
 
@@ -112,8 +109,8 @@ class Position {
         void generate_moves(void);
         void evaluate(void);
         void move(std::string move_string);
-        void move_pawn_promotion(string move);
-        void move_pawn_double_forward(string move);
+        void move_pawn_promotion(std::string move);
+        void move_pawn_double_forward(std::string move);
         void castle(Castling_names);
         void zero_at(int square, int piece);
         int get_moving_piece(int square);

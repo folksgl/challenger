@@ -3,7 +3,7 @@
 
 #include <chrono>
 #include <iomanip>
-#include "../src/game_variables.h"
+#include "../src/game_variables.hpp"
 
 typedef unsigned long long ull;
 

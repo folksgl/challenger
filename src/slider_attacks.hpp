@@ -21,7 +21,7 @@ struct Magic {
 // Initialize() method must be called before using other methods.
 class SliderAttacks {
  public:
-  void Initialize();
+  SliderAttacks(void);
 
   bitboard RookAttacks(const bitboard bb, const int index) const {
     const Magic& m = rook_magics_[index];

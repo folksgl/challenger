@@ -1,11 +1,11 @@
-#include "slider_attacks.h"
+#include "slider_attacks.hpp"
 
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <array>
 
-void SliderAttacks::Initialize() {
+SliderAttacks::SliderAttacks() {
     std::array<bitboard, kSquares> rook_masks = {
         0x101010101017e, 0x202020202027c, 0x404040404047a, 0x8080808080876,
         0x1010101010106e, 0x2020202020205e, 0x4040404040403e, 0x8080808080807e,

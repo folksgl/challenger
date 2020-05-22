@@ -1,23 +1,5 @@
-#include "common.h"
+#include "common.hpp"
 
-/*
- *  get_square_num calculates the number of the square represented by square_string
- */
-int get_square_num(std::string square_string) {
-
-    // To get the square number for a string such as e4, translate the file to a 
-    // number (a=0, b=1, etc) and add (rank_multiplier * 8) to get the square.
-    int rank_mult = (square_string.at(1) - '0') - 1;
-    int square_num = file_to_num(square_string.at(0)) + (rank_mult * 8);
-
-    return square_num;
+int get_square_num(char file, char rank) {
+    return (file - 'a') + ((rank - '1') * 8);
 }
-
-/*
- *  file_to_num translates a character representing a file on a chess board (i.e. a, b, etc)
- *  to a number representing its location on the board. a=0, b=1, c=2
- */
-inline int file_to_num(char file) {
-    return file - 'a';
-}
-

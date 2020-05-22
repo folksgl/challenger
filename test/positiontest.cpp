@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../src/position.h"
-#include "../src/common.h"
+#include "../src/position.hpp"
+#include "../src/common.hpp"
 #include <string>
 
 using namespace std;

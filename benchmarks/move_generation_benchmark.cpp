@@ -1,5 +1,5 @@
-#include "move_generation_benchmark.h"
-#include "../src/common.h"
+#include "move_generation_benchmark.hpp"
+#include "../src/common.hpp"
 #include <string>
 
 using namespace std;

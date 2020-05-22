@@ -1,7 +1,7 @@
-#include "search_benchmark.h"
-#include "move_generation_benchmark.h"
+#include "search_benchmark.hpp"
+#include "move_generation_benchmark.hpp"
 #include <string>
-#include "../src/search.h"
+#include "../src/search.hpp"
 
 extern unsigned long long positions_searched;
 

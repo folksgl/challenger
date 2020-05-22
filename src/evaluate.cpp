@@ -1,6 +1,4 @@
-#include "evaluate.h"
-
-using namespace std;
+#include "evaluate.hpp"
 
 #define PAWN   100
 #define KNIGHT 350
@@ -40,11 +38,11 @@ bitboard evaluate_position(Position* pos) {
 int get_white_material_value(Position* pos) {
     int material_val = 0;
     
-    material_val += (PAWN   * __builtin_popcountll(pos->maps[w_pawn]));
-    material_val += (KNIGHT * __builtin_popcountll(pos->maps[w_knight]));
-    material_val += (BISHOP * __builtin_popcountll(pos->maps[w_bishop]));
-    material_val += (ROOK   * __builtin_popcountll(pos->maps[w_rook]));
-    material_val += (QUEEN  * __builtin_popcountll(pos->maps[w_queen]));
+    material_val += (PAWN   * popcount(pos->maps[w_pawn]));
+    material_val += (KNIGHT * popcount(pos->maps[w_knight]));
+    material_val += (BISHOP * popcount(pos->maps[w_bishop]));
+    material_val += (ROOK   * popcount(pos->maps[w_rook]));
+    material_val += (QUEEN  * popcount(pos->maps[w_queen]));
 
     if (pos->maps[w_king]) {
         material_val += KING;
@@ -60,11 +58,11 @@ int get_white_material_value(Position* pos) {
 int get_black_material_value(Position* pos) {
     int material_val = 0;
     
-    material_val -= (PAWN   * __builtin_popcountll(pos->maps[b_pawn]));
-    material_val -= (KNIGHT * __builtin_popcountll(pos->maps[b_knight]));
-    material_val -= (BISHOP * __builtin_popcountll(pos->maps[b_bishop]));
-    material_val -= (ROOK   * __builtin_popcountll(pos->maps[b_rook]));
-    material_val -= (QUEEN  * __builtin_popcountll(pos->maps[b_queen]));
+    material_val -= (PAWN   * popcount(pos->maps[b_pawn]));
+    material_val -= (KNIGHT * popcount(pos->maps[b_knight]));
+    material_val -= (BISHOP * popcount(pos->maps[b_bishop]));
+    material_val -= (ROOK   * popcount(pos->maps[b_rook]));
+    material_val -= (QUEEN  * popcount(pos->maps[b_queen]));
 
     if (pos->maps[b_king]) {
         material_val -= KING;
@@ -81,10 +79,10 @@ int white_defending_pawns_bonus(Position* pos) {
     bitboard pawns = pos->maps[w_pawn];
     bitboard white = pos->maps[w_pieces];
 
-    bitboard left_defenders  = (((pawns & (~a_file)) << 7) & white) >> 7;
-    bitboard right_defenders = (((pawns & (~h_file)) << 9) & white) >> 9;
+    bitboard left_defenders  = (((pawns bitand (compl a_file)) << 7) bitand white) >> 7;
+    bitboard right_defenders = (((pawns bitand (compl h_file)) << 9) bitand white) >> 9;
 
-    bonus = defending_bonus * (__builtin_popcountll(left_defenders) + __builtin_popcountll(right_defenders));
+    bonus = defending_bonus * (popcount(left_defenders) + popcount(right_defenders));
 
     return bonus;
 }
@@ -97,10 +95,10 @@ int black_defending_pawns_bonus(Position* pos) {
     bitboard pawns = pos->maps[b_pawn];
     bitboard black = pos->maps[b_pieces];
 
-    bitboard left_defenders  = (((pawns & (~h_file)) >> 7) & black) << 7;
-    bitboard right_defenders = (((pawns & (~a_file)) >> 9) & black) << 9;
+    bitboard left_defenders  = (((pawns bitand (compl h_file)) >> 7) bitand black) << 7;
+    bitboard right_defenders = (((pawns bitand (compl a_file)) >> 9) bitand black) << 9;
 
-    bonus = defending_bonus * (__builtin_popcountll(left_defenders) + __builtin_popcountll(right_defenders));
+    bonus = defending_bonus * (popcount(left_defenders) + popcount(right_defenders));
 
     return bonus;
 }
@@ -109,16 +107,15 @@ int white_knight_center_bonus(Position* pos) {
     bitboard knights = pos->maps[w_knight];
     int bonus = 0;
     int index = lsb(knights);
-    bitboard square = 0x0;
 
     while (index != -1) {
-        square = squares[index];
-        if (square & middle_board) {
+        bitboard square = squares[index];
+        if (square bitand middle_board) {
             bonus += KNIGNT_CENTER;
         }
 
         // "Increment" loop index.
-        knights &= ~squares[index];
+        knights and_eq (compl squares[index]);
         index = lsb(knights);
     }
 
@@ -129,16 +126,15 @@ int black_knight_center_bonus(Position* pos) {
     bitboard knights = pos->maps[b_knight];
     int bonus = 0;
     int index = lsb(knights);
-    bitboard square = 0x0;
 
     while (index != -1) {
-        square = squares[index];
-        if (square & middle_board) {
+        bitboard square = squares[index];
+        if (square bitand middle_board) {
             bonus -= KNIGNT_CENTER;
         }
 
         // "Increment" loop index.
-        knights &= ~squares[index];
+        knights and_eq (compl squares[index]);
         index = lsb(knights);
     }
 

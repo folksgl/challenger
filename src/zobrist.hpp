@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <array>
 #include <random>
-#include "position.h"
+#include "position.hpp"
 
 enum z_piece_names { z_w_pawn, z_w_rook, z_w_knight, z_w_bishop, z_w_queen, z_w_king,  
                      z_b_pawn, z_b_rook, z_b_knight, z_b_bishop, z_b_queen, z_b_king, };
