@@ -28,7 +28,7 @@ Percentages will be determined by playing 10 games and recording winnings.
 
 ## Installation
 
-To install the challenger engine and run it against another chess engine, you will need to install a UCI (Universal Chess Interface) compatible chess program. I recommend Lucas Chess, as it is the one I use for challenger.
+To install the challenger engine and run it against another chess engine, you will need to install a UCI (Universal Chess Interface) compatible chess program. I recommend Arena, as it is the one I use for challenger.
 
 1) Download and install Arena
    1. Navigate to the [Arena Website](http://www.playwitharena.de/) and head to the downloads section.
