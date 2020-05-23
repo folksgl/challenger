@@ -11,20 +11,8 @@ TEST(white_material, all) {
     std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position pos(test);
 
-    int white_material = get_white_material_value(&pos);
-    EXPECT_EQ (white_material, 14250);
-}
-
-//
-// START GET BLACK MATERIAL TEST ///////////////////////////////////////////////
-//
-
-TEST(black_material, all) {
-    std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    Position pos(test);
-
-    int black_material = get_black_material_value(&pos);
-    EXPECT_EQ (black_material, -14250);
+    int material = get_material_value_score(&pos);
+    EXPECT_EQ (material, 0);
 }
 
 //
@@ -36,7 +24,7 @@ TEST(position_eval, all) {
     Position pos(test);
 
     bitboard position_value = evaluate_position(&pos);
-    bitboard half = std::numeric_limits<bitboard>::max() / 2;
+    bitboard half = 0;
     EXPECT_EQ (position_value, half);
 }
 
@@ -45,8 +33,8 @@ TEST(position_eval, no_white_queen) {
     Position pos(test);
 
     bitboard position_value = evaluate_position(&pos);
-    bitboard half = std::numeric_limits<bitboard>::max() / 2;
-    EXPECT_EQ (position_value, half-1000);
+    bitboard half = 0;
+    EXPECT_EQ (position_value, half - QUEEN);
 }
 
 TEST(position_eval, no_white_pieces) {
@@ -54,8 +42,10 @@ TEST(position_eval, no_white_pieces) {
     Position pos(test);
 
     bitboard position_value = evaluate_position(&pos);
-    bitboard half = std::numeric_limits<bitboard>::max() / 2;
-    EXPECT_EQ (position_value, half-14250);
+    bitboard half = 0;
+
+    int all_pieces = KING + QUEEN + (ROOK * 2) + (KNIGHT * 2) + (BISHOP * 2) + (PAWN * 8);
+    EXPECT_EQ (position_value, half - all_pieces);
 }
 
 TEST(position_eval, no_black_queen) {
@@ -63,8 +53,8 @@ TEST(position_eval, no_black_queen) {
     Position pos(test);
 
     bitboard position_value = evaluate_position(&pos);
-    bitboard half = std::numeric_limits<bitboard>::max() / 2;
-    EXPECT_EQ (position_value, half+1000);
+    bitboard half = 0;
+    EXPECT_EQ (position_value, half + QUEEN);
 }
 
 TEST(position_eval, no_black_pieces) {
@@ -72,7 +62,8 @@ TEST(position_eval, no_black_pieces) {
     Position pos(test);
 
     bitboard position_value = evaluate_position(&pos);
-    bitboard half = std::numeric_limits<bitboard>::max() / 2;
-    EXPECT_EQ (position_value, half+14250);
+    bitboard half = 0;
+    int all_pieces = KING + QUEEN + (ROOK * 2) + (KNIGHT * 2) + (BISHOP * 2) + (PAWN * 8);
+    EXPECT_EQ (position_value, half + all_pieces);
 }
 

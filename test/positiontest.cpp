@@ -1042,7 +1042,7 @@ TEST(evaluate, evaluation_is_number) {
 
     bool isNumber = false;
 
-    if (actualpos.maps[eval_score] <= 0 || actualpos.maps[eval_score] > 0) {
+    if (actualpos.eval_score <= 0 || actualpos.eval_score > 0) {
         isNumber = true;
     }
 
