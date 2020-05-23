@@ -16,8 +16,8 @@ extern unsigned long long positions_searched;
  */
 void search(Position* pos, int depth) {
 
-    bitboard alpha = std::numeric_limits<bitboard>::min();
-    bitboard beta  = std::numeric_limits<bitboard>::max();
+    bitboard alpha = std::numeric_limits<int>::min();
+    bitboard beta  = std::numeric_limits<int>::max();
     if (pos->is_white_move()) {
         alphaBetaMax(pos, alpha, beta, depth);
         sort_descending;
@@ -30,13 +30,13 @@ void search(Position* pos, int depth) {
     return;
 }
 
-int alphaBetaMax(Position* pos, bitboard alpha, bitboard beta, int depth) {
+int alphaBetaMax(Position* pos, int alpha, int beta, int depth) {
     if (depth == 0) {
         #ifdef BENCHMARK
         positions_searched++;
         #endif
         pos->evaluate();
-        return pos->maps[eval_score];
+        return pos->eval_score;
     }
 
     pos->generate_moves();
@@ -49,23 +49,24 @@ int alphaBetaMax(Position* pos, bitboard alpha, bitboard beta, int depth) {
     sort_descending;
 
     for (auto p : pos->moves) {
-        p.maps[eval_score] = alphaBetaMin(&p, alpha, beta, depth - 1);
-        if (p.maps[eval_score] >= beta) {
+        p.eval_score = alphaBetaMin(&p, alpha, beta, depth - 1);
+        if (p.eval_score >= beta) {
             return beta;
         }
-        if (p.maps[eval_score] > alpha) {
-            alpha = p.maps[eval_score];
+        if (p.eval_score > alpha) {
+            alpha = p.eval_score;
         }
     }
     return alpha;
 }
 
-int alphaBetaMin(Position* pos, bitboard alpha, bitboard beta, int depth) {
+int alphaBetaMin(Position* pos, int alpha, int beta, int depth) {
     if (depth == 0) {
         #ifdef BENCHMARK
         positions_searched++;
         #endif
-        return pos->maps[eval_score];
+        pos->evaluate();
+        return pos->eval_score;
     }
 
     pos->generate_moves();
@@ -77,12 +78,12 @@ int alphaBetaMin(Position* pos, bitboard alpha, bitboard beta, int depth) {
     // Sort in ascending order of evaluation scores
     sort_ascending;
     for (auto p : pos->moves) {
-        p.maps[eval_score] = alphaBetaMax(&p, alpha, beta, depth - 1);
-        if (p.maps[eval_score] <= alpha) {
+        p.eval_score = alphaBetaMax(&p, alpha, beta, depth - 1);
+        if (p.eval_score <= alpha) {
             return alpha;
         }
-        if (p.maps[eval_score] < beta) {
-            beta = p.maps[eval_score];
+        if (p.eval_score < beta) {
+            beta = p.eval_score;
         }
     }
     return beta;
