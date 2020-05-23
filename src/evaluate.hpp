@@ -1,6 +1,16 @@
 #ifndef EVALUATE_H
 #define EVALUATE_H
 
+#define PAWN   100
+#define KNIGHT 350
+#define BISHOP 350
+#define ROOK   525
+#define QUEEN  1000
+#define KING   10000
+
+#define PAWN_DEFEND 20
+#define KNIGNT_CENTER 20
+
 #include "position.hpp"
 #include "common.hpp"
 
@@ -20,11 +30,9 @@ const bitboard middle_board = (rank_3 | rank_4 | rank_5 | rank_6) & (c_file | d_
 
 const bitboard center_board = (rank_4 | rank_5) & (d_file | e_file);
 
-bitboard evaluate_position(Position* pos);
+int evaluate_position(Position* pos);
 
-int get_white_material_value(Position* pos);
-
-int get_black_material_value(Position* pos);
+int get_material_value_score(Position* pos);
 
 int white_defending_pawns_bonus(Position* pos);
 

@@ -1,41 +1,45 @@
 #include "evaluate.hpp"
 
-#define PAWN   100
-#define KNIGHT 350
-#define BISHOP 350
-#define ROOK   525
-#define QUEEN  1000
-#define KING   10000
-
-#define PAWN_DEFEND 20
-#define KNIGNT_CENTER 20
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SCORING
+//
+// Scoring will be done by returning a single, signed number representing the strength of the position
+// for one side or the other.
+//
+// Positive scores represent an advantage for white, while negative scores represent an advantage for black.
+//
+// ANY function to evaluate an advantage for one side should return a positive number representing the strength
+// of the advantage for that particular analysis. e.g. when looking at whether pawns defend other pieces, both
+// the white and black evaluation of defending pawns will return a positive number. The evaluate_position
+// function should take the returns from all functions and it alone will be responsible for subtracting to 
+// determine the final evaluation
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
  *  evaluate_position takes in a single position and returns a single number representing its evaluation
  *  score -- positive means white has advantage, negative means black has advantage.
  */
-bitboard evaluate_position(Position* pos) {
+int evaluate_position(Position* pos) {
 
-    bitboard zero = std::numeric_limits<bitboard>::max() / 2;
+    int evaluation = 0;
 
-    int white_eval = get_white_material_value(pos);
-    white_eval += white_defending_pawns_bonus(pos);
-    white_eval += white_knight_center_bonus(pos);
+    evaluation += get_material_value_score(pos);
 
-    int black_eval = get_black_material_value(pos);
-    black_eval += black_defending_pawns_bonus(pos);
-    black_eval += black_knight_center_bonus(pos);
+    //evaluation += white_defending_pawns_bonus(pos);
+    //evaluation += white_knight_center_bonus(pos);
 
-    bitboard evaluation = (zero + white_eval) + black_eval;
+    //evaluation += black_defending_pawns_bonus(pos);
+    //evaluation += black_knight_center_bonus(pos);
 
     return evaluation;
 }
 
 /*
- *  get_white_material_value takes in a single position and returns a number representing the strength
- *  of the white pieces in the given position.
+ *  get_material_value_score takes in a single position and returns a number representing the strength
+ *  of the pieces left in the given position, with no reguard to their positional advantage/disadvantage.
  */
-int get_white_material_value(Position* pos) {
+int get_material_value_score(Position* pos) {
     int material_val = 0;
     
     material_val += (PAWN   * popcount(pos->maps[w_pawn]));
@@ -43,30 +47,14 @@ int get_white_material_value(Position* pos) {
     material_val += (BISHOP * popcount(pos->maps[w_bishop]));
     material_val += (ROOK   * popcount(pos->maps[w_rook]));
     material_val += (QUEEN  * popcount(pos->maps[w_queen]));
+    material_val += (KING   * popcount(pos->maps[w_king]));
 
-    if (pos->maps[w_king]) {
-        material_val += KING;
-    }
-
-    return material_val;
-}
-
-/*
- *  get_black_material_value takes in a single position and returns a number representing the strength
- *  of the black pieces in the given position.
- */
-int get_black_material_value(Position* pos) {
-    int material_val = 0;
-    
     material_val -= (PAWN   * popcount(pos->maps[b_pawn]));
     material_val -= (KNIGHT * popcount(pos->maps[b_knight]));
     material_val -= (BISHOP * popcount(pos->maps[b_bishop]));
     material_val -= (ROOK   * popcount(pos->maps[b_rook]));
     material_val -= (QUEEN  * popcount(pos->maps[b_queen]));
-
-    if (pos->maps[b_king]) {
-        material_val -= KING;
-    }
+    material_val -= (KING   * popcount(pos->maps[b_king]));
 
     return material_val;
 }
@@ -79,8 +67,8 @@ int white_defending_pawns_bonus(Position* pos) {
     bitboard pawns = pos->maps[w_pawn];
     bitboard white = pos->maps[w_pieces];
 
-    bitboard left_defenders  = (((pawns bitand (compl a_file)) << 7) bitand white) >> 7;
-    bitboard right_defenders = (((pawns bitand (compl h_file)) << 9) bitand white) >> 9;
+    bitboard left_defenders  = pawns bitand ((white bitand not_a_file) << 7);
+    bitboard right_defenders  = pawns bitand ((white bitand not_h_file) << 9);
 
     bonus = defending_bonus * (popcount(left_defenders) + popcount(right_defenders));
 
@@ -95,8 +83,8 @@ int black_defending_pawns_bonus(Position* pos) {
     bitboard pawns = pos->maps[b_pawn];
     bitboard black = pos->maps[b_pieces];
 
-    bitboard left_defenders  = (((pawns bitand (compl h_file)) >> 7) bitand black) << 7;
-    bitboard right_defenders = (((pawns bitand (compl a_file)) >> 9) bitand black) << 9;
+    bitboard left_defenders  = pawns bitand ((black bitand not_h_file) >> 7);
+    bitboard right_defenders  = pawns bitand ((black bitand not_a_file) >> 9);
 
     bonus = defending_bonus * (popcount(left_defenders) + popcount(right_defenders));
 
@@ -106,17 +94,16 @@ int black_defending_pawns_bonus(Position* pos) {
 int white_knight_center_bonus(Position* pos) {
     bitboard knights = pos->maps[w_knight];
     int bonus = 0;
-    int index = lsb(knights);
 
-    while (index != -1) {
-        bitboard square = squares[index];
+    while (knights) {
+        int index = lsb_unsafe(knights);
+        bitboard square = one << index;
         if (square bitand middle_board) {
             bonus += KNIGNT_CENTER;
         }
 
         // "Increment" loop index.
-        knights and_eq (compl squares[index]);
-        index = lsb(knights);
+        knights xor_eq square;
     }
 
     return bonus;
