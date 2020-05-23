@@ -63,8 +63,7 @@ const std::array<std::array<bool, 4>, 16> castling_rights {{
 
 enum map_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces, 
                  b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king, b_pieces,
-                 act_color, castle_rights, passant_sq, hlf_clock, full_num, eval_score,
-                 zobrist_key};
+                 act_color, castle_rights, passant_sq, hlf_clock, full_num, zobrist_key};
 
 enum Color: bitboard { WHITE , BLACK };
 enum Clock: bitboard { ZERO, ONE};
@@ -76,6 +75,7 @@ class Position {
         std::array<bitboard, 21> maps = {0};
 
         std::vector<Position> moves;
+        int eval_score = 0;
 
         // Constructors
 
@@ -87,7 +87,7 @@ class Position {
         // Comparisons
         bool operator == (const Position& other) const { return maps == other.maps; }
         bool operator < (const Position& other) const { 
-            return maps[eval_score] < other.maps[eval_score]; 
+            return eval_score < other.eval_score; 
         }
 
         // Functions

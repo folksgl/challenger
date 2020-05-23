@@ -25,7 +25,7 @@ Position::Position(string fen) {
     set_halfmove_clock(halfmove_clk);
     set_fullmove_number(fullmove_num);
 
-    maps[eval_score] = evaluate_position(this);
+    eval_score = evaluate_position(this);
     maps[zobrist_key] = zobrist.get_zobrist_key(this);
 
     delete[] fenstring;
@@ -38,7 +38,7 @@ void Position::generate_moves() {
 }
 
 void Position::evaluate() {
-    maps[eval_score] = evaluate_position(this);
+    eval_score = evaluate_position(this);
     return;
 }
 
@@ -524,13 +524,10 @@ bool Position::is_square_attacked(bitboard square) {
         return true;
     }
 
-    bitboard one = (bitboard) 0x01; // MUST be cast to a bitboard to ensure 64-bit length
-
     // Add the Bishop slider attacks
     while (bishops) {
         int index = lsb_unsafe(bishops);
         attacked_squares or_eq slider_attacks.BishopAttacks(whole_board, index);
-
         // "Increment" loop index.
         bishops xor_eq (one << index);
     }
@@ -544,7 +541,6 @@ bool Position::is_square_attacked(bitboard square) {
     while (rooks) {
         int index = lsb_unsafe(rooks);
         attacked_squares or_eq slider_attacks.RookAttacks(whole_board, index);
-
         // "Increment" loop index.
         rooks xor_eq (one << index);
     }
@@ -557,7 +553,6 @@ bool Position::is_square_attacked(bitboard square) {
     while (knights) {
         int index = lsb_unsafe(knights);
         attacked_squares or_eq knight_moves[index];
-
         // "Increment" loop index.
         knights xor_eq (one << index);
     }
