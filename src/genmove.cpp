@@ -126,7 +126,6 @@ inline bitboard get_queen_attacks(bitboard board, int index) {
 
 void leaper_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, const bitboard* attack_table) {
     // Loop over the leaper on the board
-    bitboard one = (bitboard) 0x01; // MUST be cast to a bitboard to ensure 64-bit length
     while (leaper) {
         int index = lsb_unsafe(leaper);
         bitboard attacks = attack_table[index] bitand not_own_pieces;
@@ -150,7 +149,6 @@ void leaper_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, c
 void slide_generator(Position* pos, bitboard slider, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int)) {
     bitboard whole_board = pos->maps[w_pieces] bitor pos->maps[b_pieces];
 
-    bitboard one = (bitboard) 0x01; // MUST be cast to a bitboard to ensure 64-bit length
     while (slider) {
         int index = lsb_unsafe(slider);
         string src =  bit_to_square_arr[index];
@@ -358,6 +356,7 @@ void generate_b_pawn_moves(Position* pos) {
     return;
 }
 
+#ifdef DEBUG
 void PrintBitBoard(const bitboard bb) {
     for (int row = 7; row >= 0; --row) {
         for (int col = 0; col <= 7; ++col) {
@@ -370,4 +369,4 @@ void PrintBitBoard(const bitboard bb) {
         std::cout << std::endl;
     }
 }
-
+#endif
