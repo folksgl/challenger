@@ -60,39 +60,26 @@ int get_material_value_score(Position* pos) {
 }
 
 int white_defending_pawns_bonus(Position* pos) {
-    int bonus = 0;
-
-    int defending_bonus = PAWN_DEFEND;
-
     bitboard pawns = pos->maps[w_pawn];
     bitboard white = pos->maps[w_pieces];
 
-    bitboard left_defenders  = pawns bitand ((white bitand not_a_file) << 7);
-    bitboard right_defenders  = pawns bitand ((white bitand not_h_file) << 9);
+    bitboard left_defenders = ((pawns bitand not_a_file) << 7) bitand white;
+    bitboard right_defenders = ((pawns bitand not_h_file) << 9) bitand white;
 
-    bonus = defending_bonus * (popcount(left_defenders) + popcount(right_defenders));
-
-    return bonus;
+    return PAWN_DEFEND * (popcount(left_defenders) + popcount(right_defenders));
 }
 
 int black_defending_pawns_bonus(Position* pos) {
-    int bonus = 0;
-
-    int defending_bonus = -PAWN_DEFEND;
-
     bitboard pawns = pos->maps[b_pawn];
     bitboard black = pos->maps[b_pieces];
 
-    bitboard left_defenders  = pawns bitand ((black bitand not_h_file) >> 7);
-    bitboard right_defenders  = pawns bitand ((black bitand not_a_file) >> 9);
+    bitboard left_defenders = ((pawns bitand not_h_file) >> 7) bitand black;
+    bitboard right_defenders = ((pawns bitand not_a_file) >> 9) bitand black;
 
-    bonus = defending_bonus * (popcount(left_defenders) + popcount(right_defenders));
-
-    return bonus;
+    return PAWN_DEFEND * (popcount(left_defenders) + popcount(right_defenders));
 }
 
-int white_knight_center_bonus(Position* pos) {
-    bitboard knights = pos->maps[w_knight];
+int knight_center_bonus(bitboard knights) {
     int bonus = 0;
 
     while (knights) {
@@ -104,25 +91,6 @@ int white_knight_center_bonus(Position* pos) {
 
         // "Increment" loop index.
         knights xor_eq square;
-    }
-
-    return bonus;
-}
-
-int black_knight_center_bonus(Position* pos) {
-    bitboard knights = pos->maps[b_knight];
-    int bonus = 0;
-    int index = lsb(knights);
-
-    while (index != -1) {
-        bitboard square = squares[index];
-        if (square bitand middle_board) {
-            bonus -= KNIGNT_CENTER;
-        }
-
-        // "Increment" loop index.
-        knights and_eq (compl squares[index]);
-        index = lsb(knights);
     }
 
     return bonus;

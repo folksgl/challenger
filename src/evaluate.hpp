@@ -38,8 +38,6 @@ int white_defending_pawns_bonus(Position* pos);
 
 int black_defending_pawns_bonus(Position* pos);
 
-int white_knight_center_bonus(Position* pos);
-
-int black_knight_center_bonus(Position* pos);
+int knight_center_bonus(bitboard knights);
 
 #endif
