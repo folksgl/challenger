@@ -8,6 +8,7 @@ addons:
     - python3-pip
     - gcc-9
     - libgtest-dev
+    - libgmock-dev
 compiler: gcc
 before_install:
 - pip3 install setuptools
