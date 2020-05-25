@@ -14,7 +14,7 @@ It is also recommended to use CppCheck, a static analysis tool for C/C++ code.
 
 For those using ubuntu-based linux distros, these can all be installed with the following command:
 ```
-sudo apt install -y build-essentials cmake libgtest-dev cmake
+sudo apt install -y build-essentials cmake libgtest-dev libgmock-dev cmake
 ```
 
 A propperly set up development environment will be able to do the following **without error or warning**:
