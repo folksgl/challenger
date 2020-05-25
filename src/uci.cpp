@@ -249,11 +249,6 @@ void process_go_command(command_iter begin, command_iter end) {
         cout << "ERROR: no position has been given. Ignoring go command." << endl;
     }
 
-    int size = get_iter_size(begin, end);
-    if (size < 2) {
-        return; // invalid "go" command. Needs sub-command(s).
-    }
-
     search_info info;
 
     // "go" command can have multiple sub-commands, each with different length arguments.
