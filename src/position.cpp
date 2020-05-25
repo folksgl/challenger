@@ -504,8 +504,8 @@ bool Position::is_square_attacked(bitboard square) {
         king = maps[w_king];
 
         // Add pawn attacks
-        attacked_squares or_eq (pawns bitand (compl a_file)) << 7;
-        attacked_squares or_eq (pawns bitand (compl h_file)) << 9;
+        attacked_squares or_eq (pawns bitand not_a_file) << 7;
+        attacked_squares or_eq (pawns bitand not_h_file) << 9;
     }
     else {
         pawns = maps[b_pawn];
@@ -515,8 +515,8 @@ bool Position::is_square_attacked(bitboard square) {
         king = maps[b_king];
 
         // Add pawn attacks
-        attacked_squares or_eq (pawns bitand (compl h_file)) >> 7;
-        attacked_squares or_eq (pawns bitand (compl a_file)) >> 9;
+        attacked_squares or_eq (pawns bitand not_h_file) >> 7;
+        attacked_squares or_eq (pawns bitand not_a_file) >> 9;
     }
 
     // Attempt to shortcircuit the rest of the method.
