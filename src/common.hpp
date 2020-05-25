@@ -25,7 +25,7 @@ const bitboard g_file = 0x4040404040404040;
 const bitboard h_file = 0x8080808080808080;
 
 const bitboard not_a_file = compl a_file;
-const bitboard not_h_file = compl a_file;
+const bitboard not_h_file = compl h_file;
 
 const bitboard rank_1 = 0x00000000000000FF;
 const bitboard rank_2 = 0x000000000000FF00;
