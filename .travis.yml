@@ -3,21 +3,21 @@ dist: focal
 addons:
   apt:
     packages:
-    - make
-    - lcov
-    - python3-pip
-    - gcc-9
-    - libgtest-dev
-    - libgmock-dev
+      - make
+      - lcov
+      - python3-pip
+      - gcc-9
+      - libgtest-dev
+      - libgmock-dev
 compiler: gcc
 before_install:
-- pip3 install setuptools
-- pip3 install wheel
-- pip3 install cpp-coveralls
-- pip3 install --user cmake
-- cmake --version
+  - pip3 install setuptools
+  - pip3 install wheel
+  - pip3 install cpp-coveralls
+  - pip3 install --user cmake
+  - cmake --version
 script:
-- make travis_test
+  - make travis_test
 after_success:
-- make coverage
-- coveralls -l challenger.info
+  - make coverage
+  - coveralls -l ./build/challenger.info
