@@ -68,20 +68,20 @@ void Position::set_piece_positions(char* fen_tok) {
         char input = bit_oriented_string.at(i);
         switch(input) {
             // Lower case = Black Pieces
-            case 'p': maps[b_pawn]   or_eq (single_bit << sq_num--); break;
-            case 'r': maps[b_rook]   or_eq (single_bit << sq_num--); break;
-            case 'n': maps[b_knight] or_eq (single_bit << sq_num--); break;
-            case 'b': maps[b_bishop] or_eq (single_bit << sq_num--); break;
-            case 'q': maps[b_queen]  or_eq (single_bit << sq_num--); break;
-            case 'k': maps[b_king]   or_eq (single_bit << sq_num--); break;
+            case 'p': maps[b_pawn]   or_eq (one << sq_num--); break;
+            case 'r': maps[b_rook]   or_eq (one << sq_num--); break;
+            case 'n': maps[b_knight] or_eq (one << sq_num--); break;
+            case 'b': maps[b_bishop] or_eq (one << sq_num--); break;
+            case 'q': maps[b_queen]  or_eq (one << sq_num--); break;
+            case 'k': maps[b_king]   or_eq (one << sq_num--); break;
 
             // Upper case = White Pieces
-            case 'P': maps[w_pawn]   or_eq (single_bit << sq_num--); break;
-            case 'R': maps[w_rook]   or_eq (single_bit << sq_num--); break;
-            case 'N': maps[w_knight] or_eq (single_bit << sq_num--); break;
-            case 'B': maps[w_bishop] or_eq (single_bit << sq_num--); break;
-            case 'Q': maps[w_queen]  or_eq (single_bit << sq_num--); break;
-            case 'K': maps[w_king]   or_eq (single_bit << sq_num--); break;
+            case 'P': maps[w_pawn]   or_eq (one << sq_num--); break;
+            case 'R': maps[w_rook]   or_eq (one << sq_num--); break;
+            case 'N': maps[w_knight] or_eq (one << sq_num--); break;
+            case 'B': maps[w_bishop] or_eq (one << sq_num--); break;
+            case 'Q': maps[w_queen]  or_eq (one << sq_num--); break;
+            case 'K': maps[w_king]   or_eq (one << sq_num--); break;
 
             default :
                 if (isdigit(input)) {
@@ -141,10 +141,7 @@ void Position::set_passant_target_sq(char* fen_tok) {
         // No target square or if malformed passant target string, assume there is none.
         return;
     }
-
-    else {
-        maps[passant_sq] = passant_string_to_bit.at(string(fen_tok));
-    }
+    maps[passant_sq] = passant_string_to_bit.at(string(fen_tok));
 
     return;
 }
@@ -168,7 +165,7 @@ void Position::set_halfmove_clock(char* fen_tok) {
 
     char* end;
 
-    maps[hlf_clock] = Clock(strtoul(fen_tok, &end, 10));
+    maps[hlf_clock] = strtoull(fen_tok, &end, 10);
 
     return;
 }
@@ -209,10 +206,9 @@ void Position::move(string move) {
 
     // Check if there is a piece on the dest square and remove if needed.
     int dest_piece = get_moving_piece(dest_square);
-    //int z_piece = (dest_piece > 6) ? dest_piece : dest_piece - 1;
     if (dest_piece != -1) {
-        //maps[zobrist_key] xor_eq zobrist.zobrist_piece_rands[dest_square][z_piece];
         zero_at(dest_square, dest_piece);
+        maps[hlf_clock] = 0 - 1;
     }
 
     // Get the piece that is moving
@@ -224,12 +220,14 @@ void Position::move(string move) {
         if (squares[dest_square] bitand maps[passant_sq]) {
             zero_at(dest_square - 8, b_pawn);
         }
+        maps[hlf_clock] = 0 - 1;
     }
     else if (piece == b_pawn) {
 
         if (squares[dest_square] bitand maps[passant_sq]) {
             zero_at(dest_square + 8, w_pawn);
         }
+        maps[hlf_clock] = 0 - 1;
     }
     else if (piece == w_king) {
         string removechars = "KQ";
@@ -240,6 +238,7 @@ void Position::move(string move) {
         }
 
         maps[castle_rights] = castle_string_to_index.at(rights);
+        maps[hlf_clock] = 0 - 1;
     }
     else if (piece == b_king) {
         string removechars = "kq";
@@ -250,6 +249,7 @@ void Position::move(string move) {
         }
 
         maps[castle_rights] = castle_string_to_index.at(rights);
+        maps[hlf_clock] = 0 - 1;
     }
     else if (piece == w_rook or piece == b_rook) {
         string removechars = "";
@@ -273,17 +273,12 @@ void Position::move(string move) {
         }
 
         maps[castle_rights] = castle_string_to_index.at(rights);
+        maps[hlf_clock] = 0 - 1;
     }
 
     maps[passant_sq] = 0x0000000000000000;
 
-    //z_piece = (piece > 6) ? piece : piece - 1;
-
     zero_at(start_square, piece);
-    //maps[zobrist_key] xor_eq zobrist.zobrist_piece_rands[start_square][z_piece];
-
-    //z_piece = (piece > 6) ? piece : piece - 1;
-    //maps[zobrist_key] xor_eq zobrist.zobrist_piece_rands[dest_square][z_piece];
 
     // Set the destination square
     bitboard square_to_add = squares[dest_square];
@@ -295,13 +290,10 @@ void Position::move(string move) {
     else {
         maps[b_pieces] or_eq square_to_add;
     }
-
-    // Increment move number based on current halfmove clock
-    maps[full_num] += maps[hlf_clock];
-
-    maps[hlf_clock] xor_eq ONE; // Toggle halfmove clock.
-
-    //maps[zobrist_key] xor_eq zobrist.zobrist_black_move; // Toggle Zobrist value for active color.
+    
+    // When active color is black(1) increments the fullmove number, but prevents branching based off the active color.
+    maps[full_num] += maps[act_color];
+    maps[hlf_clock]++; // Toggle halfmove clock.
     maps[act_color] xor_eq BLACK; // Toggle active color.
 
     return;
@@ -360,9 +352,9 @@ void Position::move_pawn_promotion(string move) {
         maps[b_pieces] or_eq square_to_add;
     }
 
-    maps[full_num] += maps[hlf_clock]; // Increment move number.
-    maps[hlf_clock] xor_eq ONE;            // Toggle halfmove clock.
-    maps[act_color] xor_eq BLACK;          // Toggle active color.
+    maps[full_num] += maps[act_color]; // Increment fullmove number.
+    maps[hlf_clock] = 0;            // Toggle halfmove clock.
+    maps[act_color] xor_eq BLACK;   // Toggle active color.
 
     return;
 }
@@ -402,9 +394,9 @@ void Position::move_pawn_double_forward(string move) {
         maps[b_pieces] or_eq square_to_add;
     }
 
-    maps[full_num] += maps[hlf_clock]; // Increment move number.
-    maps[hlf_clock] xor_eq ONE;            // Toggle halfmove clock.
-    maps[act_color] xor_eq BLACK;          // Toggle active color.
+    maps[full_num] += maps[act_color]; // Increment fullmove number.
+    maps[hlf_clock] = 0;            // Toggle halfmove clock.
+    maps[act_color] xor_eq BLACK;   // Toggle active color.
 
     return;
 }
@@ -446,9 +438,9 @@ void Position::castle(Castling_names type) {
 
     maps[castle_rights] = castle_string_to_index.at(rights);
 
-    maps[full_num] += maps[hlf_clock]; // Increment move number.
-    maps[hlf_clock] xor_eq ONE;            // Toggle halfmove clock.
-    maps[act_color] xor_eq BLACK;          // Toggle active color.
+    maps[full_num] += maps[act_color]; // Increment fullmove number.
+    maps[hlf_clock] = 0;            // Toggle halfmove clock.
+    maps[act_color] xor_eq BLACK;   // Toggle active color.
 
     return;
 }
@@ -463,12 +455,7 @@ void Position::zero_at(int square, int piece) {
 
     bitboard mask = compl (squares[square]);
 
-    if (piece < 6) {
-        maps[w_pieces] and_eq mask;
-    }
-    else {
-        maps[b_pieces] and_eq mask;
-    }
+    maps[6 + (7 * (piece / 7))] and_eq mask;
     maps[piece] and_eq mask;
 
     return;
@@ -492,7 +479,7 @@ bool Position::is_square_attacked(bitboard square) {
     bitboard attacked_squares = 0x0;
 
     bitboard whole_board = maps[w_pieces] bitor maps[b_pieces];
-    bitboard pawns, bishops, knights, rooks, king = 0x0;
+    bitboard pawns, bishops, knights, rooks, king;
 
     bool is_white_move = this->is_white_move();
 
