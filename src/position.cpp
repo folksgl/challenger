@@ -476,7 +476,7 @@ int Position::get_moving_piece(int square) {
 }
 
 bool Position::is_square_attacked(bitboard square) {
-    bitboard attacked_squares = 0x0;
+    bitboard attacked_squares;
 
     bitboard whole_board = maps[w_pieces] bitor maps[b_pieces];
     bitboard pawns, bishops, knights, rooks, king;
@@ -491,7 +491,7 @@ bool Position::is_square_attacked(bitboard square) {
         king = maps[w_king];
 
         // Add pawn attacks
-        attacked_squares or_eq (pawns bitand not_a_file) << 7;
+        attacked_squares = (pawns bitand not_a_file) << 7;
         attacked_squares or_eq (pawns bitand not_h_file) << 9;
     }
     else {
@@ -502,7 +502,7 @@ bool Position::is_square_attacked(bitboard square) {
         king = maps[b_king];
 
         // Add pawn attacks
-        attacked_squares or_eq (pawns bitand not_h_file) >> 7;
+        attacked_squares = (pawns bitand not_h_file) >> 7;
         attacked_squares or_eq (pawns bitand not_a_file) >> 9;
     }
 
