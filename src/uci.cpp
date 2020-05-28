@@ -207,15 +207,15 @@ void process_position_command(command_iter begin, command_iter end) {
                     G_game_position->castle(c_w_king);
                 }
                 else if (start_square == 4 and dest_square == 2) {
-                    G_game_position->castle(c_w_king);
+                    G_game_position->castle(c_w_queen);
                 }
             }
             else if (moving_piece == b_king) {
                 if (start_square == 60 and dest_square == 62) {
-                    G_game_position->castle(c_w_king);
+                    G_game_position->castle(c_b_king);
                 }
                 else if (start_square == 60 and dest_square == 58) {
-                    G_game_position->castle(c_w_king);
+                    G_game_position->castle(c_b_queen);
                 }
             }
             else {
