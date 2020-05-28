@@ -140,3 +140,108 @@ TEST (process_commands, go_quit_nullpos) {
     EXPECT_EQ(output, "Fatal error, no moves found.\n");
 }
 
+TEST (process_commands, bad_debug_command) { 
+    std::vector<string> command1 = {"debug"};
+    std::vector<string> command2 = {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+    EXPECT_FALSE(G_debug);
+}
+
+TEST (process_commands, w_pawn_promotion) { 
+    std::vector<string> command1 = {"position", "2bqk1nr/Ppp2ppp/4p3/2Np1b2/2nP1B2/4P3/PPP2P1P/RNBQK2R", "w", "-", "-", "0", "1", "moves", "a7a8Q"};
+    std::vector<string> command2 = {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+    EXPECT_FALSE(G_debug);
+}
+
+TEST (read_commands, three_valid) { 
+    std::istringstream iss("position 8/8/8/8/8/8/8/8 w - - 0 1\ngo depth 1\nquit");
+    read_commands(iss);
+
+    EXPECT_EQ(command_queue.size(), 3);
+
+    std::vector<std::string> command1 {"position", "8/8/8/8/8/8/8/8", "w", "-", "-", "0", "1"};
+    EXPECT_EQ(command_queue.pop(), command1);
+
+    std::vector<std::string> command2 {"go", "depth", "1"};
+    EXPECT_EQ(command_queue.pop(), command2);
+
+    std::vector<std::string> command3 {"quit"};
+    EXPECT_EQ(command_queue.pop(), command3);
+}
+
+TEST (read_commands, two_valid) { 
+    std::istringstream iss("position 8/8/8/8/8/8/8/8 w - - 0 1\ngo depth 1\nnotvalid hello world");
+    read_commands(iss);
+
+    EXPECT_EQ(command_queue.size(), 2);
+
+    std::vector<std::string> command1 {"position", "8/8/8/8/8/8/8/8", "w", "-", "-", "0", "1"};
+    EXPECT_EQ(command_queue.pop(), command1);
+
+    std::vector<std::string> command2 {"go", "depth", "1"};
+    EXPECT_EQ(command_queue.pop(), command2);
+}
+
+TEST (read_commands, none_valid) { 
+    std::istringstream iss("hello position 8/8/8/8/8/8/8/8 w - - 0 1\nworld go depth 1\nnotvalid hello world");
+    read_commands(iss);
+
+    EXPECT_EQ(command_queue.size(), 0);
+}
+
+TEST (read_commands, empty_blank) { 
+    std::istringstream iss("     \n\n");
+    read_commands(iss);
+
+    EXPECT_EQ(command_queue.size(), 0);
+}
+
+TEST (read_commands, bad_debug_command) { 
+    std::istringstream iss("     debug");
+    read_commands(iss);
+
+    EXPECT_EQ(command_queue.size(), 1);
+
+    std::vector<std::string> command1 {"debug"};
+    EXPECT_EQ(command_queue.pop(), command1);
+    EXPECT_EQ(G_debug, false);
+}
+
+TEST (is_go_subcommand, True) { 
+    EXPECT_TRUE(is_go_subcommand("searchmoves"));
+    EXPECT_TRUE(is_go_subcommand("ponder"));
+    EXPECT_TRUE(is_go_subcommand("wtime"));
+    EXPECT_TRUE(is_go_subcommand("btime"));
+    EXPECT_TRUE(is_go_subcommand("winc"));
+    EXPECT_TRUE(is_go_subcommand("binc"));
+    EXPECT_TRUE(is_go_subcommand("movestogo"));
+    EXPECT_TRUE(is_go_subcommand("depth"));
+    EXPECT_TRUE(is_go_subcommand("nodes"));
+    EXPECT_TRUE(is_go_subcommand("mate"));
+    EXPECT_TRUE(is_go_subcommand("movetime"));
+    EXPECT_TRUE(is_go_subcommand("infinite"));
+}
+
+TEST (is_go_subcommand, False) { 
+    EXPECT_FALSE(is_go_subcommand("not"));
+    EXPECT_FALSE(is_go_subcommand("subcommands"));
+}
+
+TEST (process_position, pawn_single_forward) { 
+    std::vector<std::string> command1 {"position", "startpos", "moves", "a2a3"};
+    std::vector<std::string> command2 {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+
+    EXPECT_EQ(G_game_position->to_fen_string(), "rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1");
+}
+
