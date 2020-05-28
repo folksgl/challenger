@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void read_commands(void);
+void read_commands(std::istream& is);
 
 void process_commands();
 
@@ -28,5 +28,7 @@ std::string find_move_taken(Position* initial, Position* next);
 void process_stop_command();
 
 void process_ponderhit_command();
+
+bool is_go_subcommand(std::string command);
 
 #endif

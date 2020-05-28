@@ -14,7 +14,7 @@ int main()
 {
     G_debug = false;
 
-    std::thread command_producer(read_commands);
+    std::thread command_producer(read_commands, std::ref(std::cin));
     std::thread command_consumer(process_commands);
 
     command_producer.join();

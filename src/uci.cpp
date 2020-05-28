@@ -5,11 +5,11 @@
 
 using namespace std;
 
-void read_commands() {
+void read_commands(std::istream& is) {
     std::set<std::string> command_set { "uci", "debug", "isready", "setoption", "register", "ucinewgame", "position", "go", "stop", "ponderhit", "quit"};
 
     std::string input_string;
-    while (std::getline(std::cin, input_string)) {
+    while (std::getline(is, input_string)) {
         // Remove all leading, trailing, and double spaces in the input text
         input_string = std::regex_replace(input_string, std::regex("^ +| +$|( ) +"), "$1");
 
