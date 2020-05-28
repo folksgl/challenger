@@ -36,6 +36,10 @@ class UCICommandQueue {
         bool is_empty() {
             return safe_queue.empty();
         }
+
+        int size() {
+            return safe_queue.size();
+        }
 };
 
 #endif
