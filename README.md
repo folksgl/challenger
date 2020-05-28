@@ -11,9 +11,9 @@ The goal of challenger is to take on the stockfish 10 chess engine, which is cur
 
 ## Progress
 
-Current level completed: **None**
+Current level: 0
 
-Percentage winning next level: **0%**
+Percentage winning next level:  ![progress](https://progress-bar.dev/0)
  
 The progress of challenger will be gauged as follows: Challenger will play stockfish starting at its lowest level. Once the Challenger engine can beat the stockfish engine at the given level at least 60% of the time, the stockfish level will be increased, the "Current level completed" label above will be updated, and a release of the code will be made to snapshot the progress made.
 The "Percentage winning next level" label indicates challenger's progress in beating the next level of stockfish.
