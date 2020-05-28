@@ -234,7 +234,7 @@ TEST (is_go_subcommand, False) {
     EXPECT_FALSE(is_go_subcommand("subcommands"));
 }
 
-TEST (process_position, pawn_single_forward) { 
+TEST (process_position, pawn_single_forward_white) { 
     std::vector<std::string> command1 {"position", "startpos", "moves", "a2a3"};
     std::vector<std::string> command2 {"quit"};
     command_queue.push(command1);
@@ -243,5 +243,82 @@ TEST (process_position, pawn_single_forward) {
     process_commands();
 
     EXPECT_EQ(G_game_position->to_fen_string(), "rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1");
+}
+
+TEST (process_position, pawn_single_forward_black) { 
+    std::vector<std::string> command1 {"position", "startpos", "moves", "a2a3", "a7a6"};
+    std::vector<std::string> command2 {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+
+    EXPECT_EQ(G_game_position->to_fen_string(), "rnbqkbnr/1ppppppp/p7/8/8/P7/1PPPPPPP/RNBQKBNR w KQkq - 0 2");
+}
+
+TEST (process_position, white_castle_kingside) { 
+    std::vector<std::string> command1 {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R", "w", "KQkq", "-", "0", "1", "moves", "e1g1"};
+    std::vector<std::string> command2 {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+
+    EXPECT_EQ(G_game_position->to_fen_string(), "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQ1RK1 b kq - 0 1");
+}
+
+TEST (process_position, black_castle_kingside) { 
+    std::vector<std::string> command1 {"position", "rnbqk2r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "b", "KQkq", "-", "0", "1", "moves", "e8g8"};
+    std::vector<std::string> command2 {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+
+    EXPECT_EQ(G_game_position->to_fen_string(), "rnbq1rk1/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 2");
+}
+
+TEST (process_position, white_castle_queenside) { 
+    std::vector<std::string> command1 {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R3KBNR", "w", "KQkq", "-", "0", "1", "moves", "e1c1"};
+    std::vector<std::string> command2 {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+
+    EXPECT_EQ(G_game_position->to_fen_string(), "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/2KR1BNR b kq - 0 1");
+}
+
+TEST (process_position, black_castle_queenside) { 
+    std::vector<std::string> command1 {"position", "r3kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "b", "KQkq", "-", "0", "1", "moves", "e8c8"};
+    std::vector<std::string> command2 {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+
+    EXPECT_EQ(G_game_position->to_fen_string(), "2kr1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 2");
+}
+
+TEST (process_position, white_knight) { 
+    std::vector<std::string> command1 {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "w", "KQkq", "-", "0", "1", "moves", "g1f3"};
+    std::vector<std::string> command2 {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+
+    EXPECT_EQ(G_game_position->to_fen_string(), "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1");
+}
+
+TEST (process_position, black_knight) { 
+    std::vector<std::string> command1 {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "b", "KQkq", "-", "0", "1", "moves", "g8f6"};
+    std::vector<std::string> command2 {"quit"};
+    command_queue.push(command1);
+    command_queue.push(command2);
+
+    process_commands();
+
+    EXPECT_EQ(G_game_position->to_fen_string(), "rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1 2");
 }
 
