@@ -9,8 +9,6 @@
 
 using namespace std;
 
-const bitboard single_bit = (bitboard)1;
-
 enum Castling_names { c_w_king, c_w_queen, c_b_king, c_b_queen};
 
 const std::unordered_map<std::string, int> castle_string_to_index({
@@ -66,7 +64,6 @@ enum map_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces,
                  act_color, castle_rights, passant_sq, hlf_clock, full_num, zobrist_key};
 
 enum Color: bitboard { WHITE , BLACK };
-enum Clock: bitboard { ZERO, ONE};
 
 class Position {
 
