@@ -9,6 +9,8 @@
 
 using namespace std;
 
+constexpr bitboard neg_clock = (bitboard)0 - 1;
+
 enum Castling_names { c_w_king, c_w_queen, c_b_king, c_b_queen};
 
 const std::unordered_map<std::string, int> castle_string_to_index({

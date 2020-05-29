@@ -181,7 +181,7 @@ void Position::move(string move) {
     int dest_piece = get_moving_piece(dest_square);
     if (dest_piece != -1) {
         zero_at(dest_square, dest_piece);
-        maps[hlf_clock] = 0 - 1;
+        maps[hlf_clock] = neg_clock;
     }
 
     // Get the piece that is moving
@@ -193,14 +193,14 @@ void Position::move(string move) {
         if (square_bit(dest_square) bitand maps[passant_sq]) {
             zero_at(dest_square - 8, b_pawn);
         }
-        maps[hlf_clock] = 0 - 1;
+        maps[hlf_clock] = neg_clock;
     }
     else if (piece == b_pawn) {
 
         if (square_bit(dest_square) bitand maps[passant_sq]) {
             zero_at(dest_square + 8, w_pawn);
         }
-        maps[hlf_clock] = 0 - 1;
+        maps[hlf_clock] = neg_clock;
     }
     else if (piece == w_king) {
         string removechars = "KQ";
@@ -211,7 +211,7 @@ void Position::move(string move) {
         }
 
         maps[castle_rights] = castle_string_to_index.at(rights);
-        maps[hlf_clock] = 0 - 1;
+        maps[hlf_clock] = neg_clock;
     }
     else if (piece == b_king) {
         string removechars = "kq";
@@ -222,7 +222,7 @@ void Position::move(string move) {
         }
 
         maps[castle_rights] = castle_string_to_index.at(rights);
-        maps[hlf_clock] = 0 - 1;
+        maps[hlf_clock] = neg_clock;
     }
     else if (piece == w_rook or piece == b_rook) {
         string removechars = "";
@@ -246,7 +246,7 @@ void Position::move(string move) {
         }
 
         maps[castle_rights] = castle_string_to_index.at(rights);
-        maps[hlf_clock] = 0 - 1;
+        maps[hlf_clock] = neg_clock;
     }
 
     maps[passant_sq] = 0x0000000000000000;
