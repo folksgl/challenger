@@ -96,12 +96,12 @@ class Position {
         inline bool b_kingside_castle(void)  const { return castling_rights[maps[castle_rights]][c_b_king];  }
         inline bool b_queenside_castle(void) const { return castling_rights[maps[castle_rights]][c_b_queen]; }
 
-        void set_piece_positions(char* fen_tok);
-        void set_active_color(char* fen_tok);
-        void set_castling_rights(char* fen_tok);
-        void set_passant_target_sq(char* fen_tok);
-        void set_halfmove_clock(char* fen_tok);
-        void set_fullmove_number(char* fen_tok);
+        void set_piece_positions(std::string);
+        void set_active_color(std::string);
+        void set_castling_rights(std::string);
+        void set_passant_target_sq(std::string);
+        void set_halfmove_clock(std::string);
+        void set_fullmove_number(std::string);
 
         void generate_moves(void);
         void evaluate(void);

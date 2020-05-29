@@ -4,31 +4,35 @@
 #include "zobrist.hpp"
 #include "game_variables.hpp"
 #include <string.h>
+#include <sstream>
+#include <iterator>
+#include <algorithm>
+
+std::vector<std::string> split(const std::string& s, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(s);
+    while (std::getline(tokenStream, token, delimiter))
+    {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
 
 Position::Position(string fen) {
 
-    // Copy fen string into char[] for tokenizing.
-    char * fenstring = new char [fen.length()+1];
-    strcpy (fenstring, fen.c_str());
+    // Split the input string into tokens (delimited by space)
+    std::vector<std::string> results = split(fen, ' ');
 
-    char *piece_string  = strtok(fenstring, " "); 
-    char *active_color  = strtok(NULL, " "); 
-    char *castle_rights = strtok(NULL, " "); 
-    char *passant_sq    = strtok(NULL, " "); 
-    char *halfmove_clk  = strtok(NULL, " "); 
-    char *fullmove_num  = strtok(NULL, " "); 
-
-    set_piece_positions(piece_string);
-    set_active_color(active_color);
-    set_castling_rights(castle_rights);
-    set_passant_target_sq(passant_sq);
-    set_halfmove_clock(halfmove_clk);
-    set_fullmove_number(fullmove_num);
+    set_piece_positions(results[0]);
+    set_active_color(results[1]);
+    set_castling_rights(results[2]);
+    set_passant_target_sq(results[3]);
+    set_halfmove_clock(results[4]);
+    set_fullmove_number(results[5]);
 
     eval_score = evaluate_position(this);
     maps[zobrist_key] = zobrist.get_zobrist_key(this);
-
-    delete[] fenstring;
 }
 
 void Position::generate_moves() {
@@ -46,18 +50,15 @@ void Position::evaluate() {
  *  set_piece_positions sets the value of all the bitboards in board_position
  *  to the values found in fen_tok.
  */
-void Position::set_piece_positions(char* fen_tok) {
+void Position::set_piece_positions(std::string fen_tok) {
 
-    string tmp, bit_oriented_string;
+    // Split string on '/' character and reverse all strings in the resulting vector
+    std::vector<std::string> piece_strings = split(fen_tok, '/');
+    std::transform(piece_strings.begin(), piece_strings.end(), piece_strings.begin(), [](std::string str) { std::reverse(str.begin(), str.end()); return str;});
 
-    tmp = strtok(fen_tok, "/");
-    std::reverse(tmp.begin(), tmp.end());
-    bit_oriented_string += tmp;
-
-    for (int i = 0; i < 7; i++) {
-        tmp = strtok(NULL, "/");
-        std::reverse(tmp.begin(), tmp.end());
-        bit_oriented_string += tmp;
+    string bit_oriented_string;
+    for (const auto &str : piece_strings) {
+        bit_oriented_string += str;
     }
 
     // Create Position from bit_oriented_string.
@@ -103,14 +104,14 @@ void Position::set_piece_positions(char* fen_tok) {
  *  set_castling_rights sets the value of castling_rights in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_castling_rights(char* fen_tok) {
+void Position::set_castling_rights(std::string fen_tok) {
 
-    if (fen_tok == NULL or strlen(fen_tok) < 1 or strlen(fen_tok) > 4) {
+    if (fen_tok.length() < 1 or fen_tok.length() > 4) {
         // Castling right string is malformed, continue with no castling rights 
         return;
     }
 
-    maps[castle_rights] = castle_string_to_index.at(string(fen_tok));
+    maps[castle_rights] = castle_string_to_index.at(fen_tok);
 
     return;
 }
@@ -120,9 +121,9 @@ void Position::set_castling_rights(char* fen_tok) {
  *  set_active_color sets the value of active_color in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_active_color(char* fen_tok) {
+void Position::set_active_color(std::string fen_tok) {
 
-    if (fen_tok == NULL or strlen(fen_tok) not_eq 1) {
+    if (fen_tok.length() not_eq 1) {
         // Malformed active color string. Just assume that it is white's turn.
         return;
     }
@@ -135,9 +136,9 @@ void Position::set_active_color(char* fen_tok) {
  *  set_passant_target_sq sets the value of passant_target_sq in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_passant_target_sq(char* fen_tok) {
+void Position::set_passant_target_sq(std::string fen_tok) {
 
-    if (fen_tok == NULL or strlen(fen_tok) < 1 or strlen(fen_tok) > 2 or !isalpha(fen_tok[0]) or !isdigit(fen_tok[1])) {
+    if (fen_tok.length() < 1 or fen_tok.length() > 2 or !isalpha(fen_tok[0]) or !isdigit(fen_tok[1])) {
         // No target square or if malformed passant target string, assume there is none.
         return;
     }
@@ -150,13 +151,9 @@ void Position::set_passant_target_sq(char* fen_tok) {
  *  set_halfmove_clock sets the value of halfmove_clock in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_halfmove_clock(char* fen_tok) {
+void Position::set_halfmove_clock(std::string fen_tok) {
 
-    if (fen_tok == NULL) {
-        // Malformed clock string, just don't modify the clock and ignore token.
-        return;
-    }
-    for (unsigned int i = 0; i < strlen(fen_tok); i++) {
+    for (unsigned int i = 0; i < fen_tok.length(); i++) {
         if (not isdigit(fen_tok[i])) {
             // Malformed clock string, just don't modify the clock and ignore token.
             return;
@@ -165,7 +162,7 @@ void Position::set_halfmove_clock(char* fen_tok) {
 
     char* end;
 
-    maps[hlf_clock] = strtoull(fen_tok, &end, 10);
+    maps[hlf_clock] = std::strtoull(fen_tok.c_str(), &end, 10);
 
     return;
 }
@@ -174,13 +171,9 @@ void Position::set_halfmove_clock(char* fen_tok) {
  *  set_fullmove_number sets the value of fullmove_number in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_fullmove_number(char* fen_tok) {
+void Position::set_fullmove_number(std::string fen_tok) {
 
-    if (fen_tok == NULL) {
-        // Malformed move number string, ignore token and don't modify move number.
-        return;
-    }
-    for (unsigned int i = 0; i < strlen(fen_tok); i++) {
+    for (unsigned int i = 0; i < fen_tok.length(); i++) {
         if (not isdigit(fen_tok[i])) {
             // Malformed move number string, ignore token and don't modify move number.
             return;
@@ -188,7 +181,7 @@ void Position::set_fullmove_number(char* fen_tok) {
     }
 
     char* end;
-    maps[full_num] = strtoul(fen_tok, &end, 10);
+    maps[full_num] = strtoul(fen_tok.c_str(), &end, 10);
 
     return;
 }
@@ -217,14 +210,14 @@ void Position::move(string move) {
     if (piece == w_pawn) {
 
         // If capturing en passant, remove the captured pawn
-        if (squares[dest_square] bitand maps[passant_sq]) {
+        if (square_bit(dest_square) bitand maps[passant_sq]) {
             zero_at(dest_square - 8, b_pawn);
         }
         maps[hlf_clock] = 0 - 1;
     }
     else if (piece == b_pawn) {
 
-        if (squares[dest_square] bitand maps[passant_sq]) {
+        if (square_bit(dest_square) bitand maps[passant_sq]) {
             zero_at(dest_square + 8, w_pawn);
         }
         maps[hlf_clock] = 0 - 1;
@@ -281,7 +274,7 @@ void Position::move(string move) {
     zero_at(start_square, piece);
 
     // Set the destination square
-    bitboard square_to_add = squares[dest_square];
+    bitboard square_to_add = square_bit(dest_square);
     maps[piece] or_eq square_to_add;
 
     if (piece < 6) {
@@ -342,7 +335,7 @@ void Position::move_pawn_promotion(string move) {
     }
 
     // Set the destination square
-    bitboard square_to_add = squares[dest_square];
+    bitboard square_to_add = square_bit(dest_square);
     maps[piece] or_eq square_to_add;
 
     if (piece < 6) {
@@ -379,12 +372,12 @@ void Position::move_pawn_double_forward(string move) {
     int piece = white_move ? w_pawn : b_pawn;
 
     // Set the en passant square.
-    maps[passant_sq] = white_move? squares[dest_square - 8] : squares[dest_square + 8];
+    maps[passant_sq] = white_move? square_bit(dest_square - 8) : square_bit(dest_square + 8);
 
     zero_at(start_square, piece);
 
     // Set the destination square
-    bitboard square_to_add = squares[dest_square];
+    bitboard square_to_add = square_bit(dest_square);
     maps[piece] or_eq square_to_add;
 
     if (piece < 6) {
@@ -453,7 +446,7 @@ void Position::castle(Castling_names type) {
  */
 void Position::zero_at(int square, int piece) {
 
-    bitboard mask = compl (squares[square]);
+    bitboard mask = compl (square_bit(square));
 
     maps[6 + (7 * (piece / 7))] and_eq mask;
     maps[piece] and_eq mask;
@@ -462,12 +455,12 @@ void Position::zero_at(int square, int piece) {
 }
 
 int Position::get_moving_piece(int square) {
-    bitboard square_bit = squares[square];
+    bitboard bit = square_bit(square);
 
-    int i = square_bit bitand maps[w_pieces] ? 0 : 7;
+    int i = bit bitand maps[w_pieces] ? 0 : 7;
 
     for (; i < 14; i++) {
-        if (maps[i] bitand square_bit) {
+        if (maps[i] bitand bit) {
             return i;
         }
     }
@@ -516,7 +509,7 @@ bool Position::is_square_attacked(bitboard square) {
         int index = lsb_unsafe(bishops);
         attacked_squares or_eq slider_attacks.BishopAttacks(whole_board, index);
         // "Increment" loop index.
-        bishops xor_eq (one << index);
+        bishops xor_eq square_bit(index);
     }
 
     // Attempt to shortcircuit the rest of the method.
@@ -529,7 +522,7 @@ bool Position::is_square_attacked(bitboard square) {
         int index = lsb_unsafe(rooks);
         attacked_squares or_eq slider_attacks.RookAttacks(whole_board, index);
         // "Increment" loop index.
-        rooks xor_eq (one << index);
+        rooks xor_eq square_bit(index);
     }
 
     // Attempt to shortcircuit the rest of the method.
@@ -541,7 +534,7 @@ bool Position::is_square_attacked(bitboard square) {
         int index = lsb_unsafe(knights);
         attacked_squares or_eq knight_moves[index];
         // "Increment" loop index.
-        knights xor_eq (one << index);
+        knights xor_eq square_bit(index);
     }
 
     if (king) {
@@ -566,7 +559,7 @@ string Position::to_fen_string() {
 
             // Loop over the entire rank
             for (int j = 0; j < 8; j++) {
-                bitboard cur_square = squares[i + j];
+                bitboard cur_square = square_bit(i + j);
 
                 // Check for an empty square
                 if (not ((maps[w_pieces] bitor maps[b_pieces]) bitand cur_square)) {
