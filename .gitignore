@@ -30,3 +30,5 @@ src/.clangd
 
 # Shell files
 *.sh
+
+tmp_analysis
