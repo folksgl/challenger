@@ -426,7 +426,7 @@ void Position::castle(Castling_names type) {
  */
 void Position::zero_at(int square, int piece) {
 
-    bitboard mask = compl (square_bit(square));
+    bitboard mask = compl square_bit(square);
 
     maps[w_pieces] and_eq mask;
     maps[b_pieces] and_eq mask;
@@ -450,10 +450,12 @@ int Position::get_moving_piece(int square) {
 }
 
 bool Position::is_square_attacked(bitboard square) {
-    bitboard attacked_squares;
+
+    if (not square) return false;
 
     bitboard whole_board = maps[w_pieces] bitor maps[b_pieces];
-    bitboard pawns, bishops, knights, rooks, king;
+    bitboard pawns, bishops, rooks, knights, king, attackers;
+    int index = lsb_unsafe(square);
 
     bool is_white_move = this->is_white_move();
 
@@ -464,9 +466,8 @@ bool Position::is_square_attacked(bitboard square) {
         knights = maps[w_knight];
         king = maps[w_king];
 
-        // Add pawn attacks
-        attacked_squares = (pawns bitand not_a_file) << 7;
-        attacked_squares or_eq (pawns bitand not_h_file) << 9;
+        attackers = ((pawns bitand not_a_file) << 7) bitand square;
+        attackers or_eq ((pawns bitand not_h_file) << 9) bitand square;
     }
     else {
         pawns = maps[b_pawn];
@@ -475,57 +476,16 @@ bool Position::is_square_attacked(bitboard square) {
         knights = maps[b_knight];
         king = maps[b_king];
 
-        // Add pawn attacks
-        attacked_squares = (pawns bitand not_h_file) >> 7;
-        attacked_squares or_eq (pawns bitand not_a_file) >> 9;
+        attackers = ((pawns bitand not_h_file) >> 7) bitand square;
+        attackers or_eq ((pawns bitand not_a_file) >> 9) bitand square;
     }
 
-    // Attempt to shortcircuit the rest of the method.
-    if (square bitand attacked_squares) {
-        return true;
-    }
-
-    // Add the Bishop slider attacks
-    while (bishops) {
-        int index = lsb_unsafe(bishops);
-        attacked_squares or_eq slider_attacks.BishopAttacks(whole_board, index);
-        // "Increment" loop index.
-        bishops xor_eq square_bit(index);
-    }
-
-    // Attempt to shortcircuit the rest of the method.
-    if (square bitand attacked_squares) {
-        return true;
-    }
-
-    // Add the Rook slider attacks
-    while (rooks) {
-        int index = lsb_unsafe(rooks);
-        attacked_squares or_eq slider_attacks.RookAttacks(whole_board, index);
-        // "Increment" loop index.
-        rooks xor_eq square_bit(index);
-    }
-
-    // Attempt to shortcircuit the rest of the method.
-    if (square bitand attacked_squares) {
-        return true;
-    }
-
-    while (knights) {
-        int index = lsb_unsafe(knights);
-        attacked_squares or_eq knight_moves[index];
-        // "Increment" loop index.
-        knights xor_eq square_bit(index);
-    }
-
-    if (king) {
-        attacked_squares or_eq king_moves[lsb_unsafe(king)];
-    }
-
-    if (square bitand attacked_squares) {
-        return true;
-    }
-    return false;
+    attackers or_eq (slider_attacks.RookAttacks(whole_board, index) bitand rooks);
+    attackers or_eq (slider_attacks.BishopAttacks(whole_board, index) bitand bishops);
+    attackers or_eq (knight_moves[index] bitand knights);
+    attackers or_eq (king_moves[index] bitand king);
+    
+    return attackers;
 }
 
 string Position::to_fen_string() {
