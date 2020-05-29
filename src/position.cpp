@@ -225,27 +225,24 @@ void Position::move(string move) {
         maps[hlf_clock] = neg_clock;
     }
     else if (piece == w_rook or piece == b_rook) {
-        string removechars = "";
+        char removechars = ' ';
         if (start_square == 0) {
-            removechars = "Q";
+            removechars = 'Q';
         }
-        if (start_square == 7) {
-            removechars = "K";
+        else if (start_square == 7) {
+            removechars = 'K';
         }
-        if (start_square == 56) {
-            removechars = "q";
+        else if (start_square == 56) {
+            removechars = 'q';
         }
-        if (start_square == 63) {
-            removechars = "k";
+        else if (start_square == 63) {
+            removechars = 'k';
         }
 
         string rights = castle_index_to_string.at(maps[castle_rights]);
-
-        for (char c: removechars) {
-            rights.erase(remove(rights.begin(), rights.end(), c), rights.end());
-        }
-
+        rights.erase(remove(rights.begin(), rights.end(), removechars), rights.end());
         maps[castle_rights] = castle_string_to_index.at(rights);
+
         maps[hlf_clock] = neg_clock;
     }
 
