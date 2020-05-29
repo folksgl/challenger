@@ -1,7 +1,6 @@
 #include "position.hpp"
 #include "evaluate.hpp"
 #include "genmove.hpp"
-#include "zobrist.hpp"
 #include "game_variables.hpp"
 #include <cctype>
 #include <string.h>
@@ -32,7 +31,6 @@ Position::Position(string fen) {
     set_fullmove_number(results[5]);
 
     eval_score = evaluate_position(this);
-    maps[zobrist_key] = zobrist.get_zobrist_key(this);
 }
 
 void Position::generate_moves() {

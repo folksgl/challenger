@@ -3,13 +3,11 @@
 
 #include "position.hpp"
 #include "slider_attacks.hpp"
-#include "zobrist.hpp"
 #include "uci_command_queue.hpp"
 
 extern bool G_debug;
 extern Position* G_game_position;
 extern SliderAttacks slider_attacks;
-extern Zobrist zobrist;
 extern UCICommandQueue command_queue;
 
 #endif
