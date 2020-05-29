@@ -55,7 +55,6 @@ profile: compile
 	@echo " " >> analysis
 	@echo " " >> analysis
 	head -n 30 tmp_analysis >> analysis
-	@$(RM) tmp_analysis
 
 travis: build_dir
 	cmake --build ./build --parallel $(N_PROC)
