@@ -20,7 +20,6 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
 
 Position::Position(string fen) {
 
-    // Split the input string into tokens (delimited by space)
     std::vector<std::string> results = split(fen, ' ');
 
     set_piece_positions(results[0]);
@@ -45,7 +44,7 @@ void Position::evaluate() {
 }
 
 /*
- *  set_piece_positions sets the value of all the bitboards in board_position
+ *  set_piece_positions sets the value of all the bitboards in a Position
  *  to the values found in fen_tok.
  */
 void Position::set_piece_positions(std::string str) {
@@ -59,7 +58,7 @@ void Position::set_piece_positions(std::string str) {
         bit_oriented_string += str;
     }
 
-    // Create Position from bit_oriented_string.
+    // Populate the Position from bit_oriented_string.
     int sq_num = 63;
 
     for (const char input : bit_oriented_string) {
@@ -97,8 +96,7 @@ void Position::set_piece_positions(std::string str) {
 }
 
 /*
- *  set_castling_rights sets the value of castling_rights in board_position
- *  to the value found in fen_tok.
+ *  set_castling_rights sets the castling rights of the Position based on str
  */
 void Position::set_castling_rights(std::string str) {
 
@@ -112,8 +110,7 @@ void Position::set_castling_rights(std::string str) {
 
 
 /*
- *  set_active_color sets the value of active_color in board_position
- *  to the value found in fen_tok. Assumes only 'w' or 'b' given.
+ *  set_active_color sets the active color in the Position based on str
  */
 void Position::set_active_color(std::string str) {
 
@@ -126,8 +123,7 @@ void Position::set_active_color(std::string str) {
 }
 
 /*
- *  set_passant_target_sq sets the value of passant_target_sq in board_position
- *  to the value found in fen_tok.
+ *  set_passant_target_sq sets the passant target square for the Position based on str
  */
 void Position::set_passant_target_sq(std::string str) {
 
@@ -140,8 +136,7 @@ void Position::set_passant_target_sq(std::string str) {
 }
 
 /*
- *  set_halfmove_clock sets the value of halfmove_clock in board_position
- *  to the value found in fen_tok.
+ *  set_halfmove_clock sets the halfmove clock in Position based on str
  */
 void Position::set_halfmove_clock(std::string str) {
 
@@ -153,8 +148,7 @@ void Position::set_halfmove_clock(std::string str) {
 }
 
 /*
- *  set_fullmove_number sets the value of fullmove_number in board_position
- *  to the value found in fen_tok.
+ *  set_fullmove_number sets the fullmove number in Position based in str
  */
 void Position::set_fullmove_number(std::string str) {
 
@@ -165,7 +159,7 @@ void Position::set_fullmove_number(std::string str) {
 }
 
 /*
- *  move() performs the move given in the move string on board_position.
+ *  move performs the move given in the move string for the Position.
  */
 void Position::move(string move) {
 
@@ -181,7 +175,6 @@ void Position::move(string move) {
         maps[hlf_clock] = neg_clock;
     }
 
-    // Get the piece that is moving
     int piece = get_moving_piece(start_square);
 
     if (piece == w_pawn) {
@@ -267,7 +260,7 @@ void Position::move(string move) {
 }
 
 /*
- *  move_pawn_promotion() performs pawn promotion given in the move string on board_position.
+ *  move_pawn_promotion performs pawn promotion given in the move string
  */
 void Position::move_pawn_promotion(string move) {
 
