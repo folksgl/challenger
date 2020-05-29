@@ -428,7 +428,8 @@ void Position::zero_at(int square, int piece) {
 
     bitboard mask = compl (square_bit(square));
 
-    maps[6 + (7 * (piece / 7))] and_eq mask;
+    maps[w_pieces] and_eq mask;
+    maps[b_pieces] and_eq mask;
     maps[piece] and_eq mask;
 
     return;
