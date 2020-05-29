@@ -166,7 +166,6 @@ void Position::set_fullmove_number(std::string str) {
     return;
 }
 
-
 /*
  *  move() performs the move given in the move string on board_position.
  */
@@ -246,7 +245,7 @@ void Position::move(string move) {
         maps[hlf_clock] = neg_clock;
     }
 
-    maps[passant_sq] = 0x0000000000000000;
+    maps[passant_sq] = 0;
 
     zero_at(start_square, piece);
 
@@ -295,7 +294,7 @@ void Position::move_pawn_promotion(string move) {
     int piece = this->is_white_move() ? w_pawn : b_pawn;
 
     // Reset the en passant square.
-    maps[passant_sq] = 0x0000000000000000;
+    maps[passant_sq] = 0;
 
     zero_at(start_square, piece);
 
@@ -374,7 +373,7 @@ void Position::move_pawn_double_forward(string move) {
 void Position::castle(Castling_names type) {
 
     // reset the en passant square.
-    maps[passant_sq] = 0x0000000000000000;
+    maps[passant_sq] = 0;
     string removechars = "KQ";
 
     if (type == c_w_king) {
