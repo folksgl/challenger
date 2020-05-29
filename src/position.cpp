@@ -3,6 +3,7 @@
 #include "genmove.hpp"
 #include "zobrist.hpp"
 #include "game_variables.hpp"
+#include <cctype>
 #include <string.h>
 #include <sstream>
 #include <iterator>
@@ -12,8 +13,7 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
     std::string token;
     std::istringstream tokenStream(s);
-    while (std::getline(tokenStream, token, delimiter))
-    {
+    while (std::getline(tokenStream, token, delimiter)) {
         tokens.push_back(token);
     }
     return tokens;
@@ -50,10 +50,10 @@ void Position::evaluate() {
  *  set_piece_positions sets the value of all the bitboards in board_position
  *  to the values found in fen_tok.
  */
-void Position::set_piece_positions(std::string fen_tok) {
+void Position::set_piece_positions(std::string str) {
 
     // Split string on '/' character and reverse all strings in the resulting vector
-    std::vector<std::string> piece_strings = split(fen_tok, '/');
+    std::vector<std::string> piece_strings = split(str , '/');
     std::transform(piece_strings.begin(), piece_strings.end(), piece_strings.begin(), [](std::string str) { std::reverse(str.begin(), str.end()); return str;});
 
     string bit_oriented_string;
@@ -63,26 +63,24 @@ void Position::set_piece_positions(std::string fen_tok) {
 
     // Create Position from bit_oriented_string.
     int sq_num = 63;
-    int length = bit_oriented_string.length();
 
-    for (int i = 0; i < length; i++) {
-        char input = bit_oriented_string.at(i);
+    for (const char input : bit_oriented_string) {
         switch(input) {
             // Lower case = Black Pieces
-            case 'p': maps[b_pawn]   or_eq (one << sq_num--); break;
-            case 'r': maps[b_rook]   or_eq (one << sq_num--); break;
-            case 'n': maps[b_knight] or_eq (one << sq_num--); break;
-            case 'b': maps[b_bishop] or_eq (one << sq_num--); break;
-            case 'q': maps[b_queen]  or_eq (one << sq_num--); break;
-            case 'k': maps[b_king]   or_eq (one << sq_num--); break;
+            case 'p': maps[b_pawn]   or_eq square_bit(sq_num--); continue;
+            case 'r': maps[b_rook]   or_eq square_bit(sq_num--); continue;
+            case 'n': maps[b_knight] or_eq square_bit(sq_num--); continue;
+            case 'b': maps[b_bishop] or_eq square_bit(sq_num--); continue;
+            case 'q': maps[b_queen]  or_eq square_bit(sq_num--); continue;
+            case 'k': maps[b_king]   or_eq square_bit(sq_num--); continue;
 
             // Upper case = White Pieces
-            case 'P': maps[w_pawn]   or_eq (one << sq_num--); break;
-            case 'R': maps[w_rook]   or_eq (one << sq_num--); break;
-            case 'N': maps[w_knight] or_eq (one << sq_num--); break;
-            case 'B': maps[w_bishop] or_eq (one << sq_num--); break;
-            case 'Q': maps[w_queen]  or_eq (one << sq_num--); break;
-            case 'K': maps[w_king]   or_eq (one << sq_num--); break;
+            case 'P': maps[w_pawn]   or_eq square_bit(sq_num--); continue;
+            case 'R': maps[w_rook]   or_eq square_bit(sq_num--); continue;
+            case 'N': maps[w_knight] or_eq square_bit(sq_num--); continue;
+            case 'B': maps[w_bishop] or_eq square_bit(sq_num--); continue;
+            case 'Q': maps[w_queen]  or_eq square_bit(sq_num--); continue;
+            case 'K': maps[w_king]   or_eq square_bit(sq_num--); continue;
 
             default :
                 if (isdigit(input)) {
@@ -104,14 +102,12 @@ void Position::set_piece_positions(std::string fen_tok) {
  *  set_castling_rights sets the value of castling_rights in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_castling_rights(std::string fen_tok) {
+void Position::set_castling_rights(std::string str) {
 
-    if (fen_tok.length() < 1 or fen_tok.length() > 4) {
-        // Castling right string is malformed, continue with no castling rights 
-        return;
+    // Check for malformed castling string. Set otherwise.
+    if (str.length() > 0 and str.length() < 5) {
+        maps[castle_rights] = castle_string_to_index.at(str);
     }
-
-    maps[castle_rights] = castle_string_to_index.at(fen_tok);
 
     return;
 }
@@ -119,15 +115,14 @@ void Position::set_castling_rights(std::string fen_tok) {
 
 /*
  *  set_active_color sets the value of active_color in board_position
- *  to the value found in fen_tok.
+ *  to the value found in fen_tok. Assumes only 'w' or 'b' given.
  */
-void Position::set_active_color(std::string fen_tok) {
+void Position::set_active_color(std::string str) {
 
-    if (fen_tok.length() not_eq 1) {
-        // Malformed active color string. Just assume that it is white's turn.
-        return;
+    // Check for malformed active color string. Set otherwise.
+    if (str.length() == 1) {
+        maps[act_color] = (str == "w") ? WHITE : BLACK;
     }
-    maps[act_color] = (fen_tok[0] == 'w') ? WHITE : BLACK;
 
     return;
 }
@@ -136,13 +131,12 @@ void Position::set_active_color(std::string fen_tok) {
  *  set_passant_target_sq sets the value of passant_target_sq in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_passant_target_sq(std::string fen_tok) {
+void Position::set_passant_target_sq(std::string str) {
 
-    if (fen_tok.length() < 1 or fen_tok.length() > 2 or !isalpha(fen_tok[0]) or !isdigit(fen_tok[1])) {
-        // No target square or if malformed passant target string, assume there is none.
-        return;
+    // If no target square or if malformed passant target string, assume there is none.
+    if (str.length() == 2 and isalpha(str[0]) and isdigit(str[1])) {
+        maps[passant_sq] = passant_string_to_bit.at(str);
     }
-    maps[passant_sq] = passant_string_to_bit.at(string(fen_tok));
 
     return;
 }
@@ -151,18 +145,11 @@ void Position::set_passant_target_sq(std::string fen_tok) {
  *  set_halfmove_clock sets the value of halfmove_clock in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_halfmove_clock(std::string fen_tok) {
+void Position::set_halfmove_clock(std::string str) {
 
-    for (unsigned int i = 0; i < fen_tok.length(); i++) {
-        if (not isdigit(fen_tok[i])) {
-            // Malformed clock string, just don't modify the clock and ignore token.
-            return;
-        }
+    if (not str.empty() and std::all_of(str.begin(), str.end(), ::isdigit)) {
+        maps[hlf_clock] = std::stoull(str, nullptr, 10);
     }
-
-    char* end;
-
-    maps[hlf_clock] = std::strtoull(fen_tok.c_str(), &end, 10);
 
     return;
 }
@@ -171,18 +158,11 @@ void Position::set_halfmove_clock(std::string fen_tok) {
  *  set_fullmove_number sets the value of fullmove_number in board_position
  *  to the value found in fen_tok.
  */
-void Position::set_fullmove_number(std::string fen_tok) {
+void Position::set_fullmove_number(std::string str) {
 
-    for (unsigned int i = 0; i < fen_tok.length(); i++) {
-        if (not isdigit(fen_tok[i])) {
-            // Malformed move number string, ignore token and don't modify move number.
-            return;
-        }
+    if (not str.empty() and std::all_of(str.begin(), str.end(), ::isdigit)) {
+        maps[full_num] = std::stoull(str, nullptr, 10);
     }
-
-    char* end;
-    maps[full_num] = strtoul(fen_tok.c_str(), &end, 10);
-
     return;
 }
 
