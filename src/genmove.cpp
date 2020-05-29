@@ -37,20 +37,20 @@ void generate_moves(Position* pos) {
 
 void add_move(Position* pos, const string& src, const string& dest) {
     // Create a copy of the position and make the move
-    Position copy = Position(*pos);
+    Position copy = *pos;
     copy.move(src + dest);
 
     // If the move introduces check for the player making the move, it is illegal and will not be considered.
     bitboard king_square = copy.is_white_move() ? copy.maps[b_king] : copy.maps[w_king];
     if (not copy.is_square_attacked(king_square)) {
         // Add the move to the vector of moves possible from the current position.
-        pos->moves.push_back(copy);
+        pos->moves.emplace_back(copy);
     }
 }
 
 void add_move_pawn_promotion(Position* pos, const string& src, const string& dest) {
     // Create a copy of the position and make the move
-    Position copy_queen = Position(*pos);
+    Position copy_queen = *pos;
     string queen_string, rook_string, knight_string, bishop_string;
 
     if (copy_queen.is_white_move()) {
@@ -84,22 +84,22 @@ void add_move_pawn_promotion(Position* pos, const string& src, const string& des
     copy_bishop.move_pawn_promotion(src + dest + bishop_string);
 
     // Add the moves to the vector of moves possible from the current position
-    pos->moves.push_back(copy_queen);
-    pos->moves.push_back(copy_rook);
-    pos->moves.push_back(copy_knight);
-    pos->moves.push_back(copy_bishop);
+    pos->moves.emplace_back(copy_queen);
+    pos->moves.emplace_back(copy_rook);
+    pos->moves.emplace_back(copy_knight);
+    pos->moves.emplace_back(copy_bishop);
 }
 
 void add_move_pawn_double_forward(Position* pos, const string& src, const string& dest) {
     // Create a copy of the position and make the move
-    Position copy = Position(*pos);
+    Position copy = *pos;
     copy.move_pawn_double_forward(src + dest);
 
     // If the move introduces check for the player making the move, it is illegal and will not be considered.
     bitboard king_square = copy.is_white_move() ? copy.maps[b_king] : copy.maps[w_king];
     if (not copy.is_square_attacked(king_square)) {
         // Add the move to the vector of moves possible from the current position.
-        pos->moves.push_back(copy);
+        pos->moves.emplace_back(copy);
     }
 }
 
@@ -109,7 +109,7 @@ void add_move_castle(Position* pos, Castling_names type) {
     copy.castle(type);
 
     // Add the move to the vector of moves possible from the current position.
-    pos->moves.push_back(copy);
+    pos->moves.emplace_back(copy);
 }
 
 inline bitboard get_bishop_attacks(bitboard board, int index) {
