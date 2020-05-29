@@ -12,8 +12,8 @@ void generate_moves(Position* pos) {
 
         generate_w_pawn_moves(pos);
 
-        leaper_generator (pos, pos->maps[w_knight], not_own, knight_moves);                    // knight moves
-        leaper_generator (pos, pos->maps[w_king],   not_own, king_moves);                      // king moves
+        leaper_generator (pos, pos->maps[w_knight], not_own, knight_moves);      // knight moves
+        leaper_generator(pos, pos->maps[w_king],   not_own, king_moves);         // king moves
         slide_generator(pos, pos->maps[w_bishop], not_own, &get_bishop_attacks); // bishop moves
         slide_generator(pos, pos->maps[w_rook],   not_own, &get_rook_attacks);   // rook moves
         slide_generator(pos, pos->maps[w_queen],  not_own, &get_queen_attacks);  // queen moves
@@ -25,8 +25,8 @@ void generate_moves(Position* pos) {
 
         generate_b_pawn_moves(pos);
 
-        leaper_generator (pos, pos->maps[b_knight], not_own, knight_moves);                    // knight moves
-        leaper_generator (pos, pos->maps[b_king],   not_own, king_moves);                      // king moves
+        leaper_generator (pos, pos->maps[b_knight], not_own, knight_moves);      // knight moves
+        leaper_generator (pos, pos->maps[b_king],   not_own, king_moves);        // king moves
         slide_generator(pos, pos->maps[b_bishop], not_own, &get_bishop_attacks); // bishop moves
         slide_generator(pos, pos->maps[b_rook],   not_own, &get_rook_attacks);   // rook moves
         slide_generator(pos, pos->maps[b_queen],  not_own, &get_queen_attacks);  // queen moves
