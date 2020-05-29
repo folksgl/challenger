@@ -139,10 +139,10 @@ void leaper_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, c
             add_move(pos, src, dest);
 
             // "Increment" loop index.
-            attacks xor_eq (one << inner_index);
+            attacks xor_eq square_bit(inner_index);
         }
         // "Increment" loop index.
-        leaper xor_eq (one << index);
+        leaper xor_eq square_bit(index);
     }
 }
 
@@ -161,9 +161,9 @@ void slide_generator(Position* pos, bitboard slider, bitboard not_own_pieces, bi
             string dest = bit_to_square_arr[inner_index];
             add_move(pos, src, dest);
 
-            attacks xor_eq (one << inner_index);
+            attacks xor_eq square_bit(inner_index);
         }
-        slider xor_eq (one << index);
+        slider xor_eq square_bit(index);
     }
 
     return;
@@ -174,29 +174,26 @@ void castling_generator_w(Position* pos) {
     opposite_turn.maps[act_color] xor_eq BLACK; // Toggle active color.
     bitboard whole_board = pos->maps[w_pieces] bitor pos->maps[b_pieces];
 
-    // If no king present, don't attempt to castle
-    if (not pos->maps[w_king]) {
+    // If king is not present on the initial square, do not add moves
+    if (not (pos->maps[w_king] bitand square_bit(4))) {
         return;
     }
 
-    if (pos->w_kingside_castle()) { // Check castling availability
-        if (pos->maps[w_rook] bitand squares[7]) { // Ensure king and rook are on the board
-            if (not (whole_board bitand w_kingside_castle_empty)) {     // Ensure the squares in-between are empty
-                bool enters_check = (opposite_turn.is_square_attacked(squares[4]) or 
-                        opposite_turn.is_square_attacked(squares[5]) or 
-                        opposite_turn.is_square_attacked(squares[6]));
-                if (not enters_check) {
-                    add_move_castle(pos, c_w_king);
-                }
-            }
+    // Check castling availability
+    if (pos->w_kingside_castle() and (pos-> maps[w_rook] bitand square_bit(7)) and not (whole_board bitand w_kingside_castle_empty)) {
+        bool enters_check = (opposite_turn.is_square_attacked(square_bit(4)) or 
+                opposite_turn.is_square_attacked(square_bit(5)) or 
+                opposite_turn.is_square_attacked(square_bit(6)));
+        if (not enters_check) {
+            add_move_castle(pos, c_w_king);
         }
     }
     if (pos->w_queenside_castle()) {
-        if (pos->maps[w_king] and (pos->maps[w_rook] bitand squares[0])) { 
+        if (pos->maps[w_king] and (pos->maps[w_rook] bitand square_bit(0))) { 
             if (not (whole_board bitand w_queenside_castle_empty)) {
-                bool enters_check = (opposite_turn.is_square_attacked(squares[2]) or
-                        opposite_turn.is_square_attacked(squares[3]) or
-                        opposite_turn.is_square_attacked(squares[4]));
+                bool enters_check = (opposite_turn.is_square_attacked(square_bit(2)) or
+                        opposite_turn.is_square_attacked(square_bit(3)) or
+                        opposite_turn.is_square_attacked(square_bit(4)));
                 if (not enters_check) {
                     add_move_castle(pos, c_w_queen);
                 }
@@ -211,11 +208,11 @@ void castling_generator_b(Position* pos) {
     bitboard whole_board = pos->maps[w_pieces] bitor pos->maps[b_pieces];
 
     if (pos->b_kingside_castle()) {
-        if (pos->maps[b_king] and (pos->maps[b_rook] bitand squares[63])) {
+        if (pos->maps[b_king] and (pos->maps[b_rook] bitand square_bit(63))) {
             if (not (whole_board bitand b_kingside_castle_empty)) {
-                bool enters_check = (opposite_turn.is_square_attacked(squares[60]) or 
-                        opposite_turn.is_square_attacked(squares[61]) or 
-                        opposite_turn.is_square_attacked(squares[62]));
+                bool enters_check = (opposite_turn.is_square_attacked(square_bit(60)) or 
+                        opposite_turn.is_square_attacked(square_bit(61)) or 
+                        opposite_turn.is_square_attacked(square_bit(62)));
                 if (not enters_check) {
                     add_move_castle(pos, c_b_king);
                 }
@@ -223,11 +220,11 @@ void castling_generator_b(Position* pos) {
         }
     }
     if (pos->b_queenside_castle()) {
-        if (pos->maps[b_king] and (pos->maps[b_rook] bitand squares[56])) {
+        if (pos->maps[b_king] and (pos->maps[b_rook] bitand square_bit(56))) {
             if (not (whole_board bitand b_queenside_castle_empty)) {
-                bool enters_check = (opposite_turn.is_square_attacked(squares[60]) or 
-                        opposite_turn.is_square_attacked(squares[59]) or
-                        opposite_turn.is_square_attacked(squares[58]));
+                bool enters_check = (opposite_turn.is_square_attacked(square_bit(60)) or 
+                        opposite_turn.is_square_attacked(square_bit(59)) or
+                        opposite_turn.is_square_attacked(square_bit(58)));
                 if (not enters_check) {
                     add_move_castle(pos, c_b_queen);
                 }
@@ -240,11 +237,11 @@ void generate_w_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[w_pawn];
 
     bitboard black = pos->maps[b_pieces] bitor pos->maps[passant_sq];
-    bitboard unoccupied = (compl pos->maps[w_pieces]) bitand (compl pos->maps[b_pieces]);
+    bitboard unoccupied = compl (pos->maps[w_pieces] bitor pos->maps[b_pieces]);
 
     // left/right/forward contain the start squares of pawns that can perform those moves.
-    bitboard left_attacks  = pawns bitand ((black bitand (compl h_file)) >> 7);
-    bitboard right_attacks = pawns bitand ((black bitand (compl a_file)) >> 9);
+    bitboard left_attacks  = pawns bitand ((black bitand not_h_file) >> 7);
+    bitboard right_attacks = pawns bitand ((black bitand not_a_file) >> 9);
     bitboard forward = pawns bitand (unoccupied >> 8);
     bitboard double_forward = (rank_2 bitand forward) bitand (unoccupied >> 16);
 
@@ -254,7 +251,7 @@ void generate_w_pawn_moves(Position* pos) {
     while (pawns) {
         int index = lsb_unsafe(pawns);
 
-        bitboard squarei = squares[index];
+        bitboard squarei = square_bit(index);
         src = bit_to_square_arr[index];
 
         if (squarei bitand rank_7) {
@@ -300,11 +297,11 @@ void generate_b_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[b_pawn];
 
     bitboard white = pos->maps[w_pieces] bitor pos->maps[passant_sq];
-    bitboard unoccupied = (compl pos->maps[w_pieces]) bitand (compl pos->maps[b_pieces]);
+    bitboard unoccupied = compl (pos->maps[w_pieces] bitor pos->maps[b_pieces]);
 
     // left/right/forward contain the start squares of pawns that can perform those moves.
-    bitboard left_attacks  = pawns bitand ((white bitand (compl a_file)) << 7);
-    bitboard right_attacks = pawns bitand ((white bitand (compl h_file)) << 9);
+    bitboard left_attacks  = pawns bitand ((white bitand not_a_file) << 7);
+    bitboard right_attacks = pawns bitand ((white bitand not_h_file) << 9);
     bitboard forward = pawns bitand (unoccupied << 8);
     bitboard double_forward = (rank_7 bitand forward) bitand (unoccupied << 16);
 
@@ -314,7 +311,7 @@ void generate_b_pawn_moves(Position* pos) {
     while (pawns) {
         int index = lsb_unsafe(pawns);
 
-        bitboard squarei = squares[index];
+        bitboard squarei = square_bit(index);
         src = bit_to_square_arr[index];
 
         if (squarei bitand rank_2) {

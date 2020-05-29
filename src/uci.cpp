@@ -351,7 +351,7 @@ string find_move_taken(Position* initial, Position* next) {
     if ((initial_king != next_king) and (initial_rook != next_rook)) {
         if (white_turn) {
             src  = "e1";
-            if ((initial_rook bitand squares[0]) and not (next_rook bitand squares[0])) {
+            if ((initial_rook bitand square_bit(0)) and not (next_rook bitand square_bit(0))) {
                 dest = "c1";
             }
             else {
@@ -360,7 +360,7 @@ string find_move_taken(Position* initial, Position* next) {
         }
         else {
             src = "e8";
-            if ((initial_rook bitand squares[63]) and not (next_rook bitand squares[63])) {
+            if ((initial_rook bitand square_bit(63)) and not (next_rook bitand square_bit(63))) {
                 dest = "g8";
             }
             else {
@@ -378,17 +378,17 @@ string find_move_taken(Position* initial, Position* next) {
     // Normal moves will be set here. (i.e. not castling/promotion)
     for (int i = 0; i < 64; i++) {
         // check set bits
-        if (initial_pieces bitand squares[i]) {
+        if (initial_pieces bitand square_bit(i)) {
             // Set bit was changed to unset
-            if (!(next_pieces bitand squares[i])) {
-                src = bit_to_square.at(squares[i]);
+            if (!(next_pieces bitand square_bit(i))) {
+                src = bit_to_square.at(square_bit(i));
             }
         }
         // check unset bits
         else {
-            if (next_pieces bitand squares[i]) {
+            if (next_pieces bitand square_bit(i)) {
                 dest_square = i;
-                dest = bit_to_square.at(squares[i]);
+                dest = bit_to_square.at(square_bit(i));
             }
         }
     }
@@ -408,16 +408,16 @@ string find_move_taken(Position* initial, Position* next) {
     // Pawn promotion happened, adjust movestring
     if (initial_pawn != next_pawn) {
         if (white_turn) {
-            if (squares[dest_square] bitand next->maps[w_queen])  { dest += "Q"; }
-            if (squares[dest_square] bitand next->maps[w_bishop]) { dest += "B"; }
-            if (squares[dest_square] bitand next->maps[w_knight]) { dest += "N"; }
-            if (squares[dest_square] bitand next->maps[w_rook])   { dest += "R"; }
+            if (square_bit(dest_square) bitand next->maps[w_queen])  { dest += "Q"; }
+            if (square_bit(dest_square) bitand next->maps[w_bishop]) { dest += "B"; }
+            if (square_bit(dest_square) bitand next->maps[w_knight]) { dest += "N"; }
+            if (square_bit(dest_square) bitand next->maps[w_rook])   { dest += "R"; }
         }
         else {
-            if (squares[dest_square] bitand next->maps[b_queen])  { dest += "q"; }
-            if (squares[dest_square] bitand next->maps[b_bishop]) { dest += "b"; }
-            if (squares[dest_square] bitand next->maps[b_knight]) { dest += "n"; }
-            if (squares[dest_square] bitand next->maps[b_rook])   { dest += "r"; }
+            if (square_bit(dest_square) bitand next->maps[b_queen])  { dest += "q"; }
+            if (square_bit(dest_square) bitand next->maps[b_bishop]) { dest += "b"; }
+            if (square_bit(dest_square) bitand next->maps[b_knight]) { dest += "n"; }
+            if (square_bit(dest_square) bitand next->maps[b_rook])   { dest += "r"; }
         }
     }
 

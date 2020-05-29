@@ -1699,7 +1699,7 @@ TEST(correct_moves_generated, king_bitboard_correct_after_w_kingside) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.moves[5].maps[w_king], squares[6]);
+    EXPECT_EQ (startpos.moves[5].maps[w_king], square_bit(6));
 }
 
 TEST(correct_moves_generated, rook_bitboard_correct_after_w_kingside) {
@@ -1711,7 +1711,7 @@ TEST(correct_moves_generated, rook_bitboard_correct_after_w_kingside) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.moves[5].maps[w_rook], squares[5]);
+    EXPECT_EQ (startpos.moves[5].maps[w_rook], square_bit(5));
 }
 
 TEST(correct_moves_generated, white_bitboard_correct_after_w_kingside) {
@@ -1723,7 +1723,7 @@ TEST(correct_moves_generated, white_bitboard_correct_after_w_kingside) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.moves[5].maps[w_pieces], squares[6] | squares[5]);
+    EXPECT_EQ (startpos.moves[5].maps[w_pieces], square_bit(6) | square_bit(5));
 }
 
 TEST(correct_moves_generated, checked_w_king) {
@@ -1880,7 +1880,7 @@ TEST(correct_moves_generated, queen_bitboard_correct_after_w_queenside) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.moves[10].maps[w_king], squares[2]);
+    EXPECT_EQ (startpos.moves[10].maps[w_king], square_bit(2));
 }
 
 TEST(correct_moves_generated, rook_bitboard_correct_after_w_queenside) {
@@ -1892,7 +1892,7 @@ TEST(correct_moves_generated, rook_bitboard_correct_after_w_queenside) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.moves[10].maps[w_rook], squares[3]);
+    EXPECT_EQ (startpos.moves[10].maps[w_rook], square_bit(3));
 }
 
 TEST(correct_moves_generated, white_bitboard_correct_after_w_queenside) {
@@ -1904,7 +1904,7 @@ TEST(correct_moves_generated, white_bitboard_correct_after_w_queenside) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.moves[10].maps[w_pieces], squares[2] | squares[3]);
+    EXPECT_EQ (startpos.moves[10].maps[w_pieces], square_bit(2) | square_bit(3));
 }
 
 //
