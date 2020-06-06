@@ -7,15 +7,15 @@
 
 void generate_moves(Position* pos);
 
-void add_move(Position* pos, Position* new_pos, string src, string dest);
+void add_move(Position* pos, const string& move_string, const map_names king_piece, const int moving_piece);
 
 void generate_w_pawn_moves(Position* pos);
 
 void generate_b_pawn_moves(Position* pos);
 
-void leaper_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, const bitboard attack_table[]);
+void leaper_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, const bitboard attack_table[], const int moving_piece);
 
-void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int));
+void slide_generator(Position* pos, bitboard bishops, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int), const int moving_piece);
 
 void castling_generator_w(Position* pos);
 

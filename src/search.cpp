@@ -31,6 +31,7 @@ void search(Position* pos, int depth) {
 }
 
 int alphaBetaMax(Position* pos, int alpha, int beta, int depth) {
+    // If we have reached the final depth, return the evaluation.
     if (depth == 0) {
         #ifdef BENCHMARK
         positions_searched++;
@@ -41,22 +42,27 @@ int alphaBetaMax(Position* pos, int alpha, int beta, int depth) {
 
     pos->generate_moves();
 
+    // If we have reached a terminal node, return the evaluation.
+    if (pos->moves.size() == 0) {
+        pos->evaluate();
+        return pos->eval_score;
+    }
+
     #ifdef BENCHMARK
     positions_searched++;
     #endif
 
-    // Sort in descending order of evaluation scores
-    sort_descending;
-
     for (auto p : pos->moves) {
-        p.eval_score = alphaBetaMin(&p, alpha, beta, depth - 1);
-        if (p.eval_score >= beta) {
+        int score = alphaBetaMin(&p, alpha, beta, depth - 1);
+        p.eval_score = score;
+        if (score >= beta) {
             return beta;
         }
-        if (p.eval_score > alpha) {
-            alpha = p.eval_score;
+        if (score > alpha) {
+            alpha = score;
         }
     }
+
     return alpha;
 }
 
@@ -71,12 +77,16 @@ int alphaBetaMin(Position* pos, int alpha, int beta, int depth) {
 
     pos->generate_moves();
 
+    // If we have reached a terminal node, return the evaluation.
+    if (pos->moves.size() == 0) {
+        pos->evaluate();
+        return pos->eval_score;
+    }
+
     #ifdef BENCHMARK
     positions_searched++;
     #endif
 
-    // Sort in ascending order of evaluation scores
-    sort_ascending;
     for (auto p : pos->moves) {
         p.eval_score = alphaBetaMax(&p, alpha, beta, depth - 1);
         if (p.eval_score <= alpha) {

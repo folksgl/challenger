@@ -33,7 +33,7 @@ TEST(position_eval, no_white_queen) {
 
     int position_value = evaluate_position(&pos);
     int half = 0;
-    EXPECT_EQ (position_value, half - QUEEN);
+    EXPECT_LE (position_value, half - QUEEN);
 }
 
 TEST(position_eval, no_white_pieces) {
@@ -44,7 +44,7 @@ TEST(position_eval, no_white_pieces) {
     int half = 0;
 
     int all_pieces = KING + QUEEN + (ROOK * 2) + (KNIGHT * 2) + (BISHOP * 2) + (PAWN * 8);
-    EXPECT_EQ (position_value, half - all_pieces);
+    EXPECT_LE (position_value, half - all_pieces);
 }
 
 TEST(position_eval, no_black_queen) {
@@ -53,7 +53,7 @@ TEST(position_eval, no_black_queen) {
 
     bitboard position_value = evaluate_position(&pos);
     int half = 0;
-    EXPECT_EQ (position_value, half + QUEEN);
+    EXPECT_GE (position_value, half + QUEEN);
 }
 
 TEST(position_eval, no_black_pieces) {
@@ -62,7 +62,7 @@ TEST(position_eval, no_black_pieces) {
 
     bitboard position_value = evaluate_position(&pos);
     int all_pieces = KING + QUEEN + (ROOK * 2) + (KNIGHT * 2) + (BISHOP * 2) + (PAWN * 8);
-    EXPECT_EQ (position_value, all_pieces);
+    EXPECT_GE (position_value, all_pieces);
 }
 
 TEST(evaluation, white_pawn_defending) {

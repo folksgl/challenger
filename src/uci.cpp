@@ -191,7 +191,7 @@ void process_position_command(command_iter begin, command_iter end) {
                     G_game_position->move_pawn_double_forward(tok);
                 }
                 else {
-                    G_game_position->move(tok);
+                    G_game_position->move(tok, -1);
                 }
             }
             else if (moving_piece == b_pawn) {
@@ -199,7 +199,7 @@ void process_position_command(command_iter begin, command_iter end) {
                     G_game_position->move_pawn_double_forward(tok);
                 }
                 else {
-                    G_game_position->move(tok);
+                    G_game_position->move(tok, -1);
                 }
             }
             else if (moving_piece == w_king) {
@@ -219,7 +219,7 @@ void process_position_command(command_iter begin, command_iter end) {
                 }
             }
             else {
-                G_game_position->move(tok);
+                G_game_position->move(tok, -1);
             }
         }
         // If the token wasnt 4 or 5 characters in length, then it is invalid and the position is not modified for that token.

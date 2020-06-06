@@ -356,7 +356,7 @@ TEST(number_of_moves_generated, startpos_white_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_knight], not_own, knight_moves);         // knight moves
+    leaper_generator(&startpos, startpos.maps[w_knight], not_own, knight_moves, w_knight);         // knight moves
 
     EXPECT_EQ (startpos.moves.size(), 4);
 }
@@ -366,7 +366,7 @@ TEST(correct_moves_generated, startpos_white_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_knight], not_own, knight_moves);         // knight moves
+    leaper_generator(&startpos, startpos.maps[w_knight], not_own, knight_moves, w_knight);         // knight moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -384,7 +384,7 @@ TEST(correct_moves_generated, e5_white_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_knight], not_own, knight_moves);         // knight moves
+    leaper_generator(&startpos, startpos.maps[w_knight], not_own, knight_moves, w_knight);         // knight moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -416,7 +416,7 @@ TEST(number_of_moves_generated, startpos_black_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_knight], not_own, knight_moves);         // knight moves
+    leaper_generator(&startpos, startpos.maps[b_knight], not_own, knight_moves, b_knight);         // knight moves
 
     EXPECT_EQ (startpos.moves.size(), 4);
 }
@@ -426,7 +426,7 @@ TEST(correct_moves_generated, startpos_black_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_knight], not_own, knight_moves);         // knight moves
+    leaper_generator(&startpos, startpos.maps[b_knight], not_own, knight_moves, b_knight);         // knight moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -444,7 +444,7 @@ TEST(correct_moves_generated, e4_black_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_knight], not_own, knight_moves);         // knight moves
+    leaper_generator(&startpos, startpos.maps[b_knight], not_own, knight_moves, b_knight);         // knight moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -476,7 +476,7 @@ TEST(number_of_moves_generated, startpos_white_bishop) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    slide_generator(&startpos, startpos.maps[w_bishop], not_own, &get_bishop_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[w_bishop], not_own, &get_bishop_attacks, w_bishop); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -486,7 +486,7 @@ TEST(number_of_moves_generated, e5_white_bishop) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    slide_generator(&startpos, startpos.maps[w_bishop], not_own, &get_bishop_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[w_bishop], not_own, &get_bishop_attacks, w_bishop); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -496,7 +496,7 @@ TEST(correct_moves_generated, e5_white_bishop) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    slide_generator(&startpos, startpos.maps[w_bishop], not_own, &get_bishop_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[w_bishop], not_own, &get_bishop_attacks, w_bishop); // bishop moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -522,7 +522,7 @@ TEST(number_of_moves_generated, startpos_black_bishop) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    slide_generator(&startpos, startpos.maps[b_bishop], not_own, &get_bishop_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[b_bishop], not_own, &get_bishop_attacks, b_bishop); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -532,7 +532,7 @@ TEST(number_of_moves_generated, e5_black_bishop) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    slide_generator(&startpos, startpos.maps[b_bishop], not_own, &get_bishop_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[b_bishop], not_own, &get_bishop_attacks, b_bishop); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -542,7 +542,7 @@ TEST(correct_moves_generated, e5_black_bishop) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    slide_generator(&startpos, startpos.maps[b_bishop], not_own, &get_bishop_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[b_bishop], not_own, &get_bishop_attacks, b_bishop); // bishop moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -568,7 +568,7 @@ TEST(number_of_moves_generated, startpos_white_rook) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    slide_generator(&startpos, startpos.maps[w_rook], not_own, &get_rook_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[w_rook], not_own, &get_rook_attacks, w_rook); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -578,7 +578,7 @@ TEST(number_of_moves_generated, e5_white_rook) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    slide_generator(&startpos, startpos.maps[w_rook], not_own, &get_rook_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[w_rook], not_own, &get_rook_attacks, w_rook); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 11);
 }
@@ -588,7 +588,7 @@ TEST(correct_moves_generated, e5_white_rook) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    slide_generator(&startpos, startpos.maps[w_rook], not_own, &get_rook_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[w_rook], not_own, &get_rook_attacks, w_rook); // bishop moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -617,7 +617,7 @@ TEST(number_of_moves_generated, startpos_black_rook) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    slide_generator(&startpos, startpos.maps[b_rook], not_own, &get_rook_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[b_rook], not_own, &get_rook_attacks, b_rook); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -627,7 +627,7 @@ TEST(number_of_moves_generated, e5_black_rook) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    slide_generator(&startpos, startpos.maps[b_rook], not_own, &get_rook_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[b_rook], not_own, &get_rook_attacks, b_rook); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 11);
 }
@@ -637,7 +637,7 @@ TEST(correct_moves_generated, e5_black_rook) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    slide_generator(&startpos, startpos.maps[b_rook], not_own, &get_rook_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[b_rook], not_own, &get_rook_attacks, b_rook); // bishop moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -666,7 +666,7 @@ TEST(number_of_moves_generated, startpos_white_queen) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    slide_generator(&startpos, startpos.maps[w_queen], not_own, &get_queen_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[w_queen], not_own, &get_queen_attacks, w_queen); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -676,7 +676,7 @@ TEST(number_of_moves_generated, e5_white_queen) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    slide_generator(&startpos, startpos.maps[w_queen], not_own, &get_queen_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[w_queen], not_own, &get_queen_attacks, w_queen); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 19);
 }
@@ -686,7 +686,7 @@ TEST(correct_moves_generated, e5_white_queen) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    slide_generator(&startpos, startpos.maps[w_queen], not_own, &get_queen_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[w_queen], not_own, &get_queen_attacks, w_queen); // bishop moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -723,7 +723,7 @@ TEST(number_of_moves_generated, startpos_black_queen) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    slide_generator(&startpos, startpos.maps[b_queen], not_own, &get_queen_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[b_queen], not_own, &get_queen_attacks, b_queen); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -733,7 +733,7 @@ TEST(number_of_moves_generated, e5_black_queen) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    slide_generator(&startpos, startpos.maps[b_queen], not_own, &get_queen_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[b_queen], not_own, &get_queen_attacks, b_queen); // bishop moves
 
     EXPECT_EQ (startpos.moves.size(), 19);
 }
@@ -743,7 +743,7 @@ TEST(correct_moves_generated, e5_black_queen) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    slide_generator(&startpos, startpos.maps[b_queen], not_own, &get_queen_attacks); // bishop moves
+    slide_generator(&startpos, startpos.maps[b_queen], not_own, &get_queen_attacks, b_queen); // bishop moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -780,7 +780,7 @@ TEST(number_of_moves_generated, startpos_white_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -790,7 +790,7 @@ TEST(number_of_moves_generated, middleboard_white_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -800,7 +800,7 @@ TEST(number_of_moves_generated, pressed_white_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -810,7 +810,7 @@ TEST(number_of_moves_generated, pressed_white_king_towards_check) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 5);
 }
@@ -820,7 +820,7 @@ TEST(number_of_moves_generated, black_rook_white_king_cross_section) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 4);
 }
@@ -830,7 +830,7 @@ TEST(correct_moves_generated, middleboard_white_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -853,7 +853,7 @@ TEST(number_of_moves_generated, startpos_black_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -863,7 +863,7 @@ TEST(number_of_moves_generated, middleboard_black_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -873,7 +873,7 @@ TEST(number_of_moves_generated, pressed_black_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -883,7 +883,7 @@ TEST(number_of_moves_generated, pressed_black_king_towards_check) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 5);
 }
@@ -893,7 +893,7 @@ TEST(number_of_moves_generated, white_rook_black_king_cross_section) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 4);
 }
@@ -903,7 +903,7 @@ TEST(correct_moves_generated, middleboard_black_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves);          // king moves
+    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });

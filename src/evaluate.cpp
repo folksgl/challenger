@@ -1,4 +1,5 @@
 #include "evaluate.hpp"
+#include "game_variables.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SCORING
@@ -23,14 +24,19 @@
 int evaluate_position(Position* pos) {
 
     int evaluation = 0;
+    //bitboard whole_board = pos->maps[w_pieces] bitor pos->maps[b_pieces];
 
     evaluation += get_material_value_score(pos);
 
+    // WHITE
     //evaluation += white_defending_pawns_bonus(pos);
-    //evaluation += white_knight_center_bonus(pos);
+    //evaluation += knight_center_bonus(pos->maps[w_knight]);
+    //evaluation += diagonal_mobility_bonus(pos->maps[w_bishop] bitor pos->maps[w_queen], whole_board);
 
-    //evaluation += black_defending_pawns_bonus(pos);
-    //evaluation += black_knight_center_bonus(pos);
+    // BLACK
+    //evaluation -= black_defending_pawns_bonus(pos);
+    //evaluation -= knight_center_bonus(pos->maps[b_knight]);
+    //evaluation -= diagonal_mobility_bonus(pos->maps[b_bishop] bitor pos->maps[b_queen], whole_board);
 
     return evaluation;
 }
@@ -84,7 +90,7 @@ int knight_center_bonus(bitboard knights) {
 
     while (knights) {
         int index = lsb_unsafe(knights);
-        bitboard square = one << index;
+        bitboard square = square_bit(index);
         if (square bitand middle_board) {
             bonus += KNIGNT_CENTER;
         }
@@ -96,3 +102,13 @@ int knight_center_bonus(bitboard knights) {
     return bonus;
 }
 
+int diagonal_mobility_bonus(bitboard diagonal_sliders, bitboard board) {
+    int bonus = 0;
+    while(diagonal_sliders) {
+        int index = lsb_unsafe(diagonal_sliders);
+        bitboard attacks = slider_attacks.BishopAttacks(board, index);
+        bonus += MOBILITY * popcount(attacks);
+        diagonal_sliders xor_eq square_bit(index);
+    }
+    return bonus;
+}

@@ -106,11 +106,11 @@ class Position {
 
         void generate_moves(void);
         void evaluate(void);
-        void move(std::string move_string);
+        void move(std::string move_string, int moving_piece = -1);
         void move_pawn_promotion(std::string move);
         void move_pawn_double_forward(std::string move);
         void castle(Castling_names);
-        void zero_at(int square, int piece);
+        bool zero_at(int square, int piece);
         int get_moving_piece(int square);
         bool is_square_attacked(bitboard square);
 

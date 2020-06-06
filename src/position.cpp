@@ -161,7 +161,7 @@ void Position::set_fullmove_number(std::string str) {
 /*
  *  move performs the move given in the move string for the Position.
  */
-void Position::move(string move) {
+void Position::move(string move, int moving_piece) {
 
     // Extract start and destination squares from the move
     int start_square = get_square_num(move[0], move[1]);
@@ -169,13 +169,13 @@ void Position::move(string move) {
 
 
     // Check if there is a piece on the dest square and remove if needed.
-    int dest_piece = get_moving_piece(dest_square);
-    if (dest_piece != -1) {
-        zero_at(dest_square, dest_piece);
+    bitboard dest_square_bit = square_bit(dest_square);
+    if ((maps[w_pieces] bitor maps[b_pieces]) bitand dest_square_bit) {
+        zero_at(dest_square, get_moving_piece(dest_square));
         maps[hlf_clock] = neg_clock;
     }
 
-    int piece = get_moving_piece(start_square);
+    int piece = (moving_piece == -1) ? get_moving_piece(start_square) : moving_piece;
 
     if (piece == w_pawn) {
 
@@ -273,6 +273,11 @@ void Position::move_pawn_promotion(string move) {
     int start_square = get_square_num(move[0], move[1]);
     int dest_square = get_square_num(move[2], move[3]);
 
+
+    bitboard dest_square_bit = square_bit(dest_square);
+    if ((maps[w_pieces] bitor maps[b_pieces]) bitand dest_square_bit) {
+        zero_at(dest_square, get_moving_piece(dest_square));
+    }
 
     // Check if there is a piece on the dest square and remove if needed.
     int dest_piece = get_moving_piece(dest_square);
@@ -409,17 +414,18 @@ void Position::castle(Castling_names type) {
  *  zero_at zero's the bit indicated by square on the position given and
  *  set a number representing the piece type that was in the square.
  *
- *  return the map position of the piece changed
+ *  return whether a bit was cleared from the square
  */
-void Position::zero_at(int square, int piece) {
+bool Position::zero_at(int square, int piece) {
 
+    bool ret = maps[piece] bitand square_bit(square);
     bitboard mask = compl square_bit(square);
 
     maps[w_pieces] and_eq mask;
     maps[b_pieces] and_eq mask;
     maps[piece] and_eq mask;
 
-    return;
+    return ret;
 }
 
 int Position::get_moving_piece(int square) {

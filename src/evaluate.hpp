@@ -9,7 +9,8 @@
 #define KING   10000
 
 #define PAWN_DEFEND 20
-#define KNIGNT_CENTER 20
+#define KNIGNT_CENTER 9999
+#define MOBILITY 10
 
 #include "position.hpp"
 #include "common.hpp"
@@ -39,5 +40,7 @@ int white_defending_pawns_bonus(Position* pos);
 int black_defending_pawns_bonus(Position* pos);
 
 int knight_center_bonus(bitboard knights);
+
+int diagonal_mobility_bonus(bitboard diagonal_sliders, bitboard board);
 
 #endif

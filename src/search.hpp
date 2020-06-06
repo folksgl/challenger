@@ -9,7 +9,7 @@ struct search_info {
     int winc = 0;
     int binc = 0;
     int movestogo = 0;
-    int depth = 5;
+    int depth = 6;
     int nodes = 0;
     int mate = 0;
     int movetime = 0;
