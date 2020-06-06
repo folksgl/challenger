@@ -9,7 +9,7 @@
 
 using namespace std;
 
-constexpr bitboard neg_clock = (bitboard)0 - 1;
+constexpr bitboard neg_clock = static_cast<bitboard>(0) - 1;
 
 enum Castling_names { c_w_king, c_w_queen, c_b_king, c_b_queen};
 
@@ -80,8 +80,7 @@ class Position {
 
         Position(void) : Position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {}
         explicit Position(std::string fen);
-        Position(const Position& other) :
-            maps(other.maps) {}
+        Position(const Position& other) :maps(other.maps) {}
 
         // Comparisons
         bool operator == (const Position& other) const { return maps == other.maps; }

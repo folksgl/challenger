@@ -10,7 +10,7 @@ typedef std::uint64_t bitboard;
 // Define a way to determine the Least Significant Bit
 int lsb(bitboard x);
 
-const bitboard one = (bitboard) 0x01;
+const bitboard one = static_cast<bitboard>(1);
 
 #define popcount(x) (__builtin_popcountll(x))
 
