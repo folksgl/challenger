@@ -8,6 +8,6 @@
 extern bool G_debug;
 extern Position* G_game_position;
 extern SliderAttacks slider_attacks;
-extern UCICommandQueue command_queue;
+extern UCICommandQueue<uci_command> command_queue;
 
 #endif

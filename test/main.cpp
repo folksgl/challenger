@@ -10,7 +10,7 @@ using namespace std;
 bool G_debug;                                                          // 
 Position* G_game_position;                                             //
 SliderAttacks slider_attacks;                                          //
-UCICommandQueue command_queue;                                         //
+UCICommandQueue<uci_command> command_queue;                            //
                                                                        //
 /////////////////////////////////////////////////////////////////////////
 

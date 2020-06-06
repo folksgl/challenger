@@ -7,7 +7,7 @@ using namespace std;
 bool G_debug;
 Position* G_game_position;
 SliderAttacks slider_attacks;
-UCICommandQueue command_queue;                                         //
+UCICommandQueue<uci_command> command_queue;
 
 unsigned long long positions_generated;
 unsigned long long positions_searched;
@@ -26,7 +26,7 @@ int main()
     move_generation_perft(4);
     move_generation_perft(5);
     move_generation_perft(6); // Last run was 46.6 seconds
-    //move_generation_perft(7); // Last run was 512 seconds (8min 30sec) 
+    //move_generation_perft(7); // Last run was 512 seconds (8min 30sec). Down to 223
     
     cout << endl;
 
