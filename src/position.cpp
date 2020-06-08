@@ -180,14 +180,14 @@ void Position::move(string move, int moving_piece) {
     if (piece == w_pawn) {
 
         // If capturing en passant, remove the captured pawn
-        if (square_bit(dest_square) bitand maps[passant_sq]) {
+        if (dest_square_bit bitand maps[passant_sq]) {
             zero_at(dest_square - 8, b_pawn);
         }
         maps[hlf_clock] = neg_clock;
     }
     else if (piece == b_pawn) {
 
-        if (square_bit(dest_square) bitand maps[passant_sq]) {
+        if (dest_square_bit bitand maps[passant_sq]) {
             zero_at(dest_square + 8, w_pawn);
         }
         maps[hlf_clock] = neg_clock;
@@ -241,7 +241,7 @@ void Position::move(string move, int moving_piece) {
     zero_at(start_square, piece);
 
     // Set the destination square
-    bitboard square_to_add = square_bit(dest_square);
+    bitboard square_to_add = dest_square_bit;
     maps[piece] or_eq square_to_add;
 
     if (piece < 6) {
@@ -307,7 +307,7 @@ void Position::move_pawn_promotion(string move) {
     }
 
     // Set the destination square
-    bitboard square_to_add = square_bit(dest_square);
+    bitboard square_to_add = dest_square_bit;
     maps[piece] or_eq square_to_add;
 
     if (piece < 6) {
