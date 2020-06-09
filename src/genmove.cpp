@@ -7,13 +7,13 @@
 void generate_moves(Position* pos) {
     bitboard not_own;
 
-    if (pos->is_white_move()) {
+    if (pos->is_white_move) {
         not_own = compl (pos->maps[w_pieces]);
 
         generate_w_pawn_moves(pos);
 
-        leaper_generator (pos, pos->maps[w_knight], not_own, knight_moves, w_knight);      // knight moves
-        leaper_generator(pos, pos->maps[w_king],   not_own, king_moves, w_king);         // king moves
+        leaper_generator (pos, not_own, knight_moves, w_knight);      // knight moves
+        leaper_generator(pos, not_own, king_moves, w_king);         // king moves
         slide_generator(pos, pos->maps[w_bishop], not_own, &get_bishop_attacks, w_bishop); // bishop moves
         slide_generator(pos, pos->maps[w_rook],   not_own, &get_rook_attacks, w_rook);   // rook moves
         slide_generator(pos, pos->maps[w_queen],  not_own, &get_queen_attacks, w_queen);  // queen moves
@@ -25,8 +25,8 @@ void generate_moves(Position* pos) {
 
         generate_b_pawn_moves(pos);
 
-        leaper_generator (pos, pos->maps[b_knight], not_own, knight_moves, b_knight);      // knight moves
-        leaper_generator (pos, pos->maps[b_king],   not_own, king_moves, b_king);        // king moves
+        leaper_generator (pos, not_own, knight_moves, b_knight);      // knight moves
+        leaper_generator (pos, not_own, king_moves, b_king);        // king moves
         slide_generator(pos, pos->maps[b_bishop], not_own, &get_bishop_attacks, b_bishop); // bishop moves
         slide_generator(pos, pos->maps[b_rook],   not_own, &get_rook_attacks, b_rook);   // rook moves
         slide_generator(pos, pos->maps[b_queen],  not_own, &get_queen_attacks, b_queen);  // queen moves
@@ -43,7 +43,7 @@ void add_move(Position* pos, const string& move_string, const map_names king_pie
     // If the move introduces check for the player making the move, it is illegal and will not be considered.
     if (not copy.is_square_attacked(copy.maps[king_piece])) {
         // Add the move to the vector of moves possible from the current position.
-        pos->moves.emplace_back(copy);
+        pos->moves.push_back(copy);
     }
 }
 
@@ -52,7 +52,7 @@ void add_move_pawn_promotion(Position* pos, const string& move_string, map_names
     Position copy_queen = *pos;
     string queen_string, rook_string, knight_string, bishop_string;
 
-    if (copy_queen.is_white_move()) {
+    if (copy_queen.is_white_move) {
         queen_string = "Q";
         rook_string = "R";
         knight_string = "N";
@@ -82,10 +82,10 @@ void add_move_pawn_promotion(Position* pos, const string& move_string, map_names
     copy_bishop.move_pawn_promotion(move_string + bishop_string);
 
     // Add the moves to the vector of moves possible from the current position
-    pos->moves.emplace_back(copy_queen);
-    pos->moves.emplace_back(copy_rook);
-    pos->moves.emplace_back(copy_knight);
-    pos->moves.emplace_back(copy_bishop);
+    pos->moves.push_back(copy_queen);
+    pos->moves.push_back(copy_rook);
+    pos->moves.push_back(copy_knight);
+    pos->moves.push_back(copy_bishop);
 }
 
 void add_move_pawn_double_forward(Position* pos, const string& move_string, map_names king_piece) {
@@ -96,7 +96,7 @@ void add_move_pawn_double_forward(Position* pos, const string& move_string, map_
     // If the move introduces check for the player making the move, it is illegal and will not be considered.
     if (not copy.is_square_attacked(copy.maps[king_piece])) {
         // Add the move to the vector of moves possible from the current position.
-        pos->moves.emplace_back(copy);
+        pos->moves.push_back(copy);
     }
 }
 
@@ -106,7 +106,7 @@ void add_move_castle(Position* pos, Castling_names type) {
     copy.castle(type);
 
     // Add the move to the vector of moves possible from the current position.
-    pos->moves.emplace_back(copy);
+    pos->moves.push_back(copy);
 }
 
 inline bitboard get_bishop_attacks(bitboard board, int index) {
@@ -121,8 +121,9 @@ inline bitboard get_queen_attacks(bitboard board, int index) {
     return slider_attacks.QueenAttacks(board, index);
 }
 
-void leaper_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, const bitboard* attack_table, const int moving_piece) {
-    map_names king_piece = pos->is_white_move() ? w_king : b_king;
+void leaper_generator(Position* pos, bitboard not_own_pieces, const bitboard* attack_table, const int moving_piece) {
+    bitboard leaper = pos->maps[moving_piece];
+    map_names king_piece = pos->is_white_move ? w_king : b_king;
     // Loop over the leaper on the board
     while (leaper) {
         int index = lsb_unsafe(leaper);
@@ -144,7 +145,7 @@ void leaper_generator(Position* pos, bitboard leaper, bitboard not_own_pieces, c
 }
 
 void slide_generator(Position* pos, bitboard slider, bitboard not_own_pieces, bitboard (*attack_function)(bitboard, int), const int moving_piece) {
-    map_names king_piece = pos->is_white_move() ? w_king : b_king;
+    map_names king_piece = pos->is_white_move ? w_king : b_king;
     bitboard whole_board = pos->maps[w_pieces] bitor pos->maps[b_pieces];
 
     while (slider) {
@@ -165,8 +166,8 @@ void slide_generator(Position* pos, bitboard slider, bitboard not_own_pieces, bi
 }
 
 void castling_generator_w(Position* pos) {
-    Position opposite_turn = Position(*pos);
-    opposite_turn.maps[act_color] xor_eq BLACK; // Toggle active color.
+    Position opposite_turn = Position((*pos));
+    opposite_turn.is_white_move = not opposite_turn.is_white_move; // Toggle active color.
     bitboard whole_board = pos->maps[w_pieces] bitor pos->maps[b_pieces];
 
     // If king is not present on the initial square, do not add moves
@@ -175,7 +176,7 @@ void castling_generator_w(Position* pos) {
     }
 
     // Check castling availability
-    if (pos->w_kingside_castle() and (pos-> maps[w_rook] bitand square_bit(7)) and not (whole_board bitand w_kingside_castle_empty)) {
+    if (pos->w_kingside_castle and (pos->maps[w_rook] bitand square_bit(7)) and not (whole_board bitand w_kingside_castle_empty)) {
         bool enters_check = (opposite_turn.is_square_attacked(square_bit(4)) or 
                 opposite_turn.is_square_attacked(square_bit(5)) or 
                 opposite_turn.is_square_attacked(square_bit(6)));
@@ -183,7 +184,7 @@ void castling_generator_w(Position* pos) {
             add_move_castle(pos, c_w_king);
         }
     }
-    if (pos->w_queenside_castle()) {
+    if (pos->w_queenside_castle) {
         if (pos->maps[w_king] and (pos->maps[w_rook] bitand square_bit(0))) { 
             if (not (whole_board bitand w_queenside_castle_empty)) {
                 bool enters_check = (opposite_turn.is_square_attacked(square_bit(2)) or
@@ -198,11 +199,11 @@ void castling_generator_w(Position* pos) {
 }
 
 void castling_generator_b(Position* pos) {
-    Position opposite_turn = Position(*pos);
-    opposite_turn.maps[act_color] xor_eq BLACK; // Toggle active color.
+    Position opposite_turn = Position((*pos));
+    opposite_turn.is_white_move = not opposite_turn.is_white_move; // Toggle active color.
     bitboard whole_board = pos->maps[w_pieces] bitor pos->maps[b_pieces];
 
-    if (pos->b_kingside_castle()) {
+    if (pos->b_kingside_castle) {
         if (pos->maps[b_king] and (pos->maps[b_rook] bitand square_bit(63))) {
             if (not (whole_board bitand b_kingside_castle_empty)) {
                 bool enters_check = (opposite_turn.is_square_attacked(square_bit(60)) or 
@@ -214,7 +215,7 @@ void castling_generator_b(Position* pos) {
             }
         }
     }
-    if (pos->b_queenside_castle()) {
+    if (pos->b_queenside_castle) {
         if (pos->maps[b_king] and (pos->maps[b_rook] bitand square_bit(56))) {
             if (not (whole_board bitand b_queenside_castle_empty)) {
                 bool enters_check = (opposite_turn.is_square_attacked(square_bit(60)) or 
@@ -231,7 +232,7 @@ void castling_generator_b(Position* pos) {
 void generate_w_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[w_pawn];
 
-    bitboard black = pos->maps[b_pieces] bitor pos->maps[passant_sq];
+    bitboard black = pos->maps[b_pieces] bitor pos->passant_sq;
     bitboard unoccupied = compl (pos->maps[w_pieces] bitor pos->maps[b_pieces]);
 
     // left/right/forward contain the start squares of pawns that can perform those moves.
@@ -240,7 +241,7 @@ void generate_w_pawn_moves(Position* pos) {
     bitboard forward = pawns bitand (unoccupied >> 8);
     bitboard double_forward = (rank_2 bitand forward) bitand (unoccupied >> 16);
 
-    map_names king_piece = pos->is_white_move() ? w_king : b_king;
+    map_names king_piece = pos->is_white_move ? w_king : b_king;
     // Loop over pawns and generate appropriate moves.
     while (pawns) {
         int index = lsb_unsafe(pawns);
@@ -283,7 +284,7 @@ void generate_w_pawn_moves(Position* pos) {
 void generate_b_pawn_moves(Position* pos) {
     bitboard pawns = pos->maps[b_pawn];
 
-    bitboard white = pos->maps[w_pieces] bitor pos->maps[passant_sq];
+    bitboard white = pos->maps[w_pieces] bitor pos->passant_sq;
     bitboard unoccupied = compl (pos->maps[w_pieces] bitor pos->maps[b_pieces]);
 
     // left/right/forward contain the start squares of pawns that can perform those moves.
@@ -292,7 +293,7 @@ void generate_b_pawn_moves(Position* pos) {
     bitboard forward = pawns bitand (unoccupied << 8);
     bitboard double_forward = (rank_7 bitand forward) bitand (unoccupied << 16);
 
-    map_names king_piece = pos->is_white_move() ? w_king : b_king;
+    map_names king_piece = pos->is_white_move ? w_king : b_king;
     // Loop over pawns and generate appropriate moves.
     while (pawns) {
         int index = lsb_unsafe(pawns);

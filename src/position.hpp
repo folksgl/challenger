@@ -13,21 +13,6 @@ constexpr bitboard neg_clock = static_cast<bitboard>(0) - 1;
 
 enum Castling_names { c_w_king, c_w_queen, c_b_king, c_b_queen};
 
-const std::unordered_map<std::string, int> castle_string_to_index({
-        {"KQkq", 1},  {"KQk" , 2},  {"KQq" , 3},  {"KQ"  , 4}, 
-        {"Kkq" , 5},  {"Kk"  , 6},  {"Kq"  , 7},  {"K"   , 8},
-        {"Qkq" , 9},  {"Qk"  , 10}, {"Qq"  , 11}, {"Q"   , 12},
-        {"kq"  , 13}, {"k"   , 14}, {"q"   , 15}, {"-"   , 0}, 
-        {""    , 0},
-});
-
-const std::unordered_map<int, std::string> castle_index_to_string({
-        {1, "KQkq"},  {2,  "KQk"},  {3,  "KQq"},  {4,  "KQ"}, 
-        {5,  "Kkq"},  {6,   "Kk"},  {7,   "Kq"},  {8,  "K"},
-        {9,  "Qkq"},  {10,  "Qk"},  {11,  "Qq"},  {12, "Q"},
-        {13,  "kq"},  {14,   "k"},  {15,   "q"},  {0, "-"},
-});
-
 const std::unordered_map<std::string, bitboard> passant_string_to_bit({
         {"a3", 0x0000000000010000}, {"b3", 0x0000000000020000},
         {"c3", 0x0000000000040000}, {"d3", 0x0000000000080000}, 
@@ -41,61 +26,62 @@ const std::unordered_map<std::string, bitboard> passant_string_to_bit({
         {"-",  0x0000000000000000}
 });
 
-
-const std::array<std::array<bool, 4>, 16> castling_rights {{
-      { false, false, false, false}, // 0 = -    
-      { true, true, true, true    }, // 1  = KQkq
-      { true, true, true, false   }, // 2  = KQk
-      { true, true, false, true   }, // 3  = KQq
-      { true, true, false, false  }, // 4  = KQ
-      { true, false, true, true   }, // 5  = Kkq
-      { true, false, true, false  }, // 6  = Kk
-      { true, false, false, true  }, // 7  = Kq
-      { true, false, false, false }, // 8  = K
-      { false, true, true, true   }, // 9  = Qkq
-      { false, true, true, false  }, // 10 = Qk
-      { false, true, false, true  }, // 11 = Qq
-      { false, true, false, false }, // 12 = Q
-      { false, false, true, true  }, // 13 = kq
-      { false, false, true, false }, // 14 = k
-      { false, false, false, true }  // 15 = q
-}};
-
 enum map_names { w_pawn, w_rook, w_knight, w_bishop, w_queen, w_king, w_pieces, 
-                 b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king, b_pieces,
-                 act_color, castle_rights, passant_sq, hlf_clock, full_num};
-
-enum Color: bitboard { WHITE , BLACK };
+                 b_pawn, b_rook, b_knight, b_bishop, b_queen, b_king, b_pieces };
 
 class Position {
 
     public:
         // Class Attributes
-        std::array<bitboard, 19> maps = {0};
+        std::array<bitboard, 14> maps = {0};
+        bitboard passant_sq = 0;
 
+        // Container representing possible moves that can be taken from this position
         std::vector<Position> moves;
+
+        // Castling rights
+        bool w_kingside_castle = false;
+        bool w_queenside_castle = false;
+        bool b_kingside_castle = false;
+        bool b_queenside_castle = false;
+
+        // Evaluation score for the position
         int eval_score = 0;
 
-        // Constructors
+        // Player to move (true=WHITE, false=BLACK)
+        bool is_white_move = true;
 
+        // Clocks
+        short hlf_clock = 0;
+        short full_num = 0;
+
+        // Constructors
         Position(void) : Position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {}
         explicit Position(std::string fen);
-        Position(const Position& other) :maps(other.maps) {}
+        Position(const Position& other) :
+            maps(other.maps),
+            passant_sq(other.passant_sq),
+            w_kingside_castle(other.w_kingside_castle),
+            w_queenside_castle(other.w_queenside_castle),
+            b_kingside_castle(other.b_kingside_castle),
+            b_queenside_castle(other.b_queenside_castle),
+            is_white_move(other.is_white_move) {}
 
-        // Comparisons
-        bool operator == (const Position& other) const { return maps == other.maps; }
+        // Operator Overloads
+        bool operator == (const Position& other) const { 
+            return maps == other.maps and 
+                w_kingside_castle == other.w_kingside_castle and
+                w_queenside_castle == other.w_queenside_castle and
+                b_kingside_castle == other.b_kingside_castle and
+                b_queenside_castle == other.b_queenside_castle and
+                is_white_move == other.is_white_move and 
+                passant_sq == other.passant_sq;
+        }
         bool operator < (const Position& other) const { 
             return eval_score < other.eval_score; 
         }
 
         // Functions
-        inline bool is_white_move(void) const { return maps[act_color] == WHITE; } 
-        inline bool is_black_move(void) const { return maps[act_color] == BLACK; }
-
-        inline bool w_kingside_castle(void)  const { return castling_rights[maps[castle_rights]][c_w_king];  }
-        inline bool w_queenside_castle(void) const { return castling_rights[maps[castle_rights]][c_w_queen]; }
-        inline bool b_kingside_castle(void)  const { return castling_rights[maps[castle_rights]][c_b_king];  }
-        inline bool b_queenside_castle(void) const { return castling_rights[maps[castle_rights]][c_b_queen]; }
 
         void set_piece_positions(std::string);
         void set_active_color(std::string);
@@ -106,11 +92,11 @@ class Position {
 
         void generate_moves(void);
         void evaluate(void);
-        void move(std::string move_string, int moving_piece = -1);
-        void move_pawn_promotion(std::string move);
-        void move_pawn_double_forward(std::string move);
+        void move(const std::string& move, const int moving_piece);
+        void move_pawn_promotion(const std::string& move);
+        void move_pawn_double_forward(const std::string& move);
         void castle(Castling_names);
-        bool zero_at(int square, int piece);
+        void zero_at(int square, int piece);
         int get_moving_piece(int square);
         bool is_square_attacked(bitboard square);
 

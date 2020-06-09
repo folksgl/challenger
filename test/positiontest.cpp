@@ -276,97 +276,97 @@ namespace {
 TEST(castling_rights, all_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.w_kingside_castle());
-    EXPECT_TRUE (actualpos.w_queenside_castle());
-    EXPECT_TRUE (actualpos.b_kingside_castle());
-    EXPECT_TRUE (actualpos.b_queenside_castle());
+    EXPECT_TRUE (actualpos.w_kingside_castle);
+    EXPECT_TRUE (actualpos.w_queenside_castle);
+    EXPECT_TRUE (actualpos.b_kingside_castle);
+    EXPECT_TRUE (actualpos.b_queenside_castle);
 }
 
 TEST(castling_rights, white_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.w_kingside_castle());
-    EXPECT_TRUE (actualpos.w_queenside_castle());
-    EXPECT_FALSE (actualpos.b_kingside_castle());
-    EXPECT_FALSE (actualpos.b_queenside_castle());
+    EXPECT_TRUE (actualpos.w_kingside_castle);
+    EXPECT_TRUE (actualpos.w_queenside_castle);
+    EXPECT_FALSE (actualpos.b_kingside_castle);
+    EXPECT_FALSE (actualpos.b_queenside_castle);
 }
 
 TEST(castling_rights, black_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w kq - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.b_kingside_castle());
-    EXPECT_TRUE (actualpos.b_queenside_castle());
-    EXPECT_FALSE (actualpos.w_kingside_castle());
-    EXPECT_FALSE (actualpos.w_queenside_castle());
+    EXPECT_TRUE (actualpos.b_kingside_castle);
+    EXPECT_TRUE (actualpos.b_queenside_castle);
+    EXPECT_FALSE (actualpos.w_kingside_castle);
+    EXPECT_FALSE (actualpos.w_queenside_castle);
 }
 
 TEST(castling_rights, white_kingside_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w K - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.w_kingside_castle());
-    EXPECT_FALSE (actualpos.w_queenside_castle());
-    EXPECT_FALSE (actualpos.b_kingside_castle());
-    EXPECT_FALSE (actualpos.b_queenside_castle());
+    EXPECT_TRUE (actualpos.w_kingside_castle);
+    EXPECT_FALSE (actualpos.w_queenside_castle);
+    EXPECT_FALSE (actualpos.b_kingside_castle);
+    EXPECT_FALSE (actualpos.b_queenside_castle);
 }
 
 TEST(castling_rights, black_kingside_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w k - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.b_kingside_castle());
-    EXPECT_FALSE (actualpos.b_queenside_castle());
-    EXPECT_FALSE (actualpos.w_kingside_castle());
-    EXPECT_FALSE (actualpos.w_queenside_castle());
+    EXPECT_TRUE (actualpos.b_kingside_castle);
+    EXPECT_FALSE (actualpos.b_queenside_castle);
+    EXPECT_FALSE (actualpos.w_kingside_castle);
+    EXPECT_FALSE (actualpos.w_queenside_castle);
 }
 
 TEST(castling_rights, white_queenside_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Q - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.w_queenside_castle());
-    EXPECT_FALSE (actualpos.w_kingside_castle());
-    EXPECT_FALSE (actualpos.b_queenside_castle());
-    EXPECT_FALSE (actualpos.b_kingside_castle());
+    EXPECT_TRUE (actualpos.w_queenside_castle);
+    EXPECT_FALSE (actualpos.w_kingside_castle);
+    EXPECT_FALSE (actualpos.b_queenside_castle);
+    EXPECT_FALSE (actualpos.b_kingside_castle);
 }
 
 TEST(castling_rights, black_queenside_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w q - 0 1";
     Position actualpos(test);
-    EXPECT_TRUE (actualpos.b_queenside_castle());
-    EXPECT_FALSE (actualpos.b_kingside_castle());
-    EXPECT_FALSE (actualpos.w_kingside_castle());
-    EXPECT_FALSE (actualpos.w_queenside_castle());
+    EXPECT_TRUE (actualpos.b_queenside_castle);
+    EXPECT_FALSE (actualpos.b_kingside_castle);
+    EXPECT_FALSE (actualpos.w_kingside_castle);
+    EXPECT_FALSE (actualpos.w_queenside_castle);
 }
 
 TEST(castling_rights, no_castling_allowed_all) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_queenside_castle());
-    EXPECT_FALSE (actualpos.b_kingside_castle());
-    EXPECT_FALSE (actualpos.w_kingside_castle());
-    EXPECT_FALSE (actualpos.w_queenside_castle());
+    EXPECT_FALSE (actualpos.b_queenside_castle);
+    EXPECT_FALSE (actualpos.b_kingside_castle);
+    EXPECT_FALSE (actualpos.w_kingside_castle);
+    EXPECT_FALSE (actualpos.w_queenside_castle);
 }
 
 TEST(castling_rights, no_castling_allowed_q) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_queenside_castle());
+    EXPECT_FALSE (actualpos.b_queenside_castle);
 }
 
 TEST(castling_rights, no_castling_allowed_k) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_kingside_castle());
+    EXPECT_FALSE (actualpos.b_kingside_castle);
 }
 
 TEST(castling_rights, no_castling_allowed_Q) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.w_queenside_castle());
+    EXPECT_FALSE (actualpos.w_queenside_castle);
 }
 
 TEST(castling_rights, no_castling_allowed_K) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.w_kingside_castle());
+    EXPECT_FALSE (actualpos.w_kingside_castle);
 }
 
 
@@ -376,37 +376,38 @@ TEST(castling_rights, no_castling_allowed_K) {
 TEST(castling_rights, bk_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_kingside_castle());
+    EXPECT_FALSE (actualpos.b_kingside_castle);
 }
 
 TEST(castling_rights, wk_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.w_queenside_castle());
+    EXPECT_FALSE (actualpos.w_queenside_castle);
 }
 
 TEST(castling_rights, wq_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.w_queenside_castle());
+    EXPECT_FALSE (actualpos.w_queenside_castle);
 }
 
 TEST(castling_rights, bq_castling_allowed) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     Position actualpos(test);
-    EXPECT_FALSE (actualpos.b_queenside_castle());
+    EXPECT_FALSE (actualpos.b_queenside_castle);
 }
 
 TEST(castling_rights, w_castle_revoked) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("e1f1");
+    int moving_piece = actualpos.get_moving_piece(get_square_num('e', '1'));
+    actualpos.move("e1f1", moving_piece);
 
-    EXPECT_FALSE (actualpos.w_kingside_castle());
-    EXPECT_FALSE (actualpos.w_queenside_castle());
+    EXPECT_FALSE (actualpos.w_kingside_castle);
+    EXPECT_FALSE (actualpos.w_queenside_castle);
 
-    EXPECT_TRUE(actualpos.b_kingside_castle());
-    EXPECT_TRUE(actualpos.b_queenside_castle());
+    EXPECT_TRUE(actualpos.b_kingside_castle);
+    EXPECT_TRUE(actualpos.b_queenside_castle);
 }
 
 //
@@ -416,27 +417,29 @@ TEST(castling_rights, w_castle_revoked) {
 TEST(active_color, white_active) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[act_color], WHITE);
+    EXPECT_EQ (actualpos.is_white_move, true);
 }
 
 TEST(active_color, white_active_change) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a3");
-    EXPECT_EQ (actualpos.maps[act_color], BLACK);
+    int moving_piece = actualpos.get_moving_piece(get_square_num('a', '2'));
+    actualpos.move("a2a3", moving_piece);
+    EXPECT_EQ (actualpos.is_white_move, false);
 }
 
 TEST(active_color, black_active) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[act_color], BLACK);
+    EXPECT_EQ (actualpos.is_white_move, false);
 }
 
 TEST(active_color, black_active_change) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a7a6");
-    EXPECT_EQ (actualpos.maps[act_color], WHITE);
+    int moving_piece = actualpos.get_moving_piece(get_square_num('a', '7'));
+    actualpos.move("a7a6", moving_piece);
+    EXPECT_EQ (actualpos.is_white_move, true);
 }
 
 //
@@ -446,25 +449,25 @@ TEST(active_color, black_active_change) {
 TEST(en_passant, d3) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq d3 0 1";
     Position actualpos(test);
-    EXPECT_EQ (bit_to_square.at(actualpos.maps[passant_sq]), "d3");
+    EXPECT_EQ (bit_to_square.at(actualpos.passant_sq), "d3");
 }
 
 TEST(en_passant, a6) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a6 0 1";
     Position actualpos(test);
-    EXPECT_EQ (bit_to_square.at(actualpos.maps[passant_sq]), "a6");
+    EXPECT_EQ (bit_to_square.at(actualpos.passant_sq), "a6");
 }
 
 TEST(en_passant, h3) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq h3 0 1";
     Position actualpos(test);
-    EXPECT_EQ (bit_to_square.at(actualpos.maps[passant_sq]), "h3");
+    EXPECT_EQ (bit_to_square.at(actualpos.passant_sq), "h3");
 }
 
 TEST(en_passant, c6) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c6 0 1";
     Position actualpos(test);
-    EXPECT_EQ (bit_to_square.at(actualpos.maps[passant_sq]), "c6");
+    EXPECT_EQ (bit_to_square.at(actualpos.passant_sq), "c6");
 }
 
 //
@@ -474,31 +477,31 @@ TEST(en_passant, c6) {
 TEST(halfmove_clock, zero) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[hlf_clock], 0);
+    EXPECT_EQ (actualpos.hlf_clock, 0);
 }
 
 TEST(halfmove_clock, one) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[hlf_clock], 1);
+    EXPECT_EQ (actualpos.hlf_clock, 1);
 }
 
 TEST(halfmove_clock, seventy_four) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 74 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[hlf_clock], 74);
+    EXPECT_EQ (actualpos.hlf_clock, 74);
 }
 
 TEST(halfmove_clock, threehundred_twelve) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 312 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[hlf_clock], 312);
+    EXPECT_EQ (actualpos.hlf_clock, 312);
 }
 
 TEST(halfmove_clock, two_thousand_eighty_five) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 2085 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[hlf_clock], 2085);
+    EXPECT_EQ (actualpos.hlf_clock, 2085);
 }
 
 //
@@ -508,84 +511,31 @@ TEST(halfmove_clock, two_thousand_eighty_five) {
 TEST(fullmove_number, zero) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c3 0 0";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[full_num], 0);
+    EXPECT_EQ (actualpos.full_num, 0);
 }
 
 TEST(fullmove_number, one) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c3 0 1";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[full_num], 1);
+    EXPECT_EQ (actualpos.full_num, 1);
 }
 
 TEST(fullmove_number, seventy_four) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c3 0 74";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[full_num], 74);
+    EXPECT_EQ (actualpos.full_num, 74);
 }
 
 TEST(fullmove_number, threehundred_twelve) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c3 0 312";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[full_num], 312);
+    EXPECT_EQ (actualpos.full_num, 312);
 }
 
 TEST(fullmove_number, two_thousand_eighty_five) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c3 0 2085";
     Position actualpos(test);
-    EXPECT_EQ (actualpos.maps[full_num], 2085);
-}
-
-//
-// START ZERO AT TEST /////////////////////////////////////////////////////
-//
-
-TEST(zero_at, square_0) {
-    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    Position actualpos(test);
-    actualpos.zero_at(0, w_rook);
-    EXPECT_EQ (actualpos.maps[w_rook], 0x80);
-}
-
-TEST(zero_at, square_1) {
-    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    Position actualpos(test);
-    actualpos.zero_at(1, w_knight);
-    EXPECT_EQ (actualpos.maps[w_knight], 0x40);
-}
-
-TEST(zero_at, square_3) {
-    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    Position actualpos(test);
-    actualpos.zero_at(3, w_queen);
-    EXPECT_EQ (actualpos.maps[w_queen], 0);
-}
-
-TEST(zero_at, square_7) {
-    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    Position actualpos(test);
-    actualpos.zero_at(7, w_rook);
-    EXPECT_EQ (actualpos.maps[w_rook], 0x01);
-}
-
-TEST(zero_at, square_15) {
-    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    Position actualpos(test);
-    actualpos.zero_at(15, w_pawn);
-    EXPECT_EQ (actualpos.maps[w_pawn], 0x7F00);
-}
-
-TEST(zero_at, square_31) {
-    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    Position actualpos(test);
-    actualpos.zero_at(31, b_pieces);
-    EXPECT_EQ (actualpos.maps[w_pieces], 0xFFFF);
-}
-
-TEST(zero_at, square_63) {
-    string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    Position actualpos(test);
-    actualpos.zero_at(63, b_rook);
-    EXPECT_EQ (actualpos.maps[b_rook], 0x0100000000000000);
+    EXPECT_EQ (actualpos.full_num, 2085);
 }
 
 //
@@ -595,7 +545,8 @@ TEST(zero_at, square_63) {
 TEST(game_move, a2a4) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a4");
+    int moving_piece = actualpos.get_moving_piece(get_square_num('a', '2'));
+    actualpos.move("a2a4", moving_piece);
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
@@ -617,8 +568,10 @@ TEST(game_move, a2a4) {
 TEST(game_move, a2a4_b2b4) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a4");
-    actualpos.move("b2b4");
+    int moving_piece = actualpos.get_moving_piece(get_square_num('a', '2'));
+    actualpos.move("a2a4", moving_piece);
+    moving_piece = actualpos.get_moving_piece(get_square_num('b', '2'));
+    actualpos.move("b2b4", moving_piece);
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FF000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
@@ -641,7 +594,8 @@ TEST(game_move, a2a4_b2b4) {
 TEST(game_move, a2a7) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a7");
+    int moving_piece = actualpos.get_moving_piece(get_square_num('a', '2'));
+    actualpos.move("a2a7", moving_piece);
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FE000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
@@ -664,8 +618,10 @@ TEST(game_move, a2a7) {
 TEST(game_move, a2a7_a7b7) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
-    actualpos.move("a2a7");
-    actualpos.move("a7b7");
+    int moving_piece = actualpos.get_moving_piece(get_square_num('a', '2'));
+    actualpos.move("a2a7", moving_piece);
+    moving_piece = actualpos.get_moving_piece(get_square_num('a', '7'));
+    actualpos.move("a7b7", moving_piece);
 
     EXPECT_EQ (actualpos.maps[b_pawn],   0x00FC000000000000); // b_pawn
     EXPECT_EQ (actualpos.maps[b_rook],   0x8100000000000000); // b_rook
@@ -887,8 +843,8 @@ TEST(copy_constructor, deep_color) {
     Position actualpos(test);
     Position copypos = Position(actualpos);
 
-    EXPECT_EQ (actualpos.maps[act_color], WHITE);
-    EXPECT_EQ (copypos.maps[act_color],   WHITE);
+    EXPECT_EQ (actualpos.is_white_move, true);
+    EXPECT_EQ (copypos.is_white_move,   true);
 }
 
 TEST(copy_constructor, deep_moves) {
@@ -998,7 +954,7 @@ TEST(is_x_move, white) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
 
-    bool white_move = actualpos.is_white_move();
+    bool white_move = actualpos.is_white_move;
 
     EXPECT_TRUE(white_move);
 }
@@ -1007,7 +963,7 @@ TEST(is_x_move, not_white) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position actualpos(test);
 
-    bool white_move = actualpos.is_white_move();
+    bool white_move = actualpos.is_white_move;
 
     EXPECT_FALSE(white_move);
 }
@@ -1016,7 +972,7 @@ TEST(is_x_move, black) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position actualpos(test);
 
-    bool black_move = actualpos.is_black_move();
+    bool black_move = not actualpos.is_white_move;
 
     EXPECT_TRUE(black_move);
 }
@@ -1025,7 +981,7 @@ TEST(is_x_move, not_black) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
 
-    bool black_move = actualpos.is_black_move();
+    bool black_move = not actualpos.is_white_move;
 
     EXPECT_FALSE(black_move);
 }
@@ -1070,19 +1026,22 @@ TEST(active_color, switch_with_not_operator) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
 
-    actualpos.move("a2a1");
+    int moving_piece = actualpos.get_moving_piece(get_square_num('a', '2'));
+    actualpos.move("a2a1", moving_piece);
 
-    EXPECT_EQ(actualpos.maps[act_color], BLACK);
+    EXPECT_EQ(actualpos.is_white_move, false);
 }
 
 TEST(active_color, switch_with_not_operator_2) {
     string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position actualpos(test);
 
-    actualpos.move("a2a3");
-    actualpos.move("a7a6");
+    int moving_piece = actualpos.get_moving_piece(get_square_num('a', '2'));
+    actualpos.move("a2a3", moving_piece);
+    moving_piece = actualpos.get_moving_piece(get_square_num('a', '7'));
+    actualpos.move("a7a6", moving_piece);
 
-    EXPECT_EQ(actualpos.maps[act_color], WHITE);
+    EXPECT_EQ(actualpos.is_white_move, true);
 }
 
 //
@@ -1099,7 +1058,8 @@ TEST(is_square_attacked, rook_attacks_b_king_post_passant) {
 TEST(is_square_attacked, rook_attacks_b_king_post_passant_2) {
     string test = "8/2p5/3p4/KP5r/1R2Pp1k/8/6P1/8 b - e3 0 1";
     Position actualpos(test);
-    actualpos.move("f4e3");
+    int moving_piece = actualpos.get_moving_piece(get_square_num('f', '4'));
+    actualpos.move("f4e3", moving_piece);
 
     EXPECT_EQ(actualpos.is_square_attacked(actualpos.maps[b_king]), true);
 }

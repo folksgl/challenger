@@ -191,7 +191,7 @@ void process_position_command(command_iter begin, command_iter end) {
                     G_game_position->move_pawn_double_forward(tok);
                 }
                 else {
-                    G_game_position->move(tok, -1);
+                    G_game_position->move(tok, moving_piece);
                 }
             }
             else if (moving_piece == b_pawn) {
@@ -199,7 +199,7 @@ void process_position_command(command_iter begin, command_iter end) {
                     G_game_position->move_pawn_double_forward(tok);
                 }
                 else {
-                    G_game_position->move(tok, -1);
+                    G_game_position->move(tok, moving_piece);
                 }
             }
             else if (moving_piece == w_king) {
@@ -219,7 +219,7 @@ void process_position_command(command_iter begin, command_iter end) {
                 }
             }
             else {
-                G_game_position->move(tok, -1);
+                G_game_position->move(tok, moving_piece);
             }
         }
         // If the token wasnt 4 or 5 characters in length, then it is invalid and the position is not modified for that token.
@@ -330,7 +330,7 @@ string find_move_taken(Position* initial, Position* next) {
     std::string src  = "notset";
     std::string dest = "notset";
 
-    bool white_turn = initial->is_white_move();
+    bool white_turn = initial->is_white_move;
 
     bitboard initial_king, initial_rook, next_king, next_rook;
 
