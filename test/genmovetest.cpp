@@ -167,17 +167,20 @@ TEST(capture_passant, white) {
 TEST(no_blank_capture, white) {
     std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position startpos(test);
-    startpos.move("a2a4");
-    startpos.move("a7a6");
+    int moving_piece = startpos.get_moving_piece(get_square_num('a', '2'));
+    startpos.move("a2a4", moving_piece);
+
+    moving_piece = startpos.get_moving_piece(get_square_num('a', '7'));
+    startpos.move("a7a6", moving_piece);
 
     generate_moves(&startpos);
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    ASSERT_EQ(startpos.w_kingside_castle(),  true);
-    ASSERT_EQ(startpos.w_queenside_castle(), true);
-    ASSERT_EQ(startpos.b_kingside_castle(),  true);
-    ASSERT_EQ(startpos.b_queenside_castle(), true);
+    ASSERT_EQ(startpos.w_kingside_castle,  true);
+    ASSERT_EQ(startpos.w_queenside_castle, true);
+    ASSERT_EQ(startpos.b_kingside_castle,  true);
+    ASSERT_EQ(startpos.b_queenside_castle, true);
 
     ASSERT_EQ(startpos.maps[w_pawn], 0x000000000100FE00);
     ASSERT_EQ(startpos.maps[b_pawn], 0x00FE010000000000);
@@ -194,7 +197,7 @@ TEST(no_blank_capture, white) {
     EXPECT_EQ (startpos.maps[b_queen],  0x0800000000000000); // b_queen]
     EXPECT_EQ (startpos.maps[b_king],   0x1000000000000000); // b_king]
 
-    EXPECT_EQ (bit_to_square.at(startpos.maps[passant_sq]), "-");
+    EXPECT_EQ (bit_to_square.at(startpos.passant_sq), "-");
 
     ASSERT_EQ(startpos.moves.size(), 21);
 
@@ -356,7 +359,7 @@ TEST(number_of_moves_generated, startpos_white_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_knight], not_own, knight_moves, w_knight);         // knight moves
+    leaper_generator(&startpos, not_own, knight_moves, w_knight);         // knight moves
 
     EXPECT_EQ (startpos.moves.size(), 4);
 }
@@ -366,7 +369,7 @@ TEST(correct_moves_generated, startpos_white_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_knight], not_own, knight_moves, w_knight);         // knight moves
+    leaper_generator(&startpos, not_own, knight_moves, w_knight);         // knight moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -384,7 +387,7 @@ TEST(correct_moves_generated, e5_white_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_knight], not_own, knight_moves, w_knight);         // knight moves
+    leaper_generator(&startpos, not_own, knight_moves, w_knight);         // knight moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -416,7 +419,7 @@ TEST(number_of_moves_generated, startpos_black_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_knight], not_own, knight_moves, b_knight);         // knight moves
+    leaper_generator(&startpos, not_own, knight_moves, b_knight);         // knight moves
 
     EXPECT_EQ (startpos.moves.size(), 4);
 }
@@ -426,7 +429,7 @@ TEST(correct_moves_generated, startpos_black_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_knight], not_own, knight_moves, b_knight);         // knight moves
+    leaper_generator(&startpos, not_own, knight_moves, b_knight);         // knight moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -444,7 +447,7 @@ TEST(correct_moves_generated, e4_black_knight) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_knight], not_own, knight_moves, b_knight);         // knight moves
+    leaper_generator(&startpos, not_own, knight_moves, b_knight);         // knight moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -780,7 +783,7 @@ TEST(number_of_moves_generated, startpos_white_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -790,7 +793,7 @@ TEST(number_of_moves_generated, middleboard_white_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -800,7 +803,7 @@ TEST(number_of_moves_generated, pressed_white_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -810,7 +813,7 @@ TEST(number_of_moves_generated, pressed_white_king_towards_check) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 5);
 }
@@ -820,7 +823,7 @@ TEST(number_of_moves_generated, black_rook_white_king_cross_section) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, w_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 4);
 }
@@ -830,7 +833,7 @@ TEST(correct_moves_generated, middleboard_white_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[w_pieces]);
-    leaper_generator(&startpos, startpos.maps[w_king], not_own, king_moves, w_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, w_king);          // king moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -853,7 +856,7 @@ TEST(number_of_moves_generated, startpos_black_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 0);
 }
@@ -863,7 +866,7 @@ TEST(number_of_moves_generated, middleboard_black_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -873,7 +876,7 @@ TEST(number_of_moves_generated, pressed_black_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 8);
 }
@@ -883,7 +886,7 @@ TEST(number_of_moves_generated, pressed_black_king_towards_check) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 5);
 }
@@ -893,7 +896,7 @@ TEST(number_of_moves_generated, white_rook_black_king_cross_section) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, b_king);          // king moves
 
     EXPECT_EQ (startpos.moves.size(), 4);
 }
@@ -903,7 +906,7 @@ TEST(correct_moves_generated, middleboard_black_king) {
     Position startpos(test);
 
     bitboard not_own = ~(startpos.maps[b_pieces]);
-    leaper_generator(&startpos, startpos.maps[b_king], not_own, king_moves, b_king);          // king moves
+    leaper_generator(&startpos, not_own, king_moves, b_king);          // king moves
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
@@ -1247,7 +1250,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_1) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("a5a4");
+    int moving_piece = startpos.get_moving_piece(get_square_num('a', '5'));
+    startpos.move("a5a4", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1277,7 +1281,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_2) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("a5a6");
+    int moving_piece = startpos.get_moving_piece(get_square_num('a', '5'));
+    startpos.move("a5a6", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1307,7 +1312,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_3) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("b4a4");
+    int moving_piece = startpos.get_moving_piece(get_square_num('b', '4'));
+    startpos.move("b4a4", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1337,7 +1343,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_4) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("b4b1");
+    int moving_piece = startpos.get_moving_piece(get_square_num('b', '4'));
+    startpos.move("b4b1", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1368,7 +1375,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_5) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("b4b2");
+    int moving_piece = startpos.get_moving_piece(get_square_num('b', '4'));
+    startpos.move("b4b2", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1399,7 +1407,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_6) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("b4b3");
+    int moving_piece = startpos.get_moving_piece(get_square_num('b', '4'));
+    startpos.move("b4b3", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1429,7 +1438,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_7) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("b4c4");
+    int moving_piece = startpos.get_moving_piece(get_square_num('b', '4'));
+    startpos.move("b4c4", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1459,7 +1469,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_8) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("b4d4");
+    int moving_piece = startpos.get_moving_piece(get_square_num('b', '4'));
+    startpos.move("b4d4", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1489,7 +1500,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_9) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("b4e4");
+    int moving_piece = startpos.get_moving_piece(get_square_num('b', '4'));
+    startpos.move("b4e4", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1519,7 +1531,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_10) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("b4f4");
+    int moving_piece = startpos.get_moving_piece(get_square_num('b', '4'));
+    startpos.move("b4f4", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1536,7 +1549,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_11) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("e2e3");
+    int moving_piece = startpos.get_moving_piece(get_square_num('e', '2'));
+    startpos.move("e2e3", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1566,7 +1580,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_12) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("e2e4");
+    int moving_piece = startpos.get_moving_piece(get_square_num('e', '2'));
+    startpos.move("e2e4", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1597,7 +1612,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_13) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("g2g3");
+    int moving_piece = startpos.get_moving_piece(get_square_num('g', '2'));
+    startpos.move("g2g3", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1616,7 +1632,8 @@ TEST(correct_moves_generated, complex_position_3_perft_move_14) {
     std::string test = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1";
     Position startpos(test);
 
-    startpos.move("g2g4");
+    int moving_piece = startpos.get_moving_piece(get_square_num('g', '2'));
+    startpos.move("g2g4", moving_piece);
 
     generate_moves(&startpos);
 
@@ -1687,7 +1704,10 @@ TEST(correct_moves_generated, castling_rights_correct_after_w_kingside) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.moves[5].maps[castle_rights], castle_string_to_index.at("kq"));
+    EXPECT_EQ (startpos.moves[5].w_kingside_castle,  false);
+    EXPECT_EQ (startpos.moves[5].w_queenside_castle, false);
+    EXPECT_EQ (startpos.moves[5].b_kingside_castle,  true);
+    EXPECT_EQ (startpos.moves[5].b_queenside_castle, true);
 }
 
 TEST(correct_moves_generated, king_bitboard_correct_after_w_kingside) {
@@ -1868,7 +1888,10 @@ TEST(correct_moves_generated, castling_rights_correct_after_w_queenside) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.moves[10].maps[castle_rights], castle_string_to_index.at("kq"));
+    EXPECT_EQ (startpos.moves[10].w_kingside_castle,  false);
+    EXPECT_EQ (startpos.moves[10].w_queenside_castle, false);
+    EXPECT_EQ (startpos.moves[10].b_kingside_castle,  true);
+    EXPECT_EQ (startpos.moves[10].b_queenside_castle, true);
 }
 
 TEST(correct_moves_generated, queen_bitboard_correct_after_w_queenside) {
@@ -2017,8 +2040,12 @@ TEST(correct_number_moves_generated, king_in_check) {
     startpos.move_pawn_double_forward("a2a4");
     startpos.move_pawn_double_forward("a7a5");
     startpos.move_pawn_double_forward("b2b4");
-    startpos.move("e8e7");
-    startpos.move("c3d5");
+
+    int moving_piece = startpos.get_moving_piece(get_square_num('e', '8'));
+    startpos.move("e8e7", moving_piece);
+
+    moving_piece = startpos.get_moving_piece(get_square_num('c', '3'));
+    startpos.move("c3d5", moving_piece);
 
     generate_moves(&startpos);
 
@@ -2085,7 +2112,8 @@ TEST(correct_number_moves_generated, king_in_check_e8e7) {
     std::string test = "qn1rkrbb/1p1p1ppp/2p1p3/p2n4/PP2P2P/2NP4/2P2PP1/Q1NRKRBB b - a3 0 11";
     Position startpos(test);
 
-    startpos.move("e8e7");
+    int moving_piece = startpos.get_moving_piece(get_square_num('e', '8'));
+    startpos.move("e8e7", moving_piece);
     // qn1r1rbb/1p1pkppp/2p1p3/p2n4/PP2P2P/2NP4/2P2PP1/Q1NRKRBB w - - 1 11
 
     generate_moves(&startpos);
@@ -2114,24 +2142,25 @@ TEST(correct_number_moves_generated, random_pos_002) {
     Position startpos(test);
 
     startpos.move_pawn_double_forward("a2a4");
-    EXPECT_EQ (startpos.maps[passant_sq], 0x0000000000010000);
+    EXPECT_EQ (startpos.passant_sq, 0x0000000000010000);
     startpos.move_pawn_double_forward("c7c5");
-    EXPECT_EQ (startpos.maps[passant_sq], 0x0000040000000000);
-    startpos.move("e1d1");
+    EXPECT_EQ (startpos.passant_sq, 0x0000040000000000);
+    int moving_piece = startpos.get_moving_piece(get_square_num('e', '1'));
+    startpos.move("e1d1", moving_piece);
 
     generate_moves(&startpos);
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.is_black_move(), true);
+    EXPECT_EQ (startpos.is_white_move, false);
 
-    EXPECT_EQ (startpos.w_kingside_castle(),  false);
-    EXPECT_EQ (startpos.w_queenside_castle(), false);
-    EXPECT_EQ (startpos.b_kingside_castle(),  true);
-    EXPECT_EQ (startpos.b_queenside_castle(), true);
+    EXPECT_EQ (startpos.w_kingside_castle,  false);
+    EXPECT_EQ (startpos.w_queenside_castle, false);
+    EXPECT_EQ (startpos.b_kingside_castle,  true);
+    EXPECT_EQ (startpos.b_queenside_castle, true);
 
-    EXPECT_EQ (startpos.maps[passant_sq], 0);
+    EXPECT_EQ (startpos.passant_sq, 0);
 
     //EXPECT_EQ (,true);
 
@@ -2142,21 +2171,26 @@ TEST(correct_number_moves_generated, random_pos_003) {
     std::string test = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
     Position startpos(test);
 
-    startpos.move("e2d1");
-    startpos.move("a6f1");
-    startpos.move("e5f7");
-    startpos.move("a8b8");
-    startpos.move("h1g1");
+    int moving_piece = startpos.get_moving_piece(get_square_num('e', '2'));
+    startpos.move("e2d1", moving_piece);
+    moving_piece = startpos.get_moving_piece(get_square_num('a', '6'));
+    startpos.move("a6f1", moving_piece);
+    moving_piece = startpos.get_moving_piece(get_square_num('e', '5'));
+    startpos.move("e5f7", moving_piece);
+    moving_piece = startpos.get_moving_piece(get_square_num('a', '8'));
+    startpos.move("a8b8", moving_piece);
+    moving_piece = startpos.get_moving_piece(get_square_num('h', '1'));
+    startpos.move("h1g1", moving_piece);
 
     generate_moves(&startpos);
 
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.w_kingside_castle(),  false);
-    EXPECT_EQ (startpos.w_queenside_castle(), true);
-    EXPECT_EQ (startpos.b_kingside_castle(),  true);
-    EXPECT_EQ (startpos.b_queenside_castle(), false);
+    EXPECT_EQ (startpos.w_kingside_castle,  false);
+    EXPECT_EQ (startpos.w_queenside_castle, true);
+    EXPECT_EQ (startpos.b_kingside_castle,  true);
+    EXPECT_EQ (startpos.b_queenside_castle, false);
 
     EXPECT_EQ (startpos.moves.size(), 48);
 }
@@ -2165,13 +2199,19 @@ TEST(correct_number_moves_generated, random_pos_004) {
     std::string test = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
     Position startpos(test);
 
-    startpos.move("e2d1");
-    startpos.move("a6f1");
-    startpos.move("e5f7");
-    startpos.move("a8b8");
-    startpos.move("h1g1");
+    int moving_piece = startpos.get_moving_piece(get_square_num('e', '2'));
+    startpos.move("e2d1", moving_piece);
+    moving_piece = startpos.get_moving_piece(get_square_num('a', '6'));
+    startpos.move("a6f1", moving_piece);
+    moving_piece = startpos.get_moving_piece(get_square_num('e', '5'));
+    startpos.move("e5f7", moving_piece);
+    moving_piece = startpos.get_moving_piece(get_square_num('a', '8'));
+    startpos.move("a8b8", moving_piece);
+    moving_piece = startpos.get_moving_piece(get_square_num('h', '1'));
+    startpos.move("h1g1", moving_piece);
     startpos.castle(c_b_king);
-    startpos.move("f7h6");
+    moving_piece = startpos.get_moving_piece(get_square_num('f', '7'));
+    startpos.move("f7h6", moving_piece);
 
     // 1r3rk1/p1ppq1b1/1n2pnpN/3P4/1p2P3/2N2Q1p/PPPB1PPP/R2BKbR1 b Q - 0 1
 
@@ -2180,14 +2220,14 @@ TEST(correct_number_moves_generated, random_pos_004) {
     std::sort(startpos.moves.begin(), startpos.moves.end(), 
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
-    EXPECT_EQ (startpos.is_black_move(),  true);
+    EXPECT_EQ (startpos.is_white_move, false);
 
-    EXPECT_EQ (startpos.w_kingside_castle(),  false);
-    EXPECT_EQ (startpos.w_queenside_castle(), true);
-    EXPECT_EQ (startpos.b_kingside_castle(),  false);
-    EXPECT_EQ (startpos.b_queenside_castle(), false);
+    EXPECT_EQ (startpos.w_kingside_castle,  false);
+    EXPECT_EQ (startpos.w_queenside_castle, true);
+    EXPECT_EQ (startpos.b_kingside_castle,  false);
+    EXPECT_EQ (startpos.b_queenside_castle, false);
 
-    EXPECT_EQ (startpos.maps[passant_sq], 0);
+    EXPECT_EQ (startpos.passant_sq, 0);
 
     EXPECT_EQ (startpos.maps[w_pieces],   0x000080081024EF59);
     EXPECT_EQ (startpos.maps[b_pieces],   0x625D720002800020);

@@ -18,7 +18,7 @@ void search(Position* pos, int depth) {
 
     bitboard alpha = std::numeric_limits<int>::min();
     bitboard beta  = std::numeric_limits<int>::max();
-    if (pos->is_white_move()) {
+    if (pos->is_white_move) {
         alphaBetaMax(pos, alpha, beta, depth);
         sort_descending;
     }
