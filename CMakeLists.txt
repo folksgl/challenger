@@ -3,7 +3,7 @@ project(Challenger)
 
 # Add src and test files
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "-Wall -ggdb -Og -pg --coverage -pthread")
+set(CMAKE_CXX_FLAGS "-Wall -Og -pg --coverage -pthread")
 
 set(SRC_DIR src)
 set(TEST_DIR "test")
@@ -57,7 +57,7 @@ add_custom_target(optimized
 )
 
 add_custom_target(windows_challenger
-    COMMAND x86_64-w64-mingw32-g++ -o windows_challenger.exe -O3 -pthread --std=c++17 ${SRC_FILES}
+    COMMAND x86_64-w64-mingw32-c++-posix -o windows_challenger.exe -O3 -pthread --std=c++17 ${SRC_FILES}
     BYPRODUCTS windows_challenger
 )
 
