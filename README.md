@@ -9,6 +9,9 @@ Challenger is my own custom chess engine.
 
 The goal of challenger is to take on the stockfish 10 chess engine, which is currently the best chess engine in the world.
 
+## Status
+Currently, challenger is a "complete" chess engine in that it can play legal chess. It currently generates ~20,000,000 moves per second (hardware-dependant). However, before moving development on to making challenger smarter in which moves it chooses to play, I'm attempting to optimize move generation (20M/nps is poor compared to the roughly 200M/nps that [qperft](https://home.hccnet.nl/h.g.muller/dwnldpage.html) can generate on my machine).
+
 ## Progress
 
 Current level: 0
@@ -20,11 +23,6 @@ The "Percentage winning next level" label indicates challenger's progress in bea
 
 Percentages will be determined by playing 10 games and recording winnings.
 
-## Ongoing Work:
-- [ ] Implement all UCI compatibility
-- [ ] Improve position evaluation
-- [ ] Improve move generation
-- [ ] General optimizations
 
 ## Installation
 
