@@ -5,7 +5,7 @@
 #include "game_variables.hpp"
 #include "common.hpp"
 #include "search.hpp"
-#include "uci_command_queue.hpp"
+#include "thread_safe_queue.hpp"
 
 using namespace std;
 

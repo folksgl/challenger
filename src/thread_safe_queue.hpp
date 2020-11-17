@@ -1,5 +1,5 @@
-#ifndef UCI_QUEUE_H
-#define UCI_QUEUE_H
+#ifndef THREADSAFE_QUEUE_H
+#define THREADSAFE_QUEUE_H
 
 #include <queue>
 #include <vector>
@@ -9,7 +9,7 @@ typedef std::vector<std::string> uci_command;
 typedef uci_command::iterator command_iter;
 
 template<typename T>
-class UCICommandQueue {
+class ThreadSafeQueue {
     std::queue<T> safe_queue;
     std::mutex mut;
     std::condition_variable cv;
