@@ -15,7 +15,7 @@ void read_commands(std::istream& is) {
 
         // Split the input string into tokens (delimited by space)
         std::istringstream iss(input_string);
-        std::vector<std::string> results(std::istream_iterator<std::string>{iss},
+        uci_command results(std::istream_iterator<std::string>{iss},
                                  std::istream_iterator<std::string>());
 
         if (results.empty()) {
@@ -41,7 +41,7 @@ void read_commands(std::istream& is) {
  */
 void process_commands() {
 
-    std::string uci_command; // The first token of uci_input that should be a uci command
+    std::string command; // The first token of uci_input that should be a uci command
 
     while (true) {
         // Get command from command_queue
@@ -49,33 +49,33 @@ void process_commands() {
         auto begin = uci_input.begin();
         auto end = uci_input.end();
 
-        uci_command = uci_input[0];
+        command = uci_input[0];
 
-        if (uci_command == "uci") {
+        if (command == "uci") {
             process_uci_command();
         }
-        else if (uci_command == "debug") {
+        else if (command == "debug") {
             process_debug_command(begin, end);
         }
-        else if (uci_command == "isready") {
+        else if (command == "isready") {
             cout << "readyok" << endl;
         }
-        else if (uci_command == "setoption") {
+        else if (command == "setoption") {
             process_setoption_command(begin, end);
         }
-        else if (uci_command == "position") {
+        else if (command == "position") {
             process_position_command(begin, end);
         }
-        else if (uci_command == "go") {
+        else if (command == "go") {
             process_go_command(begin, end);
         }
-        else if (uci_command == "stop") {
+        else if (command == "stop") {
             process_stop_command();
         }
-        else if (uci_command == "ponderhit") {
+        else if (command == "ponderhit") {
             process_ponderhit_command();
         }
-        else if (uci_command == "quit") {
+        else if (command == "quit") {
             // return to allow consumer_thread in main to end execution and join.
             return;
         }
