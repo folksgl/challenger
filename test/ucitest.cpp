@@ -74,19 +74,15 @@ TEST (process_command, position_pawns_forward_as_fen) {
 }
 
 TEST (process_commands, quit) { 
-    std::vector<string> commands = {"quit"};
-    command_queue.push(commands);
+    command_queue.push(UCICommand("quit"));
     process_commands();
 
     ASSERT_TRUE(true);
 }
 
 TEST (process_commands, uci_quit) { 
-    std::vector<string> command1 = {"uci"};
-    std::vector<string> command2 = {"quit"};
-
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("uci"));
+    command_queue.push(UCICommand("quit"));
 
     std::string output = process_with_capture();
 
@@ -94,11 +90,8 @@ TEST (process_commands, uci_quit) {
 }
 
 TEST (process_commands, debug_off_quit) { 
-    std::vector<string> command1 = {"debug", "off"};
-    std::vector<string> command2 = {"quit"};
-
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("debug off"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
 
@@ -106,22 +99,17 @@ TEST (process_commands, debug_off_quit) {
 }
 
 TEST (process_commands, isready_quit) { 
-    std::vector<string> command1 = {"isready"};
-    std::vector<string> command2 = {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("isready"));
+    command_queue.push(UCICommand("quit"));
 
     std::string output = process_with_capture();
     ASSERT_EQ (output, "readyok\n");
 }
 
 TEST (process_commands, go_quit_startpos) { 
-    std::vector<string> command1 = {"position", "startpos"};
-    std::vector<string> command2 = {"go"};
-    std::vector<string> command3 = {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
-    command_queue.push(command3);
+    command_queue.push(UCICommand("position startpos"));
+    command_queue.push(UCICommand("go"));
+    command_queue.push(UCICommand("quit"));
 
     std::string output = process_with_capture();
 
@@ -129,32 +117,27 @@ TEST (process_commands, go_quit_startpos) {
 }
 
 TEST (process_commands, go_quit_nullpos) { 
-    std::vector<string> command1 = {"position", "8/8/8/8/8/8/8/8", "w", "-", "-", "0", "1"};
-    std::vector<string> command2 = {"go", "depth", "1"};
-    std::vector<string> command3 = {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
-    command_queue.push(command3);
+    command_queue.push(UCICommand("position 8/8/8/8/8/8/8/8 w - - 0 1"));
+    command_queue.push(UCICommand("go depth 1"));
+    command_queue.push(UCICommand("quit"));
 
     std::string output = process_with_capture();
     EXPECT_EQ(output, "Fatal error, no moves found.\n");
 }
 
 TEST (process_commands, bad_debug_command) { 
-    std::vector<string> command1 = {"debug"};
-    std::vector<string> command2 = {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("debug"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
     EXPECT_FALSE(G_debug);
 }
 
 TEST (process_commands, w_pawn_promotion) { 
-    std::vector<string> command1 = {"position", "2bqk1nr/Ppp2ppp/4p3/2Np1b2/2nP1B2/4P3/PPP2P1P/RNBQK2R", "w", "-", "-", "0", "1", "moves", "a7a8Q"};
-    std::vector<string> command2 = {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    std::vector<string> command1 = {};
+
+    command_queue.push(UCICommand("position 2bqk1nr/Ppp2ppp/4p3/2Np1b2/2nP1B2/4P3/PPP2P1P/RNBQK2R w - - 0 1 moves a7a8Q"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
     EXPECT_FALSE(G_debug);
@@ -167,13 +150,19 @@ TEST (read_commands, three_valid) {
     EXPECT_EQ(command_queue.size(), 3);
 
     std::vector<std::string> command1 {"position", "8/8/8/8/8/8/8/8", "w", "-", "-", "0", "1"};
-    EXPECT_EQ(command_queue.pop(), command1);
+    UCICommand cmdout = command_queue.pop();
+    std::vector<std::string> command1out(cmdout.begin(), cmdout.end());
+    EXPECT_EQ(command1out, command1);
 
     std::vector<std::string> command2 {"go", "depth", "1"};
-    EXPECT_EQ(command_queue.pop(), command2);
+    cmdout = command_queue.pop();
+    std::vector<std::string> command2out(cmdout.begin(), cmdout.end());
+    EXPECT_EQ(command2out, command2);
 
     std::vector<std::string> command3 {"quit"};
-    EXPECT_EQ(command_queue.pop(), command3);
+    cmdout = command_queue.pop();
+    std::vector<std::string> command3out(cmdout.begin(), cmdout.end());
+    EXPECT_EQ(command3out, command3);
 }
 
 TEST (read_commands, two_valid) { 
@@ -183,10 +172,14 @@ TEST (read_commands, two_valid) {
     EXPECT_EQ(command_queue.size(), 2);
 
     std::vector<std::string> command1 {"position", "8/8/8/8/8/8/8/8", "w", "-", "-", "0", "1"};
-    EXPECT_EQ(command_queue.pop(), command1);
+    UCICommand cmdout = command_queue.pop();
+    std::vector<std::string> command1out(cmdout.begin(), cmdout.end());
+    EXPECT_EQ(command1out, command1);
 
     std::vector<std::string> command2 {"go", "depth", "1"};
-    EXPECT_EQ(command_queue.pop(), command2);
+    cmdout = command_queue.pop();
+    std::vector<std::string> command2out(cmdout.begin(), cmdout.end());
+    EXPECT_EQ(command2out, command2);
 }
 
 TEST (read_commands, none_valid) { 
@@ -210,7 +203,9 @@ TEST (read_commands, bad_debug_command) {
     EXPECT_EQ(command_queue.size(), 1);
 
     std::vector<std::string> command1 {"debug"};
-    EXPECT_EQ(command_queue.pop(), command1);
+    UCICommand cmdout = command_queue.pop();
+    std::vector<std::string> command1out(cmdout.begin(), cmdout.end());
+    EXPECT_EQ(command1out, command1);
     EXPECT_EQ(G_debug, false);
 }
 
@@ -235,10 +230,8 @@ TEST (is_go_subcommand, False) {
 }
 
 TEST (process_position, pawn_single_forward_white) { 
-    std::vector<std::string> command1 {"position", "startpos", "moves", "a2a3"};
-    std::vector<std::string> command2 {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("position startpos moves a2a3"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
 
@@ -246,10 +239,8 @@ TEST (process_position, pawn_single_forward_white) {
 }
 
 TEST (process_position, pawn_single_forward_black) { 
-    std::vector<std::string> command1 {"position", "startpos", "moves", "a2a3", "a7a6"};
-    std::vector<std::string> command2 {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("position startpos moves a2a3 a7a6"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
 
@@ -257,10 +248,10 @@ TEST (process_position, pawn_single_forward_black) {
 }
 
 TEST (process_position, white_castle_kingside) { 
-    std::vector<std::string> command1 {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R", "w", "KQkq", "-", "0", "1", "moves", "e1g1"};
-    std::vector<std::string> command2 {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    
+
+    command_queue.push(UCICommand("position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R w KQkq - 0 1 moves e1g1"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
 
@@ -268,10 +259,8 @@ TEST (process_position, white_castle_kingside) {
 }
 
 TEST (process_position, black_castle_kingside) { 
-    std::vector<std::string> command1 {"position", "rnbqk2r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "b", "KQkq", "-", "0", "1", "moves", "e8g8"};
-    std::vector<std::string> command2 {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("position rnbqk2r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1 moves e8g8"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
 
@@ -279,10 +268,8 @@ TEST (process_position, black_castle_kingside) {
 }
 
 TEST (process_position, white_castle_queenside) { 
-    std::vector<std::string> command1 {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R3KBNR", "w", "KQkq", "-", "0", "1", "moves", "e1c1"};
-    std::vector<std::string> command2 {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R3KBNR w KQkq - 0 1 moves e1c1"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
 
@@ -290,10 +277,8 @@ TEST (process_position, white_castle_queenside) {
 }
 
 TEST (process_position, black_castle_queenside) { 
-    std::vector<std::string> command1 {"position", "r3kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "b", "KQkq", "-", "0", "1", "moves", "e8c8"};
-    std::vector<std::string> command2 {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("position r3kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1 moves e8c8"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
 
@@ -301,10 +286,8 @@ TEST (process_position, black_castle_queenside) {
 }
 
 TEST (process_position, white_knight) { 
-    std::vector<std::string> command1 {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "w", "KQkq", "-", "0", "1", "moves", "g1f3"};
-    std::vector<std::string> command2 {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 moves g1f3"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
 
@@ -312,13 +295,10 @@ TEST (process_position, white_knight) {
 }
 
 TEST (process_position, black_knight) { 
-    std::vector<std::string> command1 {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "b", "KQkq", "-", "0", "1", "moves", "g8f6"};
-    std::vector<std::string> command2 {"quit"};
-    command_queue.push(command1);
-    command_queue.push(command2);
+    command_queue.push(UCICommand("position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1 moves g8f6"));
+    command_queue.push(UCICommand("quit"));
 
     process_commands();
 
     EXPECT_EQ(G_game_position->to_fen_string(), "rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1 2");
 }
-

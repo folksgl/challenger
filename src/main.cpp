@@ -1,13 +1,14 @@
 #include <thread>
 #include "game_variables.hpp"
 #include "uci.hpp"
+#include "uci_command.hpp"
 
 using namespace std;
 
 bool G_debug;
 Position* G_game_position;
 SliderAttacks slider_attacks;
-ThreadSafeQueue<uci_command> command_queue;
+ThreadSafeQueue<UCICommand> command_queue;
 
 int main()
 {

@@ -2,35 +2,25 @@
 #include <regex>
 #include "uci.hpp"
 #include "game_variables.hpp"
+#include "uci_command.hpp"
 
 using namespace std;
 
 void read_commands(std::istream& is) {
-    std::set<std::string> command_set { "uci", "debug", "isready", "setoption", "register", "ucinewgame", "position", "go", "stop", "ponderhit", "quit"};
 
     std::string input_string;
     while (std::getline(is, input_string)) {
-        // Remove all leading, trailing, and double spaces in the input text
-        input_string = std::regex_replace(input_string, std::regex("^ +| +$|( ) +"), "$1");
+        try {
+            UCICommand command = UCICommand(input_string);
+            command_queue.push(command);
 
-        // Split the input string into tokens (delimited by space)
-        std::istringstream iss(input_string);
-        uci_command results(std::istream_iterator<std::string>{iss},
-                                 std::istream_iterator<std::string>());
-
-        if (results.empty()) {
-            continue;
+            // Exit the thread function on "quit" commands. Allows main thread to join command producer.
+            if (command.is_quit_command()) {
+                return;
+            }
         }
-
-        // Only push commands to the queue that look like valid gui -> engine commands.
-        bool contained_uci_command = command_set.find(results[0]) != command_set.end();
-        if (contained_uci_command) {
-            command_queue.push(results);
-        }
-
-        // Exit the thread function on "quit" commands. Allows main thread to join command producer.
-        if (results[0] == "quit") {
-            return;
+        catch (std::invalid_argument &ia) {
+            continue; // Just ignore bad command inputs and read the next line
         }
     }
 }
