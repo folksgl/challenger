@@ -5,6 +5,7 @@
 #include <vector>
 #include <iterator>
 #include <exception>
+#include "position.hpp"
 
 class UCICommand {
     private:
@@ -24,5 +25,8 @@ class UCICommand {
         }
 
         bool is_quit_command();
+        void execute();
 };
+
+std::string find_move_taken(Position* initial, Position* next);
 #endif
