@@ -125,17 +125,7 @@ TEST (process_commands, go_quit_nullpos) {
     EXPECT_EQ(output, "Fatal error, no moves found.\n");
 }
 
-TEST (process_commands, bad_debug_command) { 
-    command_queue.push(UCICommand("debug"));
-    command_queue.push(UCICommand("quit"));
-
-    process_commands();
-    EXPECT_FALSE(G_debug);
-}
-
 TEST (process_commands, w_pawn_promotion) { 
-    std::vector<string> command1 = {};
-
     command_queue.push(UCICommand("position 2bqk1nr/Ppp2ppp/4p3/2Np1b2/2nP1B2/4P3/PPP2P1P/RNBQK2R w - - 0 1 moves a7a8Q"));
     command_queue.push(UCICommand("quit"));
 
@@ -194,19 +184,6 @@ TEST (read_commands, empty_blank) {
     read_commands(iss);
 
     EXPECT_EQ(command_queue.size(), 0);
-}
-
-TEST (read_commands, bad_debug_command) { 
-    std::istringstream iss("     debug");
-    read_commands(iss);
-
-    EXPECT_EQ(command_queue.size(), 1);
-
-    std::vector<std::string> command1 {"debug"};
-    UCICommand cmdout = command_queue.pop();
-    std::vector<std::string> command1out(cmdout.begin(), cmdout.end());
-    EXPECT_EQ(command1out, command1);
-    EXPECT_EQ(G_debug, false);
 }
 
 TEST (is_go_subcommand, True) { 
