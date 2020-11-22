@@ -23,8 +23,6 @@ void process_position_command(command_iter begin, command_iter end);
 
 void process_go_command(command_iter begin, command_iter end);
 
-std::string find_move_taken(Position* initial, Position* next);
-
 void process_stop_command();
 
 void process_ponderhit_command();
