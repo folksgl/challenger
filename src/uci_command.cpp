@@ -176,9 +176,10 @@ void UCICommand::execute() {
             }
         }
         else {
+            // std::accumulate builds fen string from vector<string> using lambda that concatenate strings with ' ' between them.
             auto space_fold = [](const std::string& a, const std::string& b) { return a + ' ' + b; };
-            std::string fen = std::accumulate(command_list.begin() + 1, command_list.begin() + 7, std::string(), space_fold);
-            fen.erase(0, 1); // Erase leading ' ' from space_fold_function
+            std::string fen = std::accumulate(command_list.begin() + 2, command_list.begin() + 7, std::string(command_list[1]), space_fold);
+
             G_game_position = new Position(fen);
 
             if (command_list.size() > 7) {
