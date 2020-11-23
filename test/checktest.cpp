@@ -2,6 +2,7 @@
 #include "../src/genmove.hpp"
 #include "../src/uci.hpp"
 #include "../src/common.hpp"
+#include "../src/uci_command.hpp"
 #include <string>
 
 using namespace std;
