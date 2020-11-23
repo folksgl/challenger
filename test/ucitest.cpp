@@ -18,22 +18,22 @@ std::string process_with_capture() {
 }
 
 TEST (process_command, debug_on) { 
-    std::vector<string> commands = {"debug", "on"};
-    process_debug_command(commands.begin(), commands.end());
+    UCICommand command("debug on");
+    command.execute();
 
     ASSERT_TRUE(G_debug);
 }
 
 TEST (process_command, debug_off) { 
-    std::vector<string> commands = {"debug", "off"};
-    process_debug_command(commands.begin(), commands.end());
+    UCICommand command("debug off");
+    command.execute();
 
     ASSERT_FALSE(G_debug);
 }
 
 TEST (process_command, position_startpos) { 
-    std::vector<string> commands = {"position", "startpos"};
-    process_position_command(commands.begin(), commands.end());
+    UCICommand command("position startpos");
+    command.execute();
 
     string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -41,10 +41,8 @@ TEST (process_command, position_startpos) {
 }
 
 TEST (process_command, position_pawns_forward) { 
-    std::vector<string> commands = {"position", "startpos", "moves", "a2a4", "a7a5", "b2b4",
-                                    "b7b5", "c2c4", "c7c5", "d2d4", "d7d5", "e2e4", "e7e5",
-                                    "f2f4", "f7f5", "g2g4", "g7g5", "h2h4", "h7h5"};
-    process_position_command(commands.begin(), commands.end());
+    UCICommand command("position startpos moves a2a4 a7a5 b2b4 b7b5 c2c4 c7c5 d2d4 d7d5 e2e4 e7e5 f2f4 f7f5 g2g4 g7g5 h2h4 h7h5");
+    command.execute();
     
     string fen = "rnbqkbnr/8/8/pppppppp/PPPPPPPP/8/8/RNBQKBNR w KQkq h6 0 9";
 
@@ -52,21 +50,17 @@ TEST (process_command, position_pawns_forward) {
 }
 
 TEST (process_command, position_startpos_as_fen) { 
-    std::vector<string> commands = {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "w",
-                                    "KQkq", "-", "0", "1"};
-    process_position_command(commands.begin(), commands.end());
+    UCICommand command("position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    command.execute();
 
     string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     ASSERT_EQ (G_game_position->to_fen_string(), fen);
 }
 
-TEST (process_command, position_pawns_forward_as_fen) { 
-    std::vector<string> commands = {"position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "w",
-                                    "KQkq", "-", "0", "1", "moves", "a2a4", "a7a5", "b2b4", "b7b5",
-                                    "c2c4", "c7c5", "d2d4", "d7d5", "e2e4", "e7e5", "f2f4", "f7f5",
-                                    "g2g4", "g7g5", "h2h4", "h7h5"};
-    process_position_command(commands.begin(), commands.end());
+TEST (process_command, position_pawns_forward_as_fen) {
+    UCICommand command("position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 moves a2a4 a7a5 b2b4 b7b5 c2c4 c7c5 d2d4 d7d5 e2e4 e7e5 f2f4 f7f5 g2g4 g7g5 h2h4 h7h5");
+    command.execute();
 
     string fen = "rnbqkbnr/8/8/pppppppp/PPPPPPPP/8/8/RNBQKBNR w KQkq h6 0 9";
 
@@ -184,26 +178,6 @@ TEST (read_commands, empty_blank) {
     read_commands(iss);
 
     EXPECT_EQ(command_queue.size(), 0);
-}
-
-TEST (is_go_subcommand, True) { 
-    EXPECT_TRUE(is_go_subcommand("searchmoves"));
-    EXPECT_TRUE(is_go_subcommand("ponder"));
-    EXPECT_TRUE(is_go_subcommand("wtime"));
-    EXPECT_TRUE(is_go_subcommand("btime"));
-    EXPECT_TRUE(is_go_subcommand("winc"));
-    EXPECT_TRUE(is_go_subcommand("binc"));
-    EXPECT_TRUE(is_go_subcommand("movestogo"));
-    EXPECT_TRUE(is_go_subcommand("depth"));
-    EXPECT_TRUE(is_go_subcommand("nodes"));
-    EXPECT_TRUE(is_go_subcommand("mate"));
-    EXPECT_TRUE(is_go_subcommand("movetime"));
-    EXPECT_TRUE(is_go_subcommand("infinite"));
-}
-
-TEST (is_go_subcommand, False) { 
-    EXPECT_FALSE(is_go_subcommand("not"));
-    EXPECT_FALSE(is_go_subcommand("subcommands"));
 }
 
 TEST (process_position, pawn_single_forward_white) { 
