@@ -1,7 +1,4 @@
-#include <set>
-#include <regex>
 #include "uci.hpp"
-#include "game_variables.hpp"
 #include "uci_command.hpp"
 
 using namespace std;
@@ -30,9 +27,6 @@ void read_commands(std::istream& is) {
  *  processes the instructions given to manipulate game progression.
  */
 void process_commands() {
-
-    std::string command; // The first token of uci_input that should be a uci command
-
     while (true) {
         UCICommand command = command_queue.pop();
         if (command.is_quit_command()) {
