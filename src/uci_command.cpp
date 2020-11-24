@@ -41,16 +41,6 @@ bool UCICommand::is_quit_command() {
     return command_list.size() == 1 and command_list[0] == "quit";
 }
 
-int string_to_int(std::string num) {
-    try {
-        return std::stoi(num);
-    }
-    catch (std::invalid_argument& ia) {
-        std::cout << "Invalid string passed to std::stoi during command execution.";
-        throw;
-    }
-}
-
 string find_move_taken(Position* initial, Position* next) {
     std::string src  = "notset";
     std::string dest = "notset";
@@ -248,31 +238,32 @@ void UCICommand::execute() {
                 elem--;
             }
             else if (*elem == "wtime") {
-                info.wtime = string_to_int(*(++elem));
+                info.wtime = std::stoi(*(++elem));
+
             }
             else if (*elem == "btime") {
-                info.btime = string_to_int(*(++elem));
+                info.btime = std::stoi(*(++elem));
             }
             else if (*elem == "winc") {
-                info.winc = string_to_int(*(++elem));
+                info.winc = std::stoi(*(++elem));
             }
             else if (*elem == "binc") {
-                info.binc = string_to_int(*(++elem));
+                info.binc = std::stoi(*(++elem));
             }
             else if (*elem == "movestogo") {
-                info.movestogo = string_to_int(*(++elem));
+                info.movestogo = std::stoi(*(++elem));
             }
             else if (*elem == "depth") {
-                info.depth = string_to_int(*(++elem));
+                info.depth = std::stoi(*(++elem));
             }
             else if (*elem == "nodes") {
-                info.nodes = string_to_int(*(++elem));
+                info.nodes = std::stoi(*(++elem));
             }
             else if (*elem == "mate") {
-                info.mate = string_to_int(*(++elem));
+                info.mate = std::stoi(*(++elem));
             }
             else if (*elem == "movetime") {
-                info.movetime = string_to_int(*(++elem));
+                info.movetime = std::stoi(*(++elem));
             }
             else if (*elem == "infinite") {
                 info.infinite = true;
