@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// Global variable definitions. Declarations in game_variables.hpp
 bool G_debug;
 Position* G_game_position;
 SliderAttacks slider_attacks;
