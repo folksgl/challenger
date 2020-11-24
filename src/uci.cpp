@@ -1,8 +1,14 @@
 #include "uci.hpp"
 #include "uci_command.hpp"
+#include "game_variables.hpp"
 
 using namespace std;
 
+/* 
+ *  read_commands is the "producer" in the producer/consumer pattern for adding
+ *  and removing UCICommand objects to the shared command_queue. It will read
+ *  commands from the input stream and push new commands to the queue.
+ */
 void read_commands(std::istream& is) {
 
     std::string input_string;
@@ -22,9 +28,10 @@ void read_commands(std::istream& is) {
     }
 }
 
-/*
- *  process_commands reads in input from a UCICommandQueue and
- *  processes the instructions given to manipulate game progression.
+/* 
+ *  process_commands is the "consumer" in the producer/consumer pattern for adding
+ *  and removing UCICommand objects to the shared command_queue. It will remove
+ *  commands from the queue modify the game accordingly.
  */
 void process_commands() {
     while (true) {
