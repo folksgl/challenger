@@ -358,7 +358,6 @@ void Position::castle(Castling_names type) {
 
     // reset the en passant square.
     passant_sq = 0;
-    string removechars = "KQ";
 
     if (type == c_w_king) {
         maps[w_king] xor_eq 0x0000000000000050;
