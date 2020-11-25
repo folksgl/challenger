@@ -51,13 +51,19 @@ string find_move_taken(Position* initial, Position* next) {
 
     bool white_turn = initial->is_white_move;
 
-    // Begin castling check
-    bitboard initial_king = white_turn ? initial->maps[w_king] : initial->maps[b_king];
-    bitboard next_king = white_turn ? next->maps[w_king] : next->maps[b_king];
+    // Begin castling check first to shortcircuit (needed to prevent logic failures caused by multiple piece 
+    // movements of the same color caused during castling). An XOR of the two king bitboards will return only
+    // the bits that were changed between the two positions.
+    bitboard initial_king, next_king;
+    if (white_turn) {
+        initial_king = initial->maps[w_king];
+        next_king = next->maps[w_king];
+    }
+    else {
+        initial_king = initial->maps[b_king];
+        next_king = next->maps[b_king];
+    }
 
-    // An of the two king bitboards will return only the bits that were changed between the two positions.
-    // Castling and promotions are the only move that changes the position of two pieces of the same color,
-    // and thus can't be checked along with the other "normal" moves.
     bitboard moved_king_bits = initial_king xor next_king;
     if (moved_king_bits) {
         bitboard src_bit = lsb_unsafe(moved_king_bits bitand initial_king);
@@ -65,48 +71,61 @@ string find_move_taken(Position* initial, Position* next) {
         return bit_to_square_arr[src_bit] + bit_to_square_arr[dest_bit];
     }
 
-    // Normal moves will be set here. (i.e. not castling/promotion)
-    bitboard initial_pieces = (white_turn) ? initial->maps[w_pieces] : initial->maps[b_pieces];
-    bitboard next_pieces = (white_turn) ? next->maps[w_pieces] : next->maps[b_pieces];
+    // Non-castling moves will be set here. An XOR of the color to play will return only the bits that
+    // changed between the two positions. A bitwise AND between this value and the initial/next boards
+    // reveals the src and dest squares.
+    bitboard initial_pieces, next_pieces;
+    if (white_turn) {
+        initial_pieces = initial->maps[w_pieces];
+        next_pieces = next->maps[w_pieces];
+    }
+    else {
+        initial_pieces = initial->maps[b_pieces];
+        next_pieces = next->maps[b_pieces];
+    }
 
-    // An XOR of the color to play will return only the bits that changed as a result of the move taken.
-    // Bitwise AND between this value and the initial/next boards reveals the src and dest squares.
     bitboard moved_bits = initial_pieces xor next_pieces;
     std::string src = bit_to_square_arr[lsb_unsafe(moved_bits bitand initial_pieces)];
     std::string dest = bit_to_square_arr[lsb_unsafe(moved_bits bitand next_pieces)];
 
-    int dest_square = lsb_unsafe(moved_bits bitand next_pieces);
-
-    // Begin check for pawn promotion
-    bitboard initial_pawn = (white_turn) ? initial->maps[w_pawn] : initial->maps[b_pawn];
-    bitboard next_pawn = (white_turn) ? next->maps[w_pawn] : next->maps[b_pawn];
-
+    // Check for pawn promotion by checking if the player to move lost a pawn while it was their move.
+    // Then check for the promoted piece by counting the differences in number between initial and next.
+    bitboard initial_pawn, next_pawn;
     if (white_turn) {
-        initial_pawn &= rank_7;
-        next_pawn &= rank_7;
+        initial_pawn = initial->maps[w_pawn];
+        next_pawn = next->maps[w_pawn];
     }
     else {
-        initial_pawn &= rank_2;
-        next_pawn &= rank_2;
-    } 
-
-    // Pawn promotion happened, adjust movestring
-    if (initial_pawn != next_pawn) {
-        bitboard square = square_bit(dest_square);
-        if (white_turn) {
-            if (square bitand next->maps[w_queen])  { dest += "Q"; }
-            else if (square bitand next->maps[w_bishop]) { dest += "B"; }
-            else if (square bitand next->maps[w_knight]) { dest += "N"; }
-            else if (square bitand next->maps[w_rook])   { dest += "R"; }
-        }
-        else {
-            if (square bitand next->maps[b_queen])  { dest += "q"; }
-            else if (square bitand next->maps[b_bishop]) { dest += "b"; }
-            else if (square bitand next->maps[b_knight]) { dest += "n"; }
-            else if (square bitand next->maps[b_rook])   { dest += "r"; }
-        }
+        initial_pawn = initial->maps[b_pawn];
+        next_pawn = next->maps[b_pawn];
     }
 
+    if (popcount(next_pawn) < popcount(initial_pawn)) {
+        if (popcount(next->maps[w_queen]) > popcount(initial->maps[w_queen])) {
+            dest += "Q";
+        }
+        else if (popcount(next->maps[b_queen]) > popcount(initial->maps[b_queen])) {
+            dest += "q";
+        }
+        else if (popcount(next->maps[w_knight]) > popcount(initial->maps[w_knight])) {
+            dest += "N";
+        }
+        else if (popcount(next->maps[b_knight]) > popcount(initial->maps[b_knight])) {
+            dest += "n";
+        }
+        else if (popcount(next->maps[w_rook]) > popcount(initial->maps[w_rook])) {
+            dest += "R";
+        }
+        else if (popcount(next->maps[b_rook]) > popcount(initial->maps[b_rook])) {
+            dest += "r";
+        }
+        else if (popcount(next->maps[w_bishop]) > popcount(initial->maps[w_bishop])) {
+            dest += "B";
+        }
+        else if (popcount(next->maps[b_bishop]) > popcount(initial->maps[b_bishop])) {
+            dest += "b";
+        }
+    }
     return src + dest;
 }
 
