@@ -41,9 +41,13 @@ bool UCICommand::is_quit_command() {
     return command_list.size() == 1 and command_list[0] == "quit";
 }
 
+/*
+ *  find_move_taken takes two positions and attempts to find the move that was taken to get from
+ *  'initial' to 'next' and return this value as a string. e.g. "a2a4". It does no validation of
+ *  whether the move taken was legal or not and does not guarantee that a move between the two
+ *  positions is possible.
+ */
 string find_move_taken(Position* initial, Position* next) {
-    std::string src  = "notset";
-    std::string dest = "notset";
 
     bool white_turn = initial->is_white_move;
 
@@ -65,49 +69,33 @@ string find_move_taken(Position* initial, Position* next) {
     // Castling occured, adjust movestring
     if ((initial_king != next_king) and (initial_rook != next_rook)) {
         if (white_turn) {
-            src  = "e1";
-            if ((initial_rook bitand square_bit(0)) and not (next_rook bitand square_bit(0))) {
-                dest = "c1";
+            if ((initial_rook xor next_rook) bitand square_bit(0)) {
+                return "e1c1";
             }
             else {
-                dest = "g1";
+                return "e1g1";
             }
         }
         else {
-            src = "e8";
-            if ((initial_rook bitand square_bit(63)) and not (next_rook bitand square_bit(63))) {
-                dest = "g8";
+            if ((initial_rook xor next_rook) bitand square_bit(63)) {
+                return "e8g8";
             }
             else {
-                dest = "c8";
+                return "e8c8";
             }
         }
-        return src + dest;
     }
 
     bitboard initial_pieces = (white_turn) ? initial->maps[w_pieces] : initial->maps[b_pieces];
     bitboard next_pieces = (white_turn) ? next->maps[w_pieces] : next->maps[b_pieces];
 
-    int dest_square = 0;
-
     // Normal moves will be set here. (i.e. not castling/promotion)
-    for (int i = 0; i < 64; i++) {
-        // check set bits
-        if (initial_pieces bitand square_bit(i)) {
-            // Set bit was changed to unset
-            if (!(next_pieces bitand square_bit(i))) {
-                src = bit_to_square.at(square_bit(i));
-            }
-        }
-        // check unset bits
-        else {
-            if (next_pieces bitand square_bit(i)) {
-                dest_square = i;
-                dest = bit_to_square.at(square_bit(i));
-            }
-        }
-    }
+    bitboard moved_bits = initial_pieces xor next_pieces;
+    std::string src = bit_to_square_arr[lsb_unsafe(moved_bits bitand initial_pieces)];
+    std::string dest = bit_to_square_arr[lsb_unsafe(moved_bits bitand next_pieces)];
+    int dest_square = lsb_unsafe(moved_bits bitand next_pieces);
 
+    // Begin chec 
     bitboard initial_pawn = (white_turn) ? initial->maps[w_pawn] : initial->maps[b_pawn];
     bitboard next_pawn = (white_turn) ? next->maps[w_pawn] : next->maps[b_pawn];
 
@@ -122,17 +110,18 @@ string find_move_taken(Position* initial, Position* next) {
 
     // Pawn promotion happened, adjust movestring
     if (initial_pawn != next_pawn) {
+        bitboard square = square_bit(dest_square);
         if (white_turn) {
-            if (square_bit(dest_square) bitand next->maps[w_queen])  { dest += "Q"; }
-            if (square_bit(dest_square) bitand next->maps[w_bishop]) { dest += "B"; }
-            if (square_bit(dest_square) bitand next->maps[w_knight]) { dest += "N"; }
-            if (square_bit(dest_square) bitand next->maps[w_rook])   { dest += "R"; }
+            if (square bitand next->maps[w_queen])  { dest += "Q"; }
+            else if (square bitand next->maps[w_bishop]) { dest += "B"; }
+            else if (square bitand next->maps[w_knight]) { dest += "N"; }
+            else if (square bitand next->maps[w_rook])   { dest += "R"; }
         }
         else {
-            if (square_bit(dest_square) bitand next->maps[b_queen])  { dest += "q"; }
-            if (square_bit(dest_square) bitand next->maps[b_bishop]) { dest += "b"; }
-            if (square_bit(dest_square) bitand next->maps[b_knight]) { dest += "n"; }
-            if (square_bit(dest_square) bitand next->maps[b_rook])   { dest += "r"; }
+            if (square bitand next->maps[b_queen])  { dest += "q"; }
+            else if (square bitand next->maps[b_bishop]) { dest += "b"; }
+            else if (square bitand next->maps[b_knight]) { dest += "n"; }
+            else if (square bitand next->maps[b_rook])   { dest += "r"; }
         }
     }
 
