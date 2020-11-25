@@ -51,51 +51,33 @@ string find_move_taken(Position* initial, Position* next) {
 
     bool white_turn = initial->is_white_move;
 
-    bitboard initial_king, initial_rook, next_king, next_rook;
+    // Begin castling check
+    bitboard initial_king = white_turn ? initial->maps[w_king] : initial->maps[b_king];
+    bitboard next_king = white_turn ? next->maps[w_king] : next->maps[b_king];
 
-    if (white_turn) {
-        initial_king = initial->maps[w_king];
-        initial_rook = initial->maps[w_rook];
-        next_king = next->maps[w_king];
-        next_rook = next->maps[w_rook];
-    }
-    else {
-        initial_king = initial->maps[b_king];
-        initial_rook = initial->maps[b_rook];
-        next_king = next->maps[b_king];
-        next_rook = next->maps[b_rook];
-    }
-
-    // Castling occured, adjust movestring
-    if ((initial_king != next_king) and (initial_rook != next_rook)) {
-        if (white_turn) {
-            if ((initial_rook xor next_rook) bitand square_bit(0)) {
-                return "e1c1";
-            }
-            else {
-                return "e1g1";
-            }
-        }
-        else {
-            if ((initial_rook xor next_rook) bitand square_bit(63)) {
-                return "e8g8";
-            }
-            else {
-                return "e8c8";
-            }
-        }
+    // An of the two king bitboards will return only the bits that were changed between the two positions.
+    // Castling and promotions are the only move that changes the position of two pieces of the same color,
+    // and thus can't be checked along with the other "normal" moves.
+    bitboard moved_king_bits = initial_king xor next_king;
+    if (moved_king_bits) {
+        bitboard src_bit = lsb_unsafe(moved_king_bits bitand initial_king);
+        bitboard dest_bit = lsb_unsafe(moved_king_bits bitand next_king);
+        return bit_to_square_arr[src_bit] + bit_to_square_arr[dest_bit];
     }
 
+    // Normal moves will be set here. (i.e. not castling/promotion)
     bitboard initial_pieces = (white_turn) ? initial->maps[w_pieces] : initial->maps[b_pieces];
     bitboard next_pieces = (white_turn) ? next->maps[w_pieces] : next->maps[b_pieces];
 
-    // Normal moves will be set here. (i.e. not castling/promotion)
+    // An XOR of the color to play will return only the bits that changed as a result of the move taken.
+    // Bitwise AND between this value and the initial/next boards reveals the src and dest squares.
     bitboard moved_bits = initial_pieces xor next_pieces;
     std::string src = bit_to_square_arr[lsb_unsafe(moved_bits bitand initial_pieces)];
     std::string dest = bit_to_square_arr[lsb_unsafe(moved_bits bitand next_pieces)];
+
     int dest_square = lsb_unsafe(moved_bits bitand next_pieces);
 
-    // Begin chec 
+    // Begin check for pawn promotion
     bitboard initial_pawn = (white_turn) ? initial->maps[w_pawn] : initial->maps[b_pawn];
     bitboard next_pawn = (white_turn) ? next->maps[w_pawn] : next->maps[b_pawn];
 
