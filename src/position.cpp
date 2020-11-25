@@ -3,6 +3,7 @@
 #include "genmove.hpp"
 #include "game_variables.hpp"
 #include <cctype>
+#include <numeric>
 #include <string.h>
 #include <sstream>
 #include <iterator>
@@ -52,11 +53,7 @@ void Position::set_piece_positions(std::string str) {
     // Split string on '/' character and reverse all strings in the resulting vector
     std::vector<std::string> piece_strings = split(str , '/');
     std::transform(piece_strings.begin(), piece_strings.end(), piece_strings.begin(), [](std::string str) { std::reverse(str.begin(), str.end()); return str;});
-
-    string bit_oriented_string;
-    for (const auto &str : piece_strings) {
-        bit_oriented_string += str;
-    }
+    string bit_oriented_string = std::accumulate(piece_strings.begin(), piece_strings.end(), std::string());
 
     // Populate the Position from bit_oriented_string.
     int sq_num = 63;
