@@ -90,17 +90,17 @@ string find_move_taken(Position* initial, Position* next) {
 
     // Check for pawn promotion by checking if the player to move lost a pawn while it was their move.
     // Then check for the promoted piece by counting the differences in number between initial and next.
-    bitboard initial_pawn, next_pawn;
+    int initial_pawn_count, next_pawn_count;
     if (white_turn) {
-        initial_pawn = initial->maps[w_pawn];
-        next_pawn = next->maps[w_pawn];
+        initial_pawn_count = popcount(initial->maps[w_pawn]);
+        next_pawn_count = popcount(next->maps[w_pawn]);
     }
     else {
-        initial_pawn = initial->maps[b_pawn];
-        next_pawn = next->maps[b_pawn];
+        initial_pawn_count = popcount(initial->maps[b_pawn]);
+        next_pawn_count = popcount(next->maps[b_pawn]);
     }
 
-    if (popcount(next_pawn) < popcount(initial_pawn)) {
+    if (next_pawn_count < initial_pawn_count) {
         if (popcount(next->maps[w_queen]) > popcount(initial->maps[w_queen])) {
             dest += "Q";
         }
