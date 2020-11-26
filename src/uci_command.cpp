@@ -216,6 +216,10 @@ void UCICommand::execute() {
         }
     }
     else if (begin_token == "go") {
+        // Ensure that we don't start searching on a NULL position
+        if (G_game_position == NULL) {
+            cout << "Fatal error, no game found." << endl;
+        }
         search_info info;
         auto elem = command_list.begin(); // elem points to first token after "go"
         std::set<std::string> subcommands{"searchmoves", "ponder", "wtime", "btime", "winc", "binc",
@@ -260,10 +264,7 @@ void UCICommand::execute() {
             }
         }
         search(G_game_position, info.depth);
-        if (G_game_position == NULL) {
-            cout << "Fatal error, no game found." << endl;
-        }
-        else if (G_game_position->moves.empty()) {
+        if (G_game_position->moves.empty()) {
             cout << "Fatal error, no moves found." << endl;
         }
         else {
