@@ -19,7 +19,7 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
     return tokens;
 }
 
-Position::Position(string fen) {
+Position::Position(std::string fen) {
 
     std::vector<std::string> results = split(fen, ' ');
 
@@ -53,7 +53,7 @@ void Position::set_piece_positions(std::string str) {
     // Split string on '/' character and reverse all strings in the resulting vector
     std::vector<std::string> piece_strings = split(str , '/');
     std::transform(piece_strings.begin(), piece_strings.end(), piece_strings.begin(), [](std::string str) { std::reverse(str.begin(), str.end()); return str;});
-    string bit_oriented_string = std::accumulate(piece_strings.begin(), piece_strings.end(), std::string());
+    std::string bit_oriented_string = std::accumulate(piece_strings.begin(), piece_strings.end(), std::string());
 
     // Populate the Position from bit_oriented_string.
     int sq_num = 63;
@@ -171,7 +171,7 @@ void Position::set_fullmove_number(std::string str) {
 /*
  *  move performs the move given in the move string for the Position.
  */
-void Position::move(const string& move, const int moving_piece) {
+void Position::move(const std::string& move, const int moving_piece) {
 
     // Extract start and destination squares from the move
     int start_square = get_square_num(move[0], move[1]);
@@ -254,7 +254,7 @@ void Position::move(const string& move, const int moving_piece) {
 /*
  *  move_pawn_promotion performs pawn promotion given in the move string
  */
-void Position::move_pawn_promotion(const string& move) {
+void Position::move_pawn_promotion(const std::string& move) {
 
     // Extract start and destination squares from the move
     int start_square = get_square_num(move[0], move[1]);
@@ -314,7 +314,7 @@ void Position::move_pawn_promotion(const string& move) {
 /*
  *  move_pawn_double_forward() performs pawn promotion given in the move string on board_position.
  */
-void Position::move_pawn_double_forward(const string& move) {
+void Position::move_pawn_double_forward(const std::string& move) {
 
     if (move.length() != 4) {
         // Malformed move string, ignore move and don't change the position.
@@ -427,7 +427,7 @@ int Position::get_moving_piece(int square) {
 
 bool Position::is_square_attacked(bitboard square) {
 
-    if (not square) return false;
+    if (not square) return false; // Square was 0, which is not valid
 
     bitboard whole_board = maps[w_pieces] bitor maps[b_pieces];
     bitboard pawns, bishops, rooks, knights, king, attackers;
@@ -462,8 +462,8 @@ bool Position::is_square_attacked(bitboard square) {
     return attackers;
 }
 
-string Position::to_fen_string() {
-    string fenstring = "";
+std::string Position::to_fen_string() {
+    std::string fenstring = "";
 
     // Loop through all 64 squares on the board
     for (int i = 63; i >= 0; i--) {
