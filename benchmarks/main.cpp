@@ -7,7 +7,7 @@ using namespace std;
 bool G_debug;
 Position* G_game_position;
 SliderAttacks slider_attacks;
-UCICommandQueue<uci_command> command_queue;
+ThreadSafeQueue<UCICommand> command_queue;
 
 unsigned long long positions_generated;
 unsigned long long positions_searched;
