@@ -1,5 +1,7 @@
 #include "gtest/gtest.h"
+#include "../src/game_variables.hpp"
 #include "../src/uci_command.hpp"
+#include "../src/uci.hpp"
 
 using namespace std;
 
@@ -256,4 +258,27 @@ TEST (ucicommandtest_quit_regex, bad_quit_commands) {
     ASSERT_THROW(UCICommand("quit quit"), std::invalid_argument);
     ASSERT_THROW(UCICommand("go quit"), std::invalid_argument);
     ASSERT_THROW(UCICommand("quit isready"), std::invalid_argument);
+}
+
+TEST (ucicommandtest_execute, correct_go_command_parsing) {
+    command_queue.push(UCICommand("position startpos"));
+    command_queue.push(UCICommand("go wtime 123 btime 321 searchmoves a2a1 a4a6q depth 3"));
+    command_queue.push(UCICommand("quit"));
+
+    process_commands();
+
+    ASSERT_EQ(G_info.wtime, 123);
+    ASSERT_EQ(G_info.btime, 321);
+    ASSERT_EQ(G_info.searchmoves.size(), 2);
+    ASSERT_EQ(G_info.searchmoves[0], "a2a1");
+    ASSERT_EQ(G_info.searchmoves[1], "a4a6q");
+    ASSERT_EQ(G_info.depth, 3);
+}
+
+TEST (ucicommandtest_is_quit, quit_commands) {
+    UCICommand quit_command("quit");
+    UCICommand not_quit_command("position startpos");
+
+    ASSERT_TRUE(quit_command.is_quit_command());
+    ASSERT_FALSE(not_quit_command.is_quit_command());
 }

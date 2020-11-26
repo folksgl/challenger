@@ -226,14 +226,13 @@ void UCICommand::execute() {
                                           "movestogo", "depth", "nodes", "mate", "movetime", "infinite"};
         while (++elem != command_list.end()) {
             if (*elem == "searchmoves") {
-                while(++elem != command_list.end() and subcommands.find(*elem) != subcommands.end()) {
+                while(++elem != command_list.end() and subcommands.find(*elem) == subcommands.end()) {
                     info.searchmoves.push_back(std::string(*elem));
                 }
                 elem--;
             }
             else if (*elem == "wtime") {
                 info.wtime = std::stoi(*(++elem));
-
             }
             else if (*elem == "btime") {
                 info.btime = std::stoi(*(++elem));
@@ -263,7 +262,8 @@ void UCICommand::execute() {
                 info.infinite = true;
             }
         }
-        search(G_game_position, info.depth);
+        G_info = info;
+        search(G_game_position, G_info.depth);
         if (G_game_position->moves.empty()) {
             cout << "Fatal error, no moves found." << endl;
         }
