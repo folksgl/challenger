@@ -48,7 +48,7 @@ void Position::evaluate() {
  *  set_piece_positions sets the value of all the bitboards in a Position
  *  to the values found in fen_tok.
  */
-void Position::set_piece_positions(std::string str) {
+void Position::set_piece_positions(const std::string& str) {
 
     // Split string on '/' character and reverse all strings in the resulting vector
     std::vector<std::string> piece_strings = split(str , '/');

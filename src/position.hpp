@@ -83,7 +83,7 @@ class Position {
 
         // Functions
 
-        void set_piece_positions(std::string);
+        void set_piece_positions(const std::string&);
         void set_active_color(std::string);
         void set_castling_rights(std::string);
         void set_passant_target_sq(std::string);
