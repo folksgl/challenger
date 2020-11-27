@@ -56,8 +56,7 @@ class Position {
         short full_num = 0;
 
         // Constructors
-        Position(void) : Position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {}
-        explicit Position(std::string fen);
+        Position(const std::string& fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         Position(const Position& other) :
             maps(other.maps),
             passant_sq(other.passant_sq),

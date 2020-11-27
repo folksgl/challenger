@@ -19,7 +19,7 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
     return tokens;
 }
 
-Position::Position(std::string fen) {
+Position::Position(const std::string& fen) {
 
     std::vector<std::string> results = split(fen, ' ');
 
