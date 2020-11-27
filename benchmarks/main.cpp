@@ -8,6 +8,7 @@ bool G_debug;
 Position* G_game_position;
 SliderAttacks slider_attacks;
 ThreadSafeQueue<UCICommand> command_queue;
+search_info G_info;
 
 unsigned long long positions_generated;
 unsigned long long positions_searched;
