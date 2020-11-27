@@ -83,11 +83,11 @@ class Position {
         // Functions
 
         void set_piece_positions(const std::string&);
-        void set_active_color(std::string);
-        void set_castling_rights(std::string);
-        void set_passant_target_sq(std::string);
-        void set_halfmove_clock(std::string);
-        void set_fullmove_number(std::string);
+        void set_active_color(const std::string&);
+        void set_castling_rights(const std::string&);
+        void set_passant_target_sq(const std::string&);
+        void set_halfmove_clock(const std::string&);
+        void set_fullmove_number(const std::string&);
 
         void generate_moves(void);
         void evaluate(void);

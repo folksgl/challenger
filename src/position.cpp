@@ -95,7 +95,7 @@ void Position::set_piece_positions(const std::string& str) {
 /*
  *  set_castling_rights sets the castling rights of the Position based on str
  */
-void Position::set_castling_rights(std::string str) {
+void Position::set_castling_rights(const std::string& str) {
 
     // Check for malformed castling string. Set otherwise.
     if (str.length() > 0 and str.length() < 5) {
@@ -122,7 +122,7 @@ void Position::set_castling_rights(std::string str) {
 /*
  *  set_active_color sets the active color in the Position based on str
  */
-void Position::set_active_color(std::string str) {
+void Position::set_active_color(const std::string& str) {
 
     // Check for malformed active color string. Set otherwise.
     if (str.length() == 1) {
@@ -135,7 +135,7 @@ void Position::set_active_color(std::string str) {
 /*
  *  set_passant_target_sq sets the passant target square for the Position based on str
  */
-void Position::set_passant_target_sq(std::string str) {
+void Position::set_passant_target_sq(const std::string& str) {
 
     // If no target square or if malformed passant target string, assume there is none.
     if (str.length() == 2 and isalpha(str[0]) and isdigit(str[1])) {
@@ -148,7 +148,7 @@ void Position::set_passant_target_sq(std::string str) {
 /*
  *  set_halfmove_clock sets the halfmove clock in Position based on str
  */
-void Position::set_halfmove_clock(std::string str) {
+void Position::set_halfmove_clock(const std::string& str) {
 
     if (not str.empty() and std::all_of(str.begin(), str.end(), ::isdigit)) {
         hlf_clock = std::stoull(str, nullptr, 10);
@@ -160,7 +160,7 @@ void Position::set_halfmove_clock(std::string str) {
 /*
  *  set_fullmove_number sets the fullmove number in Position based in str
  */
-void Position::set_fullmove_number(std::string str) {
+void Position::set_fullmove_number(const std::string& str) {
 
     if (not str.empty() and std::all_of(str.begin(), str.end(), ::isdigit)) {
         full_num = std::stoull(str, nullptr, 10);
