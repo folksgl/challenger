@@ -179,7 +179,12 @@ void Position::move(const std::string& move, const int moving_piece) {
 
 
     // Check if there is a piece on the dest square and remove if needed.
+    bitboard start_square_bit = square_bit(start_square);
     bitboard dest_square_bit = square_bit(dest_square);
+
+    bitboard moving_bits = start_square_bit bitor dest_square_bit;
+    maps[moving_piece] xor_eq moving_bits;
+
     if ((maps[w_pieces] bitor maps[b_pieces]) bitand dest_square_bit) {
         zero_at(dest_square, get_moving_piece(dest_square));
         hlf_clock = -1;
@@ -229,18 +234,12 @@ void Position::move(const std::string& move, const int moving_piece) {
 
     passant_sq = 0;
 
-    // Zero out the starting square
-    zero_at(start_square, moving_piece);
-
-    // Set the destination square
-    bitboard square_to_add = dest_square_bit;
-    maps[moving_piece] or_eq square_to_add;
-
+    // Set side-to-move's changed bits
     if (moving_piece < 6) {
-        maps[w_pieces] or_eq square_to_add;
+        maps[w_pieces] xor_eq moving_bits;
     }
     else {
-        maps[b_pieces] or_eq square_to_add;
+        maps[b_pieces] xor_eq moving_bits;
     }
     
     // When active color is black(1) increments the fullmove number, but prevents branching based off the active color.
@@ -329,7 +328,7 @@ void Position::move_pawn_double_forward(const std::string& move) {
     int piece = is_white_move ? w_pawn : b_pawn;
 
     // Set the en passant square.
-    passant_sq = is_white_move? square_bit(dest_square - 8) : square_bit(dest_square + 8);
+    passant_sq = square_bit((dest_square + start_square) / 2);
 
     zero_at(start_square, piece);
 
