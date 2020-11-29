@@ -92,10 +92,6 @@ class Position {
         void generate_moves(void);
         void evaluate(void);
         void move(const std::string& move, const int moving_piece);
-        void move_pawn_promotion(const std::string& move);
-        void move_pawn_double_forward(const std::string& move);
-        void castle(Castling_names);
-        void zero_at(int square, int piece);
         int get_moving_piece(int square);
         bool is_square_attacked(bitboard square);
 
