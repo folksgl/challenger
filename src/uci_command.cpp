@@ -170,49 +170,9 @@ void UCICommand::execute() {
         // This logic all needs to be moved to INSIDE the .move function of a Position object
         for (auto it = begin_moves; it != command_list.end(); it++) {
             std::string tok = *it;
-            if (tok.length() == 5) {
-                G_game_position->move_pawn_promotion(tok);
-            }
-            else if (tok.length() == 4) {
-                int start_square = get_square_num(tok[0], tok[1]);
-                int dest_square = get_square_num(tok[2], tok[3]);
-                int moving_piece = G_game_position->get_moving_piece(start_square);
-                if (moving_piece == w_pawn) {
-                    if (start_square + 16 == dest_square) {
-                        G_game_position->move_pawn_double_forward(tok);
-                    }
-                    else {
-                        G_game_position->move(tok, moving_piece);
-                    }
-                }
-                else if (moving_piece == b_pawn) {
-                    if (start_square - 16 == dest_square) {
-                        G_game_position->move_pawn_double_forward(tok);
-                    }
-                    else {
-                        G_game_position->move(tok, moving_piece);
-                    }
-                }
-                else if (moving_piece == w_king) {
-                    if (start_square == 4 and dest_square == 6) {
-                        G_game_position->castle(c_w_king);
-                    }
-                    else if (start_square == 4 and dest_square == 2) {
-                        G_game_position->castle(c_w_queen);
-                    }
-                }
-                else if (moving_piece == b_king) {
-                    if (start_square == 60 and dest_square == 62) {
-                        G_game_position->castle(c_b_king);
-                    }
-                    else if (start_square == 60 and dest_square == 58) {
-                        G_game_position->castle(c_b_queen);
-                    }
-                }
-                else {
-                    G_game_position->move(tok, moving_piece);
-                }
-            }
+            int start_square = get_square_num(tok[0], tok[1]);
+            int moving_piece = G_game_position->get_moving_piece(start_square);
+            G_game_position->move(tok, moving_piece);
         }
     }
     else if (begin_token == "go") {

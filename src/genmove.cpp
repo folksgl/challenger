@@ -47,7 +47,7 @@ void add_move(Position* pos, const string& move_string, const map_names king_pie
     }
 }
 
-void add_move_pawn_promotion(Position* pos, const string& move_string, map_names king_piece) {
+void add_move_pawn_promotion(Position* pos, const string& move_string, map_names king_piece, const int moving_piece) {
     // Create a copy of the position and make the move
     Position copy_queen = *pos;
     string queen_string, rook_string, knight_string, bishop_string;
@@ -64,7 +64,7 @@ void add_move_pawn_promotion(Position* pos, const string& move_string, map_names
         knight_string = "n";
         bishop_string = "b";
     }
-    copy_queen.move_pawn_promotion(move_string + queen_string);
+    copy_queen.move(move_string + queen_string, moving_piece);
 
     // If the move introduces check for the player making the move, it is illegal and will not be considered.
     if (copy_queen.is_square_attacked(copy_queen.maps[king_piece])) {
@@ -77,9 +77,9 @@ void add_move_pawn_promotion(Position* pos, const string& move_string, map_names
     Position copy_bishop = Position(*pos);
 
     // Perform the moves
-    copy_rook.move_pawn_promotion(move_string + rook_string);
-    copy_knight.move_pawn_promotion(move_string + knight_string);
-    copy_bishop.move_pawn_promotion(move_string + bishop_string);
+    copy_rook.move(move_string + rook_string, moving_piece);
+    copy_knight.move(move_string + knight_string, moving_piece);
+    copy_bishop.move(move_string + bishop_string, moving_piece);
 
     // Add the moves to the vector of moves possible from the current position
     pos->moves.push_back(copy_queen);
@@ -88,22 +88,10 @@ void add_move_pawn_promotion(Position* pos, const string& move_string, map_names
     pos->moves.push_back(copy_bishop);
 }
 
-void add_move_pawn_double_forward(Position* pos, const string& move_string, map_names king_piece) {
-    // Create a copy of the position and make the move
-    Position copy = *pos;
-    copy.move_pawn_double_forward(move_string);
-
-    // If the move introduces check for the player making the move, it is illegal and will not be considered.
-    if (not copy.is_square_attacked(copy.maps[king_piece])) {
-        // Add the move to the vector of moves possible from the current position.
-        pos->moves.push_back(copy);
-    }
-}
-
-void add_move_castle(Position* pos, Castling_names type) {
+void add_move_castle(Position* pos, const string& move_string, const int moving_piece) {
     // Create a copy of the position and make the move
     Position copy = Position(*pos);
-    copy.castle(type);
+    copy.move(move_string, moving_piece);
 
     // Add the move to the vector of moves possible from the current position.
     pos->moves.push_back(copy);
@@ -176,22 +164,26 @@ void castling_generator_w(Position* pos) {
     }
 
     // Check castling availability
-    if (pos->w_kingside_castle and (pos->maps[w_rook] bitand square_bit(7)) and not (whole_board bitand w_kingside_castle_empty)) {
-        bool enters_check = (opposite_turn.is_square_attacked(square_bit(4)) or 
-                opposite_turn.is_square_attacked(square_bit(5)) or 
-                opposite_turn.is_square_attacked(square_bit(6)));
-        if (not enters_check) {
-            add_move_castle(pos, c_w_king);
+    if (pos->w_kingside_castle) {
+        if (pos->maps[w_rook] bitand square_bit(7)) {
+            if (not (whole_board bitand w_kingside_castle_empty)) {
+                bool enters_check = (opposite_turn.is_square_attacked(square_bit(4)) or 
+                        opposite_turn.is_square_attacked(square_bit(5)) or 
+                        opposite_turn.is_square_attacked(square_bit(6)));
+                if (not enters_check) {
+                    add_move_castle(pos, "e1g1", w_king);
+                }
+            }
         }
     }
     if (pos->w_queenside_castle) {
-        if (pos->maps[w_king] and (pos->maps[w_rook] bitand square_bit(0))) { 
+        if (pos->maps[w_rook] bitand square_bit(0)) { 
             if (not (whole_board bitand w_queenside_castle_empty)) {
                 bool enters_check = (opposite_turn.is_square_attacked(square_bit(2)) or
                         opposite_turn.is_square_attacked(square_bit(3)) or
                         opposite_turn.is_square_attacked(square_bit(4)));
                 if (not enters_check) {
-                    add_move_castle(pos, c_w_queen);
+                    add_move_castle(pos, "e1c1", w_king);
                 }
             }
         }
@@ -204,25 +196,25 @@ void castling_generator_b(Position* pos) {
     bitboard whole_board = pos->maps[w_pieces] bitor pos->maps[b_pieces];
 
     if (pos->b_kingside_castle) {
-        if (pos->maps[b_king] and (pos->maps[b_rook] bitand square_bit(63))) {
+        if (pos->maps[b_rook] bitand square_bit(63)) {
             if (not (whole_board bitand b_kingside_castle_empty)) {
                 bool enters_check = (opposite_turn.is_square_attacked(square_bit(60)) or 
                         opposite_turn.is_square_attacked(square_bit(61)) or 
                         opposite_turn.is_square_attacked(square_bit(62)));
                 if (not enters_check) {
-                    add_move_castle(pos, c_b_king);
+                    add_move_castle(pos, "e8g8", b_king);
                 }
             }
         }
     }
     if (pos->b_queenside_castle) {
-        if (pos->maps[b_king] and (pos->maps[b_rook] bitand square_bit(56))) {
+        if (pos->maps[b_rook] bitand square_bit(56)) {
             if (not (whole_board bitand b_queenside_castle_empty)) {
                 bool enters_check = (opposite_turn.is_square_attacked(square_bit(60)) or 
                         opposite_turn.is_square_attacked(square_bit(59)) or
                         opposite_turn.is_square_attacked(square_bit(58)));
                 if (not enters_check) {
-                    add_move_castle(pos, c_b_queen);
+                    add_move_castle(pos, "e8c8", b_king);
                 }
             }
         }
@@ -251,13 +243,13 @@ void generate_w_pawn_moves(Position* pos) {
 
         if (squarei bitand rank_7) {
             if (squarei bitand left_attacks) {
-                add_move_pawn_promotion(pos, src + bit_to_square_arr[index + 7], king_piece);
+                add_move_pawn_promotion(pos, src + bit_to_square_arr[index + 7], king_piece, w_pawn);
             }
             if (squarei bitand right_attacks) {
-                add_move_pawn_promotion(pos, src + bit_to_square_arr[index + 9], king_piece);
+                add_move_pawn_promotion(pos, src + bit_to_square_arr[index + 9], king_piece, w_pawn);
             }
             if (squarei bitand forward) {
-                add_move_pawn_promotion(pos, src + bit_to_square_arr[index + 8], king_piece);
+                add_move_pawn_promotion(pos, src + bit_to_square_arr[index + 8], king_piece, w_pawn);
             }
         }
         else {
@@ -271,7 +263,7 @@ void generate_w_pawn_moves(Position* pos) {
                 add_move(pos, src + bit_to_square_arr[index + 8], king_piece, w_pawn);
 
                 if (squarei bitand double_forward) {
-                    add_move_pawn_double_forward(pos, src + bit_to_square_arr[index + 16], king_piece);
+                    add_move(pos, src + bit_to_square_arr[index + 16], king_piece, w_pawn);
                 }
             }
         }
@@ -303,13 +295,13 @@ void generate_b_pawn_moves(Position* pos) {
 
         if (squarei bitand rank_2) {
             if (squarei bitand left_attacks) {
-                add_move_pawn_promotion(pos, src + bit_to_square_arr[index - 7], king_piece);
+                add_move_pawn_promotion(pos, src + bit_to_square_arr[index - 7], king_piece, b_pawn);
             }
             if (squarei bitand right_attacks) {
-                add_move_pawn_promotion(pos, src + bit_to_square_arr[index - 9], king_piece);
+                add_move_pawn_promotion(pos, src + bit_to_square_arr[index - 9], king_piece, b_pawn);
             }
             if (squarei bitand forward) {
-                add_move_pawn_promotion(pos, src + bit_to_square_arr[index - 8], king_piece);
+                add_move_pawn_promotion(pos, src + bit_to_square_arr[index - 8], king_piece, b_pawn);
             }
         }
         else {
@@ -323,7 +315,7 @@ void generate_b_pawn_moves(Position* pos) {
                 add_move(pos, src + bit_to_square_arr[index - 8], king_piece, b_pawn);
 
                 if (squarei bitand double_forward) {
-                    add_move_pawn_double_forward(pos, src + bit_to_square_arr[index - 16], king_piece);
+                    add_move(pos, src + bit_to_square_arr[index - 16], king_piece, b_pawn);
                 }
             }
         }
