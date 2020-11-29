@@ -170,6 +170,8 @@ TEST(no_blank_capture, white) {
     int moving_piece = startpos.get_moving_piece(get_square_num('a', '2'));
     startpos.move("a2a4", moving_piece);
 
+    EXPECT_EQ (bit_to_square.at(startpos.passant_sq), "a3");
+
     moving_piece = startpos.get_moving_piece(get_square_num('a', '7'));
     startpos.move("a7a6", moving_piece);
 
@@ -2037,9 +2039,9 @@ TEST(correct_number_moves_generated, king_in_check) {
     std::string test = "qn1rkrbb/pp1p1ppp/2p1p3/3n4/4P2P/2NP4/PPP2PP1/Q1NRKRBB w - - 1 9";
     Position startpos(test);
 
-    startpos.move_pawn_double_forward("a2a4");
-    startpos.move_pawn_double_forward("a7a5");
-    startpos.move_pawn_double_forward("b2b4");
+    startpos.move("a2a4", w_pawn);
+    startpos.move("a7a5", b_pawn);
+    startpos.move("b2b4", w_pawn);
 
     int moving_piece = startpos.get_moving_piece(get_square_num('e', '8'));
     startpos.move("e8e7", moving_piece);
@@ -2065,7 +2067,7 @@ TEST(correct_number_moves_generated, king_in_check_a2a4) {
     std::string test = "qn1rkrbb/pp1p1ppp/2p1p3/3n4/4P2P/2NP4/PPP2PP1/Q1NRKRBB w - - 1 9";
     Position startpos(test);
 
-    startpos.move_pawn_double_forward("a2a4");
+    startpos.move("a2a4", w_pawn);
 
     generate_moves(&startpos);
 
@@ -2080,7 +2082,7 @@ TEST(correct_number_moves_generated, king_in_check_a7a5) {
     std::string test = "qn1rkrbb/pp1p1ppp/2p1p3/3n4/P3P2P/2NP4/1PP2PP1/Q1NRKRBB b - a3 0 10";
     Position startpos(test);
 
-    startpos.move_pawn_double_forward("a7a5");
+    startpos.move("a7a5", b_pawn);
     // qn1rkrbb/1p1p1ppp/2p1p3/p2n4/P3P2P/2NP4/1PP2PP1/Q1NRKRBB w - a6 1 10
 
     generate_moves(&startpos);
@@ -2096,7 +2098,7 @@ TEST(correct_number_moves_generated, king_in_check_b2b4) {
     std::string test = "qn1rkrbb/1p1p1ppp/2p1p3/p2n4/P3P2P/2NP4/1PP2PP1/Q1NRKRBB w - a6 1 10";
     Position startpos(test);
 
-    startpos.move_pawn_double_forward("b2b4");
+    startpos.move("b2b4", w_pawn);
     // qn1rkrbb/1p1p1ppp/2p1p3/p2n4/PP2P2P/2NP4/2P2PP1/Q1NRKRBB b - a3 0 11
 
     generate_moves(&startpos);
@@ -2141,9 +2143,9 @@ TEST(correct_number_moves_generated, random_pos_002) {
     std::string test = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
     Position startpos(test);
 
-    startpos.move_pawn_double_forward("a2a4");
+    startpos.move("a2a4", w_pawn);
     EXPECT_EQ (startpos.passant_sq, 0x0000000000010000);
-    startpos.move_pawn_double_forward("c7c5");
+    startpos.move("c7c5", b_pawn);
     EXPECT_EQ (startpos.passant_sq, 0x0000040000000000);
     int moving_piece = startpos.get_moving_piece(get_square_num('e', '1'));
     startpos.move("e1d1", moving_piece);
@@ -2209,7 +2211,8 @@ TEST(correct_number_moves_generated, random_pos_004) {
     startpos.move("a8b8", moving_piece);
     moving_piece = startpos.get_moving_piece(get_square_num('h', '1'));
     startpos.move("h1g1", moving_piece);
-    startpos.castle(c_b_king);
+    moving_piece = startpos.get_moving_piece(get_square_num('e', '8'));
+    startpos.move("e8g8", moving_piece);
     moving_piece = startpos.get_moving_piece(get_square_num('f', '7'));
     startpos.move("f7h6", moving_piece);
 

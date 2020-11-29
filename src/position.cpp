@@ -179,36 +179,78 @@ void Position::move(const std::string& move, const int moving_piece) {
 
 
     // Check if there is a piece on the dest square and remove if needed.
+    bitboard start_square_bit = square_bit(start_square);
     bitboard dest_square_bit = square_bit(dest_square);
+    bitboard moving_bits = start_square_bit bitor dest_square_bit;
+
+    // If a capture is taking place. Zero the destination square and reset halfmove clock.
     if ((maps[w_pieces] bitor maps[b_pieces]) bitand dest_square_bit) {
-        zero_at(dest_square, get_moving_piece(dest_square));
-        hlf_clock = -1;
-    }
-
-    if (moving_piece == w_pawn) {
-
-        // If capturing en passant, remove the captured pawn
-        if (dest_square_bit bitand passant_sq) {
-            zero_at(dest_square - 8, b_pawn);
+        bitboard dest_zero_mask = compl dest_square_bit;
+        for (bitboard& bb : maps) {
+            bb and_eq dest_zero_mask;
         }
         hlf_clock = -1;
     }
-    else if (moving_piece == b_pawn) {
 
-        if (dest_square_bit bitand passant_sq) {
-            zero_at(dest_square + 8, w_pawn);
+    bitboard new_passant_sq = 0; // Default is 0, only set on double forward pawn move
+
+    // Check for special move-types
+    if (moving_piece == w_pawn or moving_piece == b_pawn) {
+        if (dest_square_bit bitand passant_sq) { // En passant capture
+            int dest_zero = (moving_piece == w_pawn) ? dest_square - 8: dest_square + 8;
+
+            bitboard mask = compl square_bit(dest_zero);
+            maps[w_pieces] and_eq mask;
+            maps[b_pieces] and_eq mask;
+            maps[w_pawn] and_eq mask;
+            maps[b_pawn] and_eq mask;
         }
-        hlf_clock = -1;
+        else if (abs(dest_square - start_square) == 16) { // Pawn double forward
+            new_passant_sq = square_bit((start_square + dest_square) / 2);
+        }
+        else if (dest_square_bit bitand (rank_1 bitor rank_8)) { // Pawn promotion
+            // Set the destination square bit in the pawn bitboard. It will be unset when
+            // the moving_bits xor operation occurs.
+            maps[moving_piece] or_eq dest_square_bit;
+            char promoted_to = move.at(4);
+            switch (promoted_to) {
+                case 'q': maps[b_queen] or_eq dest_square_bit;  break;
+                case 'Q': maps[w_queen] or_eq dest_square_bit;  break;
+                case 'N': maps[w_knight] or_eq dest_square_bit; break;
+                case 'n': maps[b_knight] or_eq dest_square_bit; break;
+                case 'B': maps[w_bishop] or_eq dest_square_bit; break;
+                case 'b': maps[b_bishop] or_eq dest_square_bit; break;
+                case 'R': maps[w_rook] or_eq dest_square_bit;   break;
+                case 'r': maps[b_rook] or_eq dest_square_bit;   break;
+            }
+        }
+        hlf_clock = -1; // Pawn moves reset the halfmove clock.
     }
     else if (moving_piece == w_king) {
         w_kingside_castle = false;
         w_queenside_castle = false;
         hlf_clock = -1;
+        if ((start_square - dest_square) == 2) { // Queenside Castling
+            maps[w_rook] xor_eq 0x0000000000000009;
+            maps[w_pieces] xor_eq 0x0000000000000009;
+        }
+        else if ((start_square - dest_square) == -2) { // Kingside Castling
+            maps[w_rook] xor_eq 0x00000000000000A0;
+            maps[w_pieces] xor_eq 0x00000000000000A0;
+        }
     }
     else if (moving_piece == b_king) {
         b_kingside_castle = false;
         b_queenside_castle = false;
         hlf_clock = -1;
+        if ((start_square - dest_square) == 2) { // Queenside Castling
+            maps[b_rook] xor_eq 0x0900000000000000;
+            maps[b_pieces] xor_eq 0x0900000000000000;
+        }
+        else if ((start_square - dest_square) == -2) { // Kingside Castling
+            maps[b_rook] xor_eq 0xA000000000000000;
+            maps[b_pieces] xor_eq 0xA000000000000000;
+        }
     }
     else if (moving_piece == w_rook or moving_piece == b_rook) {
         if (start_square == 0) {
@@ -227,20 +269,15 @@ void Position::move(const std::string& move, const int moving_piece) {
         hlf_clock = -1;
     }
 
-    passant_sq = 0;
+    passant_sq = new_passant_sq;
 
-    // Zero out the starting square
-    zero_at(start_square, moving_piece);
-
-    // Set the destination square
-    bitboard square_to_add = dest_square_bit;
-    maps[moving_piece] or_eq square_to_add;
-
+    // Set side-to-move's changed bits
+    maps[moving_piece] xor_eq moving_bits;
     if (moving_piece < 6) {
-        maps[w_pieces] or_eq square_to_add;
+        maps[w_pieces] xor_eq moving_bits;
     }
     else {
-        maps[b_pieces] or_eq square_to_add;
+        maps[b_pieces] xor_eq moving_bits;
     }
     
     // When active color is black(1) increments the fullmove number, but prevents branching based off the active color.
@@ -251,172 +288,10 @@ void Position::move(const std::string& move, const int moving_piece) {
     return;
 }
 
-/*
- *  move_pawn_promotion performs pawn promotion given in the move string
- */
-void Position::move_pawn_promotion(const std::string& move) {
-
-    // Extract start and destination squares from the move
-    int start_square = get_square_num(move[0], move[1]);
-    int dest_square = get_square_num(move[2], move[3]);
-
-
-    bitboard dest_square_bit = square_bit(dest_square);
-    if ((maps[w_pieces] bitor maps[b_pieces]) bitand dest_square_bit) {
-        zero_at(dest_square, get_moving_piece(dest_square));
-    }
-
-    // Check if there is a piece on the dest square and remove if needed.
-    int dest_piece = get_moving_piece(dest_square);
-
-    if (dest_piece != -1) {
-        zero_at(dest_square, dest_piece);
-    }
-
-    // Get the piece that is moving
-    int piece = is_white_move ? w_pawn : b_pawn;
-
-    // Reset the en passant square.
-    passant_sq = 0;
-
-    zero_at(start_square, piece);
-
-    char promoted_to = move.at(4);
-    switch (promoted_to) {
-        case 'q': piece = b_queen;  break;
-        case 'Q': piece = w_queen;  break;
-        case 'N': piece = w_knight; break;
-        case 'n': piece = b_knight; break;
-        case 'B': piece = w_bishop; break;
-        case 'b': piece = b_bishop; break;
-        case 'R': piece = w_rook;   break;
-        case 'r': piece = b_rook;   break;
-    }
-
-    // Set the destination square
-    bitboard square_to_add = dest_square_bit;
-    maps[piece] or_eq square_to_add;
-
-    if (piece < 6) {
-        maps[w_pieces] or_eq square_to_add;
-    }
-    else {
-        maps[b_pieces] or_eq square_to_add;
-    }
-
-    full_num += not is_white_move; // Increment fullmove number.
-    hlf_clock = 0;            // Toggle halfmove clock.
-    is_white_move = not is_white_move;   // Toggle active color.
-
-    return;
-}
-
-/*
- *  move_pawn_double_forward() performs pawn promotion given in the move string on board_position.
- */
-void Position::move_pawn_double_forward(const std::string& move) {
-
-    if (move.length() != 4) {
-        // Malformed move string, ignore move and don't change the position.
-        return;
-    }
-
-    // Extract start and destination squares from the move
-    int start_square = get_square_num(move[0], move[1]);
-    int dest_square = get_square_num(move[2], move[3]);
-
-    // Get the piece that is moving
-    int piece = is_white_move ? w_pawn : b_pawn;
-
-    // Set the en passant square.
-    passant_sq = is_white_move? square_bit(dest_square - 8) : square_bit(dest_square + 8);
-
-    zero_at(start_square, piece);
-
-    // Set the destination square
-    bitboard square_to_add = square_bit(dest_square);
-    maps[piece] or_eq square_to_add;
-
-    if (piece < 6) {
-        maps[w_pieces] or_eq square_to_add;
-    }
-    else {
-        maps[b_pieces] or_eq square_to_add;
-    }
-
-    full_num += not is_white_move; // Increment fullmove number.
-    hlf_clock = 0;            // Toggle halfmove clock.
-    is_white_move = not is_white_move;   // Toggle active color.
-
-    return;
-}
-
-void Position::castle(Castling_names type) {
-
-    // reset the en passant square.
-    passant_sq = 0;
-
-    if (type == c_w_king) {
-        maps[w_king] xor_eq 0x0000000000000050;
-        maps[w_rook] xor_eq 0x00000000000000A0;
-        maps[w_pieces] xor_eq 0x00000000000000F0;
-
-        w_kingside_castle = false;
-        w_queenside_castle = false;
-    }
-    else if (type == c_w_queen) {
-        maps[w_king] xor_eq 0x0000000000000014;
-        maps[w_rook] xor_eq 0x0000000000000009;
-        maps[w_pieces] xor_eq 0x000000000000001D;
-
-        w_kingside_castle = false;
-        w_queenside_castle = false;
-    }
-    else if (type == c_b_king) {
-        maps[b_king] xor_eq 0x5000000000000000;
-        maps[b_rook] xor_eq 0xA000000000000000;
-        maps[b_pieces] xor_eq 0xF000000000000000;
-
-        b_kingside_castle = false;
-        b_queenside_castle = false;
-    }
-    else {
-        maps[b_king] xor_eq 0x1400000000000000;
-        maps[b_rook] xor_eq 0x0900000000000000;
-        maps[b_pieces] xor_eq 0x1D00000000000000;
-
-        b_kingside_castle = false;
-        b_queenside_castle = false;
-    }
-
-    full_num += not is_white_move; // Increment fullmove number.
-    hlf_clock = 0;            // Toggle halfmove clock.
-    is_white_move = not is_white_move;   // Toggle active color.
-
-    return;
-}
-
-/*
- *  zero_at zero's the bit indicated by square on the position given and
- *  set a number representing the piece type that was in the square.
- *
- *  return whether a bit was cleared from the square
- */
-void Position::zero_at(int square, int piece) {
-
-    bitboard mask = compl square_bit(square);
-
-    maps[w_pieces] and_eq mask;
-    maps[b_pieces] and_eq mask;
-    maps[piece] and_eq mask;
-}
-
 int Position::get_moving_piece(int square) {
     bitboard bit = square_bit(square);
 
-    int i = bit bitand maps[w_pieces] ? 0 : 7;
-
-    for (; i < 14; i++) {
+    for (unsigned int i = 0; i < maps.size(); i++) {
         if (maps[i] bitand bit) {
             return i;
         }
