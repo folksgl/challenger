@@ -2,12 +2,10 @@
 #include "../src/search.hpp"
 #include "../src/genmove.hpp"
 
-using namespace std;
-
 //
 // Ensure that alphaBetaMax of a position results in a move list sorted in decending order by evaluation score.
 //
-TEST (search, white_result_is_descending) { 
+TEST(search, white_result_is_descending) {
     std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position startpos(test);
 
@@ -23,7 +21,7 @@ TEST (search, white_result_is_descending) {
     ASSERT_NE(startpos.moves.begin()->eval_score, startpos.moves.end()->eval_score);
 }
 
-TEST (search, black_result_is_descending) { 
+TEST(search, black_result_is_descending) {
     std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
     Position startpos(test);
 
@@ -42,7 +40,7 @@ TEST (search, black_result_is_descending) {
 //
 // Ensure that alphaBetaMax of a position results in a move list sorted in decending order by evaluation score.
 //
-TEST (alpha_max, result_is_descending) { 
+TEST(alpha_max, result_is_descending) {
     std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position startpos(test);
 
@@ -61,7 +59,7 @@ TEST (alpha_max, result_is_descending) {
 //
 // Ensure that alphaBetaMin of a position results in a move list sorted in ascending order by evaluation score.
 //
-TEST (alpha_min, result_is_ascending) { 
+TEST(alpha_min, result_is_ascending) {
     std::string test = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     Position startpos(test);
 

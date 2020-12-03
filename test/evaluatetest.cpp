@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include "../src/evaluate.hpp"
 #include "../src/common.hpp"
-#include <string>
 
 //
 // START GET WHITE MATERIAL TEST ///////////////////////////////////////////////
@@ -12,7 +11,7 @@ TEST(white_material, all) {
     Position pos(test);
 
     int material = get_material_value_score(&pos);
-    EXPECT_EQ (material, 0);
+    EXPECT_EQ(material, 0);
 }
 
 //
@@ -24,7 +23,7 @@ TEST(position_eval, all) {
     Position pos(test);
 
     int position_value = evaluate_position(&pos);
-    EXPECT_EQ (position_value, 0);
+    EXPECT_EQ(position_value, 0);
 }
 
 TEST(position_eval, no_white_queen) {
@@ -33,7 +32,7 @@ TEST(position_eval, no_white_queen) {
 
     int position_value = evaluate_position(&pos);
     int half = 0;
-    EXPECT_LE (position_value, half - QUEEN);
+    EXPECT_LE(position_value, half - QUEEN);
 }
 
 TEST(position_eval, no_white_pieces) {
@@ -44,7 +43,7 @@ TEST(position_eval, no_white_pieces) {
     int half = 0;
 
     int all_pieces = KING + QUEEN + (ROOK * 2) + (KNIGHT * 2) + (BISHOP * 2) + (PAWN * 8);
-    EXPECT_LE (position_value, half - all_pieces);
+    EXPECT_LE(position_value, half - all_pieces);
 }
 
 TEST(position_eval, no_black_queen) {
@@ -53,7 +52,7 @@ TEST(position_eval, no_black_queen) {
 
     bitboard position_value = evaluate_position(&pos);
     int half = 0;
-    EXPECT_GE (position_value, half + QUEEN);
+    EXPECT_GE(position_value, half + QUEEN);
 }
 
 TEST(position_eval, no_black_pieces) {
@@ -62,7 +61,7 @@ TEST(position_eval, no_black_pieces) {
 
     bitboard position_value = evaluate_position(&pos);
     int all_pieces = KING + QUEEN + (ROOK * 2) + (KNIGHT * 2) + (BISHOP * 2) + (PAWN * 8);
-    EXPECT_GE (position_value, all_pieces);
+    EXPECT_GE(position_value, all_pieces);
 }
 
 TEST(evaluation, white_pawn_defending) {
@@ -70,7 +69,7 @@ TEST(evaluation, white_pawn_defending) {
     Position pos(test);
 
     int position_value = white_defending_pawns_bonus(&pos);
-    EXPECT_EQ (position_value, PAWN_DEFEND * 3);
+    EXPECT_EQ(position_value, PAWN_DEFEND * 3);
 }
 
 TEST(evaluation, black_pawn_defending) {
@@ -78,7 +77,7 @@ TEST(evaluation, black_pawn_defending) {
     Position pos(test);
 
     int position_value = black_defending_pawns_bonus(&pos);
-    EXPECT_EQ (position_value, PAWN_DEFEND * 4);
+    EXPECT_EQ(position_value, PAWN_DEFEND * 4);
 }
 
 TEST(evaluation, white_knight_center_board) {
@@ -86,7 +85,7 @@ TEST(evaluation, white_knight_center_board) {
     Position pos(test);
 
     int position_value = knight_center_bonus(pos.maps[w_knight]);
-    EXPECT_EQ (position_value, KNIGNT_CENTER * 1);
+    EXPECT_EQ(position_value, KNIGNT_CENTER * 1);
 }
 
 TEST(evaluation, black_knight_center_board) {
@@ -94,6 +93,6 @@ TEST(evaluation, black_knight_center_board) {
     Position pos(test);
 
     int position_value = knight_center_bonus(pos.maps[b_knight]);
-    EXPECT_EQ (position_value, KNIGNT_CENTER * 1);
+    EXPECT_EQ(position_value, KNIGNT_CENTER * 1);
 }
 

@@ -3,16 +3,14 @@
 #include "../src/uci_command.hpp"
 #include "../src/uci.hpp"
 
-using namespace std;
-
-TEST (ucicommandtest_uci_regex, good_uci_commands) { 
+TEST(ucicommandtest_uci_regex, good_uci_commands) {
     ASSERT_NO_THROW(UCICommand("uci"));
     ASSERT_NO_THROW(UCICommand("\nuci"));
     ASSERT_NO_THROW(UCICommand("\tuci"));
     ASSERT_NO_THROW(UCICommand("\n\t   uci\n\t\n\n\t   "));
 }
 
-TEST (ucicommandtest_uci_regex, bad_uci_commands) { 
+TEST(ucicommandtest_uci_regex, bad_uci_commands) {
     ASSERT_THROW(UCICommand("uuci"), std::invalid_argument);
     ASSERT_THROW(UCICommand("ucii"), std::invalid_argument);
     ASSERT_THROW(UCICommand("uci asdf"), std::invalid_argument);
@@ -23,12 +21,12 @@ TEST (ucicommandtest_uci_regex, bad_uci_commands) {
     ASSERT_THROW(UCICommand("1 uci"), std::invalid_argument);
     ASSERT_THROW(UCICommand("u ci"), std::invalid_argument);
 }
-TEST (ucicommandtest_debug_regex, good_debug_commands) { 
+TEST(ucicommandtest_debug_regex, good_debug_commands) {
     ASSERT_NO_THROW(UCICommand("debug on"));
     ASSERT_NO_THROW(UCICommand("debug off"));
 }
 
-TEST (ucicommandtest_debug_regex, bad_debug_commands) { 
+TEST(ucicommandtest_debug_regex, bad_debug_commands) {
     ASSERT_THROW(UCICommand("ddebug on"), std::invalid_argument);
     ASSERT_THROW(UCICommand("debug o"), std::invalid_argument);
     ASSERT_THROW(UCICommand("debug onn"), std::invalid_argument);
@@ -40,11 +38,11 @@ TEST (ucicommandtest_debug_regex, bad_debug_commands) {
     ASSERT_THROW(UCICommand("d\nebug on"), std::invalid_argument);
 }
 
-TEST (ucicommandtest_isready_regex, good_isready_commands) { 
+TEST(ucicommandtest_isready_regex, good_isready_commands) {
     ASSERT_NO_THROW(UCICommand("isready"));
 }
 
-TEST (ucicommandtest_isready_regex, bad_isready_commands) { 
+TEST(ucicommandtest_isready_regex, bad_isready_commands) {
     ASSERT_THROW(UCICommand("iisready"), std::invalid_argument);
     ASSERT_THROW(UCICommand("isreadyy"), std::invalid_argument);
     ASSERT_THROW(UCICommand("is ready"), std::invalid_argument);
@@ -57,14 +55,14 @@ TEST (ucicommandtest_isready_regex, bad_isready_commands) {
     ASSERT_THROW(UCICommand("i\tsready"), std::invalid_argument);
 }
 
-TEST (ucicommandtest_setoption_regex, good_setoption_commands) { 
+TEST(ucicommandtest_setoption_regex, good_setoption_commands) {
     ASSERT_NO_THROW(UCICommand("setoption name value x"));
     ASSERT_NO_THROW(UCICommand("setoption name value 1"));
     ASSERT_NO_THROW(UCICommand("setoption asdf_1234"));
     ASSERT_NO_THROW(UCICommand("setoption asdf_1234 value asdf_1234"));
 }
 
-TEST (ucicommandtest_setoption_regex, bad_setoption_commands) { 
+TEST(ucicommandtest_setoption_regex, bad_setoption_commands) {
     ASSERT_THROW(UCICommand("isetoption"), std::invalid_argument);
     ASSERT_THROW(UCICommand("setoptiony"), std::invalid_argument);
     ASSERT_THROW(UCICommand("set option"), std::invalid_argument);
@@ -78,11 +76,11 @@ TEST (ucicommandtest_setoption_regex, bad_setoption_commands) {
     ASSERT_THROW(UCICommand("setoption 42 24"), std::invalid_argument);
 }
 
-TEST (ucicommandtest_ucinewgame_regex, good_ucinewgame_commands) { 
+TEST(ucicommandtest_ucinewgame_regex, good_ucinewgame_commands) {
     ASSERT_NO_THROW(UCICommand("ucinewgame"));
 }
 
-TEST (ucicommandtest_ucinewgame_regex, bad_ucinewgame_commands) { 
+TEST(ucicommandtest_ucinewgame_regex, bad_ucinewgame_commands) {
     ASSERT_THROW(UCICommand("uucinewgame"), std::invalid_argument);
     ASSERT_THROW(UCICommand("ucinewgamee"), std::invalid_argument);
     ASSERT_THROW(UCICommand("uci newgame"), std::invalid_argument);
@@ -94,7 +92,7 @@ TEST (ucicommandtest_ucinewgame_regex, bad_ucinewgame_commands) {
     ASSERT_THROW(UCICommand("ucinewgame ucinewgame"), std::invalid_argument);
 }
 
-TEST (ucicommandtest_position_regex, good_position_commands) { 
+TEST(ucicommandtest_position_regex, good_position_commands) {
     ASSERT_NO_THROW(UCICommand("position startpos"));
     ASSERT_NO_THROW(UCICommand("position 8/8/8/8/8/8/8/8 w KQkq - 0 1"));
     ASSERT_NO_THROW(UCICommand("position rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"));
@@ -127,7 +125,7 @@ TEST (ucicommandtest_position_regex, good_position_commands) {
     ASSERT_NO_THROW(UCICommand("position 8/8/8/8/8/8/8/8 w KQkq - 0 1 moves d5f8B"));
 }
 
-TEST (ucicommandtest_position_regex, bad_position_commands) { 
+TEST(ucicommandtest_position_regex, bad_position_commands) {
     ASSERT_THROW(UCICommand("uposition"), std::invalid_argument);
     ASSERT_THROW(UCICommand("positione"), std::invalid_argument);
     ASSERT_THROW(UCICommand("posit on"), std::invalid_argument);
@@ -170,7 +168,7 @@ TEST (ucicommandtest_position_regex, bad_position_commands) {
     ASSERT_THROW(UCICommand("position 8/8/8/8/8/8/8/8 w KQkq - 0 0 moves a1a1w"), std::invalid_argument);
 }
 
-TEST (ucicommandtest_go_regex, good_go_commands) { 
+TEST(ucicommandtest_go_regex, good_go_commands) {
     ASSERT_NO_THROW(UCICommand("go"));
     ASSERT_NO_THROW(UCICommand("go depth 1"));
     ASSERT_NO_THROW(UCICommand("go depth 1234567890"));
@@ -181,7 +179,7 @@ TEST (ucicommandtest_go_regex, good_go_commands) {
     ASSERT_NO_THROW(UCICommand("go infinite searchmoves a1a2 a2a4q"));
 }
 
-TEST (ucicommandtest_go_regex, bad_go_commands) { 
+TEST(ucicommandtest_go_regex, bad_go_commands) {
     ASSERT_THROW(UCICommand("ugo"), std::invalid_argument);
     ASSERT_THROW(UCICommand("gon"), std::invalid_argument);
     ASSERT_THROW(UCICommand("g\no"), std::invalid_argument);
@@ -199,11 +197,11 @@ TEST (ucicommandtest_go_regex, bad_go_commands) {
     ASSERT_THROW(UCICommand("go inc 4"), std::invalid_argument);
 }
 
-TEST (ucicommandtest_stop_regex, good_stop_commands) { 
+TEST(ucicommandtest_stop_regex, good_stop_commands) {
     ASSERT_NO_THROW(UCICommand("stop"));
 }
 
-TEST (ucicommandtest_stop_regex, bad_stop_commands) { 
+TEST(ucicommandtest_stop_regex, bad_stop_commands) {
     ASSERT_THROW(UCICommand("sstop"), std::invalid_argument);
     ASSERT_THROW(UCICommand("stopp"), std::invalid_argument);
     ASSERT_THROW(UCICommand("st\nop"), std::invalid_argument);
@@ -222,11 +220,11 @@ TEST (ucicommandtest_stop_regex, bad_stop_commands) {
     ASSERT_THROW(UCICommand("sto  p"), std::invalid_argument);
 }
 
-TEST (ucicommandtest_ponderhit_regex, good_ponderhit_commands) { 
+TEST(ucicommandtest_ponderhit_regex, good_ponderhit_commands) {
     ASSERT_NO_THROW(UCICommand("ponderhit"));
 }
 
-TEST (ucicommandtest_ponderhit_regex, bad_ponderhit_commands) { 
+TEST(ucicommandtest_ponderhit_regex, bad_ponderhit_commands) {
     ASSERT_THROW(UCICommand("pponderhit"), std::invalid_argument);
     ASSERT_THROW(UCICommand("ponderhitt"), std::invalid_argument);
     ASSERT_THROW(UCICommand("ponder\nhit"), std::invalid_argument);
@@ -241,11 +239,11 @@ TEST (ucicommandtest_ponderhit_regex, bad_ponderhit_commands) {
     ASSERT_THROW(UCICommand("ponderhit isready"), std::invalid_argument);
 }
 
-TEST (ucicommandtest_quit_regex, good_quit_commands) { 
+TEST(ucicommandtest_quit_regex, good_quit_commands) {
     ASSERT_NO_THROW(UCICommand("quit"));
 }
 
-TEST (ucicommandtest_quit_regex, bad_quit_commands) { 
+TEST(ucicommandtest_quit_regex, bad_quit_commands) {
     ASSERT_THROW(UCICommand("qquit"), std::invalid_argument);
     ASSERT_THROW(UCICommand("quitt"), std::invalid_argument);
     ASSERT_THROW(UCICommand("qu\nit"), std::invalid_argument);
@@ -260,7 +258,7 @@ TEST (ucicommandtest_quit_regex, bad_quit_commands) {
     ASSERT_THROW(UCICommand("quit isready"), std::invalid_argument);
 }
 
-TEST (ucicommandtest_execute, correct_go_command_parsing) {
+TEST(ucicommandtest_execute, correct_go_command_parsing) {
     command_queue.push(UCICommand("position startpos"));
     command_queue.push(UCICommand("go wtime 123 btime 321 searchmoves a2a1 a4a6q depth 3"));
     command_queue.push(UCICommand("quit"));
@@ -275,7 +273,7 @@ TEST (ucicommandtest_execute, correct_go_command_parsing) {
     ASSERT_EQ(G_info.depth, 3);
 }
 
-TEST (ucicommandtest_is_quit, quit_commands) {
+TEST(ucicommandtest_is_quit, quit_commands) {
     UCICommand quit_command("quit");
     UCICommand not_quit_command("position startpos");
 

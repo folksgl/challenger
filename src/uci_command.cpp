@@ -6,18 +6,20 @@
 #include "search.hpp"
 #include "game_variables.hpp"
 
-/* 
+using std::cout, std::endl;
+
+/*
  * is_valid_uci_command checks the given string against one or more regular expressions to validate
  * that the string matches the UCI GUI->Engine command structure found here: http://wbec-ridderkerk.nl/html/UCIProtocol.html
- * 
+ *
  * The regular expressions in this function may seem complex, but reviewing the C++ regex specs
  * should help even the newest programmers work through them http://www.cplusplus.com/reference/regex/ECMAScript/
  */
-bool is_valid_uci_command(std::string& command) {
+bool is_valid_uci_command(const std::string& command) {
     return std::regex_match(command, std::regex("^(uci|isready|ucinewgame|stop|ponderhit|quit)$|^debug (on|off)$"))
-        or std::regex_match(command, std::regex("^position (startpos|([rnbqkp12345678RNBQKP]{1,8}/){7}[rnbqkp12345678RNBQKP]{1,8} (w|b) (-|[KQkq]{1,4}) (-|[a-h][1-8]) (\\d)+ (\\d)+)( moves( [a-h][1-8][a-h][1-8][rnbqRNBQ]?)+)?$"))
-        or std::regex_match(command, std::regex("^go( ponder| infinite| (wtime|btime|winc|binc|movestogo|depth|nodes|mate|movetime) [\\d]+| searchmoves( [a-h][1-8][a-h][1-8][rnbqRNBQ]?)+)*$"))
-        or std::regex_match(command, std::regex("^setoption (?!(value|setoption))[\\w]+( value [\\w]+)?$"));
+        || std::regex_match(command, std::regex("^position (startpos|([rnbqkp12345678RNBQKP]{1,8}/){7}[rnbqkp12345678RNBQKP]{1,8} (w|b) (-|[KQkq]{1,4}) (-|[a-h][1-8]) (\\d)+ (\\d)+)( moves( [a-h][1-8][a-h][1-8][rnbqRNBQ]?)+)?$"))
+        || std::regex_match(command, std::regex("^go( ponder| infinite| (wtime|btime|winc|binc|movestogo|depth|nodes|mate|movetime) [\\d]+| searchmoves( [a-h][1-8][a-h][1-8][rnbqRNBQ]?)+)*$"))
+        || std::regex_match(command, std::regex("^setoption (?!(value|setoption))[\\w]+( value [\\w]+)?$"));
 }
 
 UCICommand::UCICommand(std::string command) {
@@ -25,20 +27,20 @@ UCICommand::UCICommand(std::string command) {
     // remove all leading, trailing, and double spaces in the input text
     command = std::regex_replace(command, std::regex("[[:s:]]"), " ");
     command = std::regex_replace(command, std::regex("^ +| +$|( ) +"), "$1");
-    if (not is_valid_uci_command(command)) {
+    if (!is_valid_uci_command(command)) {
         throw std::invalid_argument("Bad command string. Command failed validation.");
     }
 
     // Split space-separated string into vector of strings
     std::istringstream iss(command);
     std::string token;
-    while(std::getline(iss, token, ' ')) {
+    while (std::getline(iss, token, ' ')) {
         command_list.push_back(token);
     }
 }
 
 bool UCICommand::is_quit_command() {
-    return command_list.size() == 1 and command_list[0] == "quit";
+    return command_list.size() == 1 && command_list[0] == "quit";
 }
 
 /*
@@ -48,26 +50,24 @@ bool UCICommand::is_quit_command() {
  *  positions is possible.
  */
 string find_move_taken(Position* initial, Position* next) {
-
     bool white_turn = initial->is_white_move;
 
-    // Begin castling check first to shortcircuit (needed to prevent logic failures caused by multiple piece 
+    // Begin castling check first to shortcircuit (needed to prevent logic failures caused by multiple piece
     // movements of the same color caused during castling). An XOR of the two king bitboards will return only
     // the bits that were changed between the two positions.
     bitboard initial_king, next_king;
     if (white_turn) {
         initial_king = initial->maps[w_king];
         next_king = next->maps[w_king];
-    }
-    else {
+    } else {
         initial_king = initial->maps[b_king];
         next_king = next->maps[b_king];
     }
 
-    bitboard moved_king_bits = initial_king xor next_king;
+    bitboard moved_king_bits = initial_king ^ next_king;
     if (moved_king_bits) {
-        bitboard src_bit = lsb_unsafe(moved_king_bits bitand initial_king);
-        bitboard dest_bit = lsb_unsafe(moved_king_bits bitand next_king);
+        bitboard src_bit = lsb_unsafe(moved_king_bits & initial_king);
+        bitboard dest_bit = lsb_unsafe(moved_king_bits & next_king);
         return bit_to_square_arr[src_bit] + bit_to_square_arr[dest_bit];
     }
 
@@ -78,15 +78,14 @@ string find_move_taken(Position* initial, Position* next) {
     if (white_turn) {
         initial_pieces = initial->maps[w_pieces];
         next_pieces = next->maps[w_pieces];
-    }
-    else {
+    } else {
         initial_pieces = initial->maps[b_pieces];
         next_pieces = next->maps[b_pieces];
     }
 
-    bitboard moved_bits = initial_pieces xor next_pieces;
-    std::string src = bit_to_square_arr[lsb_unsafe(moved_bits bitand initial_pieces)];
-    std::string dest = bit_to_square_arr[lsb_unsafe(moved_bits bitand next_pieces)];
+    bitboard moved_bits = initial_pieces ^ next_pieces;
+    std::string src = bit_to_square_arr[lsb_unsafe(moved_bits & initial_pieces)];
+    std::string dest = bit_to_square_arr[lsb_unsafe(moved_bits & next_pieces)];
 
     // Check for pawn promotion by checking if the player to move lost a pawn while it was their move.
     // Then check for the promoted piece by counting the differences in number between initial and next.
@@ -94,8 +93,7 @@ string find_move_taken(Position* initial, Position* next) {
     if (white_turn) {
         initial_pawn_count = popcount(initial->maps[w_pawn]);
         next_pawn_count = popcount(next->maps[w_pawn]);
-    }
-    else {
+    } else {
         initial_pawn_count = popcount(initial->maps[b_pawn]);
         next_pawn_count = popcount(next->maps[b_pawn]);
     }
@@ -103,26 +101,19 @@ string find_move_taken(Position* initial, Position* next) {
     if (next_pawn_count < initial_pawn_count) {
         if (popcount(next->maps[w_queen]) > popcount(initial->maps[w_queen])) {
             dest += "Q";
-        }
-        else if (popcount(next->maps[b_queen]) > popcount(initial->maps[b_queen])) {
+        } else if (popcount(next->maps[b_queen]) > popcount(initial->maps[b_queen])) {
             dest += "q";
-        }
-        else if (popcount(next->maps[w_knight]) > popcount(initial->maps[w_knight])) {
+        } else if (popcount(next->maps[w_knight]) > popcount(initial->maps[w_knight])) {
             dest += "N";
-        }
-        else if (popcount(next->maps[b_knight]) > popcount(initial->maps[b_knight])) {
+        } else if (popcount(next->maps[b_knight]) > popcount(initial->maps[b_knight])) {
             dest += "n";
-        }
-        else if (popcount(next->maps[w_rook]) > popcount(initial->maps[w_rook])) {
+        } else if (popcount(next->maps[w_rook]) > popcount(initial->maps[w_rook])) {
             dest += "R";
-        }
-        else if (popcount(next->maps[b_rook]) > popcount(initial->maps[b_rook])) {
+        } else if (popcount(next->maps[b_rook]) > popcount(initial->maps[b_rook])) {
             dest += "r";
-        }
-        else if (popcount(next->maps[w_bishop]) > popcount(initial->maps[w_bishop])) {
+        } else if (popcount(next->maps[w_bishop]) > popcount(initial->maps[w_bishop])) {
             dest += "B";
-        }
-        else if (popcount(next->maps[b_bishop]) > popcount(initial->maps[b_bishop])) {
+        } else if (popcount(next->maps[b_bishop]) > popcount(initial->maps[b_bishop])) {
             dest += "b";
         }
     }
@@ -132,21 +123,16 @@ string find_move_taken(Position* initial, Position* next) {
 void UCICommand::execute() {
     std::string begin_token = command_list[0];
     if (begin_token == "uci") {
-        std::cout << "id name Challenger\nid author folksgl\nuciok" << std::endl;
-    }
-    else if (begin_token == "debug") {
+        cout << "id name Challenger\nid author folksgl\nuciok" << endl;
+    } else if (begin_token == "debug") {
         G_debug = command_list[1] == "on";
-    }
-    else if (begin_token == "isready") {
-        std::cout << "readyok" << endl;
-    }
-    else if (begin_token == "setoption") {
-        return; // Challenger has no options available yet.
-    }
-    else if (begin_token == "ucinewgame") {
-        return; // Nothing is currently required for challenger to search positions from another game.
-    }
-    else if (begin_token == "position") {
+    } else if (begin_token == "isready") {
+        cout << "readyok" << endl;
+    } else if (begin_token == "setoption") {
+        return;  // Challenger has no options available yet.
+    } else if (begin_token == "ucinewgame") {
+        return;  // Nothing is currently required for challenger to search positions from another game.
+    } else if (begin_token == "position") {
         std::vector<std::string>::iterator begin_moves = command_list.end();
         if (command_list[1] == "startpos") {
             G_game_position = new Position();
@@ -154,8 +140,7 @@ void UCICommand::execute() {
             if (command_list.size() > 2) {
                 begin_moves = command_list.begin() + 3;
             }
-        }
-        else {
+        } else {
             // std::accumulate builds fen string from vector<string> using lambda that concatenate strings with ' ' between them.
             auto space_fold = [](const std::string& a, const std::string& b) { return a + ' ' + b; };
             std::string fen = std::accumulate(command_list.begin() + 2, command_list.begin() + 7, std::string(command_list[1]), space_fold);
@@ -174,51 +159,40 @@ void UCICommand::execute() {
             int moving_piece = G_game_position->get_moving_piece(start_square);
             G_game_position->move(tok, moving_piece);
         }
-    }
-    else if (begin_token == "go") {
+    } else if (begin_token == "go") {
         // Ensure that we don't start searching on a NULL position
         if (G_game_position == NULL) {
             cout << "Fatal error, no game found." << endl;
         }
         search_info info;
-        auto elem = command_list.begin(); // elem points to first token after "go"
+        auto elem = command_list.begin();  // elem points to first token after "go"
         std::set<std::string> subcommands{"searchmoves", "ponder", "wtime", "btime", "winc", "binc",
-                                          "movestogo", "depth", "nodes", "mate", "movetime", "infinite"};
+            "movestogo", "depth", "nodes", "mate", "movetime", "infinite"};
         while (++elem != command_list.end()) {
             if (*elem == "searchmoves") {
-                while(++elem != command_list.end() and subcommands.find(*elem) == subcommands.end()) {
+                while (++elem != command_list.end() && subcommands.find(*elem) == subcommands.end()) {
                     info.searchmoves.push_back(std::string(*elem));
                 }
                 elem--;
-            }
-            else if (*elem == "wtime") {
+            } else if (*elem == "wtime") {
                 info.wtime = std::stoi(*(++elem));
-            }
-            else if (*elem == "btime") {
+            } else if (*elem == "btime") {
                 info.btime = std::stoi(*(++elem));
-            }
-            else if (*elem == "winc") {
+            } else if (*elem == "winc") {
                 info.winc = std::stoi(*(++elem));
-            }
-            else if (*elem == "binc") {
+            } else if (*elem == "binc") {
                 info.binc = std::stoi(*(++elem));
-            }
-            else if (*elem == "movestogo") {
+            } else if (*elem == "movestogo") {
                 info.movestogo = std::stoi(*(++elem));
-            }
-            else if (*elem == "depth") {
+            } else if (*elem == "depth") {
                 info.depth = std::stoi(*(++elem));
-            }
-            else if (*elem == "nodes") {
+            } else if (*elem == "nodes") {
                 info.nodes = std::stoi(*(++elem));
-            }
-            else if (*elem == "mate") {
+            } else if (*elem == "mate") {
                 info.mate = std::stoi(*(++elem));
-            }
-            else if (*elem == "movetime") {
+            } else if (*elem == "movetime") {
                 info.movetime = std::stoi(*(++elem));
-            }
-            else if (*elem == "infinite") {
+            } else if (*elem == "infinite") {
                 info.infinite = true;
             }
         }
@@ -226,16 +200,13 @@ void UCICommand::execute() {
         search(G_game_position, G_info.depth);
         if (G_game_position->moves.empty()) {
             cout << "Fatal error, no moves found." << endl;
-        }
-        else {
+        } else {
             std::string movestring = find_move_taken(G_game_position, &G_game_position->moves[0]);
             cout << "bestmove " << movestring << endl;
         }
-    }
-    else if (begin_token == "ponderhit") {
-        //Nothing to do yet
-    }
-    else if (begin_token == "stop") {
-        //Nothing to do yet
+    } else if (begin_token == "ponderhit") {
+        // Nothing to do yet
+    } else if (begin_token == "stop") {
+        // Nothing to do yet
     }
 }

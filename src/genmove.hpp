@@ -1,6 +1,7 @@
-#ifndef GENMOVE_H
-#define GENMOVE_H
+#ifndef SRC_GENMOVE_HPP_
+#define SRC_GENMOVE_HPP_
 
+#include <string>
 #include "position.hpp"
 #include "common.hpp"
 #include "game_variables.hpp"
@@ -27,4 +28,4 @@ bitboard get_rook_attacks(bitboard board, int index);
 
 bitboard get_queen_attacks(bitboard board, int index);
 
-#endif
+#endif  // SRC_GENMOVE_HPP_

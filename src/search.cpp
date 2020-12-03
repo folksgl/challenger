@@ -1,8 +1,7 @@
+#include <limits>
 #include "search.hpp"
 #include "evaluate.hpp"
 #include "game_variables.hpp"
-
-using namespace std;
 
 #ifdef BENCHMARK
 extern unsigned long long positions_searched;
@@ -15,14 +14,12 @@ extern unsigned long long positions_searched;
  * Perform a search of the position given.
  */
 void search(Position* pos, int depth) {
-
     bitboard alpha = std::numeric_limits<int>::min();
     bitboard beta  = std::numeric_limits<int>::max();
     if (pos->is_white_move) {
         alphaBetaMax(pos, alpha, beta, depth);
         sort_descending;
-    }
-    else {
+    } else {
         alphaBetaMin(pos, alpha, beta, depth);
         sort_ascending;
     }

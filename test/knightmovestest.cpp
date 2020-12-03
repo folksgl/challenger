@@ -2,16 +2,14 @@
 #include "../src/genmove.hpp"
 #include "../src/uci.hpp"
 #include "../src/common.hpp"
-#include <string>
 
-using namespace std;
 TEST(correct_knight_moves_generated, white_knight_a1) {
     std::string test = "8/8/8/8/8/8/8/N7 w KQkq - 0 1";
     Position startpos(test);
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 2);
@@ -26,7 +24,7 @@ TEST(correct_knight_moves_generated, white_knight_b1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -42,7 +40,7 @@ TEST(correct_knight_moves_generated, white_knight_c1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -59,7 +57,7 @@ TEST(correct_knight_moves_generated, white_knight_d1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -76,7 +74,7 @@ TEST(correct_knight_moves_generated, white_knight_e1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -93,7 +91,7 @@ TEST(correct_knight_moves_generated, white_knight_f1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -110,7 +108,7 @@ TEST(correct_knight_moves_generated, white_knight_g1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -126,7 +124,7 @@ TEST(correct_knight_moves_generated, white_knight_h1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 2);
@@ -141,7 +139,7 @@ TEST(correct_knight_moves_generated, white_knight_a2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -157,7 +155,7 @@ TEST(correct_knight_moves_generated, white_knight_b2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -174,7 +172,7 @@ TEST(correct_knight_moves_generated, white_knight_c2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -193,7 +191,7 @@ TEST(correct_knight_moves_generated, white_knight_d2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -212,7 +210,7 @@ TEST(correct_knight_moves_generated, white_knight_e2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -231,7 +229,7 @@ TEST(correct_knight_moves_generated, white_knight_f2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -250,7 +248,7 @@ TEST(correct_knight_moves_generated, white_knight_g2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -267,7 +265,7 @@ TEST(correct_knight_moves_generated, white_knight_h2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -283,7 +281,7 @@ TEST(correct_knight_moves_generated, white_knight_a3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -300,7 +298,7 @@ TEST(correct_knight_moves_generated, white_knight_b3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -319,7 +317,7 @@ TEST(correct_knight_moves_generated, white_knight_c3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -340,7 +338,7 @@ TEST(correct_knight_moves_generated, white_knight_d3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -361,7 +359,7 @@ TEST(correct_knight_moves_generated, white_knight_e3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -382,7 +380,7 @@ TEST(correct_knight_moves_generated, white_knight_f3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -403,7 +401,7 @@ TEST(correct_knight_moves_generated, white_knight_g3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -422,7 +420,7 @@ TEST(correct_knight_moves_generated, white_knight_h3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -439,7 +437,7 @@ TEST(correct_knight_moves_generated, white_knight_a4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -456,7 +454,7 @@ TEST(correct_knight_moves_generated, white_knight_b4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -475,7 +473,7 @@ TEST(correct_knight_moves_generated, white_knight_c4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -496,7 +494,7 @@ TEST(correct_knight_moves_generated, white_knight_d4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -517,7 +515,7 @@ TEST(correct_knight_moves_generated, white_knight_e4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -538,7 +536,7 @@ TEST(correct_knight_moves_generated, white_knight_f4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -559,7 +557,7 @@ TEST(correct_knight_moves_generated, white_knight_g4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -578,7 +576,7 @@ TEST(correct_knight_moves_generated, white_knight_h4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -595,7 +593,7 @@ TEST(correct_knight_moves_generated, white_knight_a5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -612,7 +610,7 @@ TEST(correct_knight_moves_generated, white_knight_b5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -631,7 +629,7 @@ TEST(correct_knight_moves_generated, white_knight_c5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -652,7 +650,7 @@ TEST(correct_knight_moves_generated, white_knight_d5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -673,7 +671,7 @@ TEST(correct_knight_moves_generated, white_knight_e5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -694,7 +692,7 @@ TEST(correct_knight_moves_generated, white_knight_f5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -715,7 +713,7 @@ TEST(correct_knight_moves_generated, white_knight_g5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -734,7 +732,7 @@ TEST(correct_knight_moves_generated, white_knight_h5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -751,7 +749,7 @@ TEST(correct_knight_moves_generated, white_knight_a6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -768,7 +766,7 @@ TEST(correct_knight_moves_generated, white_knight_b6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -787,7 +785,7 @@ TEST(correct_knight_moves_generated, white_knight_c6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -808,7 +806,7 @@ TEST(correct_knight_moves_generated, white_knight_d6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -829,7 +827,7 @@ TEST(correct_knight_moves_generated, white_knight_e6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -850,7 +848,7 @@ TEST(correct_knight_moves_generated, white_knight_f6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -871,7 +869,7 @@ TEST(correct_knight_moves_generated, white_knight_g6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -890,7 +888,7 @@ TEST(correct_knight_moves_generated, white_knight_h6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -907,7 +905,7 @@ TEST(correct_knight_moves_generated, white_knight_a7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -923,7 +921,7 @@ TEST(correct_knight_moves_generated, white_knight_b7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -940,7 +938,7 @@ TEST(correct_knight_moves_generated, white_knight_c7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -959,7 +957,7 @@ TEST(correct_knight_moves_generated, white_knight_d7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -978,7 +976,7 @@ TEST(correct_knight_moves_generated, white_knight_e7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -997,7 +995,7 @@ TEST(correct_knight_moves_generated, white_knight_f7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1016,7 +1014,7 @@ TEST(correct_knight_moves_generated, white_knight_g7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1033,7 +1031,7 @@ TEST(correct_knight_moves_generated, white_knight_h7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -1049,7 +1047,7 @@ TEST(correct_knight_moves_generated, white_knight_a8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 2);
@@ -1064,7 +1062,7 @@ TEST(correct_knight_moves_generated, white_knight_b8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -1080,7 +1078,7 @@ TEST(correct_knight_moves_generated, white_knight_c8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1097,7 +1095,7 @@ TEST(correct_knight_moves_generated, white_knight_d8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1114,7 +1112,7 @@ TEST(correct_knight_moves_generated, white_knight_e8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1131,7 +1129,7 @@ TEST(correct_knight_moves_generated, white_knight_f8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1148,7 +1146,7 @@ TEST(correct_knight_moves_generated, white_knight_g8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -1164,7 +1162,7 @@ TEST(correct_knight_moves_generated, white_knight_h8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 2);
@@ -1179,7 +1177,7 @@ TEST(correct_knight_moves_generated, black_knight_a1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 2);
@@ -1194,7 +1192,7 @@ TEST(correct_knight_moves_generated, black_knight_b1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -1210,7 +1208,7 @@ TEST(correct_knight_moves_generated, black_knight_c1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1227,7 +1225,7 @@ TEST(correct_knight_moves_generated, black_knight_d1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1244,7 +1242,7 @@ TEST(correct_knight_moves_generated, black_knight_e1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1261,7 +1259,7 @@ TEST(correct_knight_moves_generated, black_knight_f1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1278,7 +1276,7 @@ TEST(correct_knight_moves_generated, black_knight_g1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -1294,7 +1292,7 @@ TEST(correct_knight_moves_generated, black_knight_h1) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 2);
@@ -1309,7 +1307,7 @@ TEST(correct_knight_moves_generated, black_knight_a2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -1325,7 +1323,7 @@ TEST(correct_knight_moves_generated, black_knight_b2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1342,7 +1340,7 @@ TEST(correct_knight_moves_generated, black_knight_c2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1361,7 +1359,7 @@ TEST(correct_knight_moves_generated, black_knight_d2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1380,7 +1378,7 @@ TEST(correct_knight_moves_generated, black_knight_e2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1399,7 +1397,7 @@ TEST(correct_knight_moves_generated, black_knight_f2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1418,7 +1416,7 @@ TEST(correct_knight_moves_generated, black_knight_g2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1435,7 +1433,7 @@ TEST(correct_knight_moves_generated, black_knight_h2) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -1451,7 +1449,7 @@ TEST(correct_knight_moves_generated, black_knight_a3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1468,7 +1466,7 @@ TEST(correct_knight_moves_generated, black_knight_b3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1487,7 +1485,7 @@ TEST(correct_knight_moves_generated, black_knight_c3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1508,7 +1506,7 @@ TEST(correct_knight_moves_generated, black_knight_d3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1529,7 +1527,7 @@ TEST(correct_knight_moves_generated, black_knight_e3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1550,7 +1548,7 @@ TEST(correct_knight_moves_generated, black_knight_f3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1571,7 +1569,7 @@ TEST(correct_knight_moves_generated, black_knight_g3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1590,7 +1588,7 @@ TEST(correct_knight_moves_generated, black_knight_h3) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1607,7 +1605,7 @@ TEST(correct_knight_moves_generated, black_knight_a4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1624,7 +1622,7 @@ TEST(correct_knight_moves_generated, black_knight_b4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1643,7 +1641,7 @@ TEST(correct_knight_moves_generated, black_knight_c4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1664,7 +1662,7 @@ TEST(correct_knight_moves_generated, black_knight_d4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1685,7 +1683,7 @@ TEST(correct_knight_moves_generated, black_knight_e4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1706,7 +1704,7 @@ TEST(correct_knight_moves_generated, black_knight_f4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1727,7 +1725,7 @@ TEST(correct_knight_moves_generated, black_knight_g4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1746,7 +1744,7 @@ TEST(correct_knight_moves_generated, black_knight_h4) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1763,7 +1761,7 @@ TEST(correct_knight_moves_generated, black_knight_a5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1780,7 +1778,7 @@ TEST(correct_knight_moves_generated, black_knight_b5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1799,7 +1797,7 @@ TEST(correct_knight_moves_generated, black_knight_c5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1820,7 +1818,7 @@ TEST(correct_knight_moves_generated, black_knight_d5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1841,7 +1839,7 @@ TEST(correct_knight_moves_generated, black_knight_e5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1862,7 +1860,7 @@ TEST(correct_knight_moves_generated, black_knight_f5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1883,7 +1881,7 @@ TEST(correct_knight_moves_generated, black_knight_g5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1902,7 +1900,7 @@ TEST(correct_knight_moves_generated, black_knight_h5) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1919,7 +1917,7 @@ TEST(correct_knight_moves_generated, black_knight_a6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -1936,7 +1934,7 @@ TEST(correct_knight_moves_generated, black_knight_b6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -1955,7 +1953,7 @@ TEST(correct_knight_moves_generated, black_knight_c6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1976,7 +1974,7 @@ TEST(correct_knight_moves_generated, black_knight_d6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -1997,7 +1995,7 @@ TEST(correct_knight_moves_generated, black_knight_e6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -2018,7 +2016,7 @@ TEST(correct_knight_moves_generated, black_knight_f6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -2039,7 +2037,7 @@ TEST(correct_knight_moves_generated, black_knight_g6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -2058,7 +2056,7 @@ TEST(correct_knight_moves_generated, black_knight_h6) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -2075,7 +2073,7 @@ TEST(correct_knight_moves_generated, black_knight_a7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -2091,7 +2089,7 @@ TEST(correct_knight_moves_generated, black_knight_b7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -2108,7 +2106,7 @@ TEST(correct_knight_moves_generated, black_knight_c7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -2127,7 +2125,7 @@ TEST(correct_knight_moves_generated, black_knight_d7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -2146,7 +2144,7 @@ TEST(correct_knight_moves_generated, black_knight_e7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -2165,7 +2163,7 @@ TEST(correct_knight_moves_generated, black_knight_f7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -2184,7 +2182,7 @@ TEST(correct_knight_moves_generated, black_knight_g7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -2201,7 +2199,7 @@ TEST(correct_knight_moves_generated, black_knight_h7) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -2217,7 +2215,7 @@ TEST(correct_knight_moves_generated, black_knight_a8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 2);
@@ -2232,7 +2230,7 @@ TEST(correct_knight_moves_generated, black_knight_b8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -2248,7 +2246,7 @@ TEST(correct_knight_moves_generated, black_knight_c8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -2265,7 +2263,7 @@ TEST(correct_knight_moves_generated, black_knight_d8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -2282,7 +2280,7 @@ TEST(correct_knight_moves_generated, black_knight_e8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -2299,7 +2297,7 @@ TEST(correct_knight_moves_generated, black_knight_f8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -2316,7 +2314,7 @@ TEST(correct_knight_moves_generated, black_knight_g8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 3);
@@ -2332,7 +2330,7 @@ TEST(correct_knight_moves_generated, black_knight_h8) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 2);

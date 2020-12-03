@@ -1,5 +1,5 @@
-#ifndef EVALUATE_H
-#define EVALUATE_H
+#ifndef SRC_EVALUATE_HPP_
+#define SRC_EVALUATE_HPP_
 
 #define PAWN   100
 #define KNIGHT 350
@@ -17,14 +17,14 @@
 
 // Pre-initialized lookup table for possible knight moves on a given square
 const bitboard center_attack_bonus[64] = {
-    10, 10, 10, 10, 10, 10, 10, 10, // 1st Rank
-    10, 15, 15, 15, 15, 15, 15, 10, // 2nd Rank
-    10, 15, 20, 20, 20, 20, 15, 10, // 3rd Rank
-    10, 15, 20, 25, 25, 20, 15, 10, // 4th Rank
-    10, 15, 20, 25, 25, 20, 15, 10, // 5th Rank
-    10, 15, 20, 20, 20, 20, 15, 10, // 6th Rank
-    10, 15, 15, 15, 15, 15, 15, 10, // 7th Rank
-    10, 10, 10, 10, 10, 10, 10, 10  // 8th Rank
+    10, 10, 10, 10, 10, 10, 10, 10,  // 1st Rank
+    10, 15, 15, 15, 15, 15, 15, 10,  // 2nd Rank
+    10, 15, 20, 20, 20, 20, 15, 10,  // 3rd Rank
+    10, 15, 20, 25, 25, 20, 15, 10,  // 4th Rank
+    10, 15, 20, 25, 25, 20, 15, 10,  // 5th Rank
+    10, 15, 20, 20, 20, 20, 15, 10,  // 6th Rank
+    10, 15, 15, 15, 15, 15, 15, 10,  // 7th Rank
+    10, 10, 10, 10, 10, 10, 10, 10   // 8th Rank
 };
 
 const bitboard middle_board = (rank_3 | rank_4 | rank_5 | rank_6) & (c_file | d_file | e_file | f_file);
@@ -43,4 +43,4 @@ int knight_center_bonus(bitboard knights);
 
 int diagonal_mobility_bonus(bitboard diagonal_sliders, bitboard board);
 
-#endif
+#endif  // SRC_EVALUATE_HPP_
