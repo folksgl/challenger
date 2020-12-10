@@ -6,7 +6,7 @@ addons:
       - make
       - lcov
       - python3-pip
-      - gcc-9
+      - gcc-10
       - libgtest-dev
       - libgmock-dev
 compiler: gcc
