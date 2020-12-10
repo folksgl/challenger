@@ -3,11 +3,12 @@ N_PROC := $(shell nproc)
 
 build_dir:
 	@if [ ! -d "./build" ];then     \
-			cmake -S . -B ./build -Wdev -D CMAKE_EXPORT_COMPILE_COMMANDS=ON -D CMAKE_CXX_COMPILER=g++-9 ; \
+			cmake -S . -B ./build -Wdev -D CMAKE_EXPORT_COMPILE_COMMANDS=ON -D CMAKE_CXX_COMPILER=g++-10 ; \
 			mv ./build/compile_commands.json ./src/ ; \
 	fi
 
 check:
+	cpplint --verbose=2 --linelength=150 --filter=-legal/copyright ./src/*
 	cppcheck --enable=all ./src
 
 compile: build_dir
@@ -55,9 +56,3 @@ profile: compile
 	@echo " " >> analysis
 	@echo " " >> analysis
 	head -n 30 tmp_analysis >> analysis
-
-travis: build_dir
-	cmake --build ./build --parallel $(N_PROC)
-
-travis_test: travis
-	cmake --build ./build --target test --parallel $(N_PROC) -- --no-print-directory ARGS=-V

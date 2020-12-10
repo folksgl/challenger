@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 project(Challenger)
 
 # Add src and test files
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_COMPILER g++-10)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "-Wall -Og -pg --coverage -pthread")
 
 set(SRC_DIR src)
@@ -52,22 +53,22 @@ add_custom_target(coverage
 set(RELEASE_FLAGS "")
 
 add_custom_target(optimized
-    COMMAND g++ -o linux_challenger -O3 -pthread --std=c++17 ${SRC_FILES}
+    COMMAND g++ -o linux_challenger -O3 -pthread --std=c++20 ${SRC_FILES}
     BYPRODUCTS optimized_challenger
 )
 
 add_custom_target(windows_challenger
-    COMMAND x86_64-w64-mingw32-c++-posix -o windows_challenger.exe -O3 -pthread --std=c++17 ${SRC_FILES}
+    COMMAND x86_64-w64-mingw32-c++-posix -o windows_challenger.exe -O3 -pthread --std=c++20 ${SRC_FILES}
     BYPRODUCTS windows_challenger
 )
 
 add_custom_target(benchmark
-    COMMAND g++ -o benchmark_challenger -O3 -pthread --std=c++17 ${BENCH_FILES}
+    COMMAND g++ -o benchmark_challenger -O3 -pthread --std=c++20 ${BENCH_FILES}
     BYPRODUCTS benchmark_challenger
 )
 
 add_custom_target(perft
-    COMMAND g++ -o perft_challenger -DPERFT -O3 -pthread --std=c++17 ${PERFT_FILE_LIST}
+    COMMAND g++ -o perft_challenger -DPERFT -O3 -pthread --std=c++20 ${PERFT_FILE_LIST}
     BYPRODUCTS perft_challenger
 )
 

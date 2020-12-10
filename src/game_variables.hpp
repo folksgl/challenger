@@ -1,5 +1,5 @@
-#ifndef GAME_SETTINGS_H
-#define GAME_SETTINGS_H
+#ifndef SRC_GAME_VARIABLES_HPP_
+#define SRC_GAME_VARIABLES_HPP_
 
 #include "position.hpp"
 #include "slider_attacks.hpp"
@@ -13,4 +13,4 @@ extern SliderAttacks slider_attacks;
 extern ThreadSafeQueue<UCICommand> command_queue;
 extern search_info G_info;
 
-#endif
+#endif  // SRC_GAME_VARIABLES_HPP_

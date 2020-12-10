@@ -3,9 +3,6 @@
 #include "../src/uci.hpp"
 #include "../src/common.hpp"
 #include "../src/uci_command.hpp"
-#include <string>
-
-using namespace std;
 
 //
 // Ensure pawn moves don't introduce check.
@@ -17,7 +14,7 @@ TEST(pawn_doesnt_introduce_check, forward_castle) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -34,7 +31,7 @@ TEST(pawn_doesnt_introduce_check, attack_right_castle) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 4);
@@ -51,7 +48,7 @@ TEST(pawn_doesnt_introduce_check, attack_right_capture_knight) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 6);
@@ -70,7 +67,7 @@ TEST(pawn_doesnt_introduce_check, forward_bishop) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -91,7 +88,7 @@ TEST(pawn_doesnt_introduce_check, forward_queen) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 8);
@@ -112,7 +109,7 @@ TEST(pawn_doesnt_introduce_check, forward_knight) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 7);
@@ -136,7 +133,7 @@ TEST(king_doesnt_introduce_check, doubled_pawn) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 7);
@@ -156,7 +153,7 @@ TEST(king_doesnt_introduce_check, enemy_king) {
 
     generate_moves(&startpos);
 
-    std::sort(startpos.moves.begin(), startpos.moves.end(), 
+    std::sort(startpos.moves.begin(), startpos.moves.end(),
             [&startpos](Position &a, Position &b) { return find_move_taken(&startpos, &a) < find_move_taken(&startpos, &b); });
 
     ASSERT_EQ(startpos.moves.size(), 7);

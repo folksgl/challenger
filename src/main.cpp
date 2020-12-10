@@ -3,8 +3,6 @@
 #include "uci.hpp"
 #include "uci_command.hpp"
 
-using namespace std;
-
 // Global variable definitions. Declarations in game_variables.hpp
 bool G_debug;
 Position* G_game_position;
@@ -12,8 +10,7 @@ SliderAttacks slider_attacks;
 ThreadSafeQueue<UCICommand> command_queue;
 search_info G_info;
 
-int main()
-{
+int main() {
     G_debug = false;
 
     std::thread command_producer(read_commands, std::ref(std::cin));
