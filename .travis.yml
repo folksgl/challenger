@@ -1,3 +1,4 @@
+---
 language: cpp
 dist: focal
 addons:
@@ -18,7 +19,7 @@ before_install:
   - pip3 install --user cmake
   - cmake --version
 script:
-  - make travis_test
+  - make test
 after_success:
   - make coverage
   - coveralls -l ./build/challenger.info

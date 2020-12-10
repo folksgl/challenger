@@ -56,9 +56,3 @@ profile: compile
 	@echo " " >> analysis
 	@echo " " >> analysis
 	head -n 30 tmp_analysis >> analysis
-
-travis: build_dir
-	cmake --build ./build --parallel $(N_PROC)
-
-travis_test: travis
-	cmake --build ./build --target test --parallel $(N_PROC) -- --no-print-directory ARGS=-V
