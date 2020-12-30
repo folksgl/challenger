@@ -7,7 +7,7 @@
 
 Challenger is my own custom chess engine.
 
-The goal of challenger is to take on the stockfish 10 chess engine, which is currently the best chess engine in the world.
+The goal of challenger is to take on the [Stockfish](https://stockfishchess.org/) chess engine, which is currently the best chess engine in the world.
 
 ## Status
 ***Undergoing re-design***: Challenger started as a personal project to get better at C++ in January 2019. Since then, I've learned a lot! For that reason, Challenger is currently being re-designed in a new repository thats still in development. Keep an eye out for *challenger-rs* in January 2020!
@@ -21,8 +21,8 @@ Current level: 0
 
 Percentage winning next level:  ![progress](https://progress-bar.dev/0)
  
-The progress of challenger will be gauged as follows: Challenger will play stockfish starting at its lowest level. Once the Challenger engine can beat the stockfish engine at the given level at least 60% of the time, the stockfish level will be increased, the "Current level completed" label above will be updated, and a release of the code will be made to snapshot the progress made.
-The "Percentage winning next level" label indicates challenger's progress in beating the next level of stockfish.
+The progress of challenger will be gauged as follows: Challenger will play Stockfish starting at its lowest level. Once the Challenger engine can beat the Stockfish engine at the given level at least 60% of the time, the Stockfish level will be increased, the "Current level completed" label above will be updated, and a release of the code will be made to snapshot the progress made.
+The "Percentage winning next level" label indicates challenger's progress in beating the next level of Stockfish.
 
 Percentages will be determined by playing 10 games and recording winnings.
 
