@@ -76,25 +76,23 @@ add_custom_target(coverage
 
 set(RELEASE_FLAGS "")
 
-set(STD_20 --std=c++2a)
-
 add_custom_target(optimized
-    COMMAND g++ -o linux_challenger -O3 -pthread ${STD_20} ${SRC_FILES}
+    COMMAND g++ -o linux_challenger -O3 -pthread ${SRC_FILES}
     BYPRODUCTS optimized_challenger
 )
 
 add_custom_target(windows_challenger
-    COMMAND x86_64-w64-mingw32-c++-posix -o windows_challenger.exe -O3 -pthread ${STD_20} ${SRC_FILES}
+    COMMAND x86_64-w64-mingw32-c++-posix -o windows_challenger.exe -O3 -pthread ${SRC_FILES}
     BYPRODUCTS windows_challenger
 )
 
 add_custom_target(benchmark
-    COMMAND g++ -o benchmark_challenger -O3 -pthread ${STD_20} ${BENCH_FILES}
+    COMMAND g++ -o benchmark_challenger -O3 -pthread ${BENCH_FILES}
     BYPRODUCTS benchmark_challenger
 )
 
 add_custom_target(perft
-    COMMAND g++ -o perft_challenger -DPERFT -O3 -pthread ${STD_20} ${PERFT_FILE_LIST}
+    COMMAND g++ -o perft_challenger -DPERFT -O3 -pthread ${PERFT_FILE_LIST}
     BYPRODUCTS perft_challenger
 )
 
