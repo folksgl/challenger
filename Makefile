@@ -3,7 +3,9 @@ N_PROC := $(shell nproc)
 
 build_dir:
 	@if [ ! -d "./build" ];then     \
-			cmake -S . -B ./build -Wdev -D CMAKE_EXPORT_COMPILE_COMMANDS=ON -D CMAKE_CXX_COMPILER=g++-10 ; \
+			cmake -S . -B ./build -Wdev -D CMAKE_EXPORT_COMPILE_COMMANDS=ON -D CMAKE_CXX_COMPILER=g++ ; \
+	fi
+	@if [ -f ./build/compile_commands.json ]; then \
 			mv ./build/compile_commands.json ./src/ ; \
 	fi
 
